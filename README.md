@@ -2,3 +2,4 @@
 - Yue Ying Lee (@YueYingLee)
 - Kenneth Nguyen (@kenneth0810)
 - Ruben Martinez-Martinez (@Ruben725)
+- Johnny Nguyen (@johnny-txt)
