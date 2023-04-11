@@ -3,7 +3,7 @@
 1. Register an email account (Yue Ying)
 2. Login (Yue Ying)
 3. Send emails (Yue Ying)
-4. Delete emails (Ruben )
+4. Delete emails (Ruben)
 5. Search emails (Ruben)
 6. Send chat messages (Johnny)
 7. Delete chat messages (Johnny)
@@ -86,6 +86,7 @@ The user enters confirmation passwords wrongly.
 **Pre condition:**
 - The user is logged in to their email account. 
 - The user has prepared the contents of the email and know who they want to send to. 
+- The user is on the homepage of the website. 
 
 **Trigger:** The user selects the “Send an email” option on the menu bar. 
 
@@ -140,7 +141,7 @@ The user enters confirmation passwords wrongly.
 - The system will not allow the user to send a message if the user has not entered any text in the text box
 
 **Alternate Sequence #2:** The user enters an invalid username(email address). 
-- The system displays an error message that indicates the entered username does not exist and prompts the user to reenter to quit the chat.
+- The system displays an error message that indicates the entered username does not exist and prompts the user to reenter or to quit the chat.
 - The user either reenter a valid recipient email to have a chat or to not have a chat with anybody.
 
 **5. Use case name: Delete Chat Messages**
@@ -168,7 +169,7 @@ The user enters confirmation passwords wrongly.
 - The system will exit out of the delete confirmation dialog box.
 - The user will see the message remains in the chat window.
 
-**6. Use case Name: Add a TODO component**
+**6. Use case name: Add a TODO component**
 
 **Pre-condition:**
 - The user must be logged in. 
@@ -243,5 +244,5 @@ The user enters confirmation passwords wrongly.
 - The system displays a error message to indicate unsuccessful request to delete account and prompts the user to reenter or cancel the process. 
 - The user either reenter the password or choose to cancel the process. 
 
-**Alternate Sequence #2:** The user clicks “No” to cancel the confirmation to delete the account
-- The user is redirected to their profile page
+**Alternate Sequence #2:** The user clicks “No” to cancel the confirmation to delete the account.
+- The user is redirected to their profile page.
