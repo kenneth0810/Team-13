@@ -128,17 +128,18 @@ The user enters confirmation passwords wrongly.
 **Primary Sequence:**
 1. The user clicks on the chat button on the chat message page to see all their chats.
 2. The user clicks on the "start a chat" button.
-3. The system will prompt the user to enter an existing username(email address).
-4. The user will then have to click the "start chat" button for confirmation
-5. The user will see a chat box appear with a text entry at the bottom of the page.
-6. The user can input any text they want in the text entry box.
+3. The system prompts the user to enter an existing username(email address) and clicks "start chat."
+4. The user enter the username and click the "start chat" button for confirmation.
+5. The user see a chat box appear with a text entry at the bottom of the page.
+6. The user input any text they want in the text entry box.
 7. The user clicks the "send" arrow to successfully send their message.
 
 **Primary Postconditions:**
 - The user will see that their text can be seen in the chat history log of the chat page.
 
 **Alternate Sequence #1:** The user enters nothing in the text box.
-- The system will not allow the user to send a message if the user has not entered any text in the text box
+- The system shows errors and not allow the user to send a message.
+- The system prompts the user to enter message or quit the chat.
 
 **Alternate Sequence #2:** The user enters an invalid username(email address). 
 - The system displays an error message that indicates the entered username does not exist and prompts the user to reenter or to quit the chat.
@@ -165,9 +166,9 @@ The user enters confirmation passwords wrongly.
 **Alternate Sequence #1:** The user attempts to delete a message from the recipient.
 - The system does not pop out the option to delete the message.
 
-**Alternate Sequence #2:** The user clicks the “No” option from the confirmation dialog box
-- The system will exit out of the delete confirmation dialog box.
-- The user will see the message remains in the chat window.
+**Alternate Sequence #2:** The user clicks the “No” option from the confirmation dialog box.
+- The system exit out of the delete confirmation dialog box.
+- The user see the message remains in the chat window.
 
 **6. Use case name: Add a TODO component**
 
@@ -234,7 +235,8 @@ The user enters confirmation passwords wrongly.
 2. The user will input their password to verify their account ownership.
 3. The system verifies the user account ownership.
 4. The user will see a confirmation popup to confirm if they want to permanently delete the account.
-5. After the user confirms, the account will be permanently deleted.
+5. The user clicks confirm to delete the account. 
+6. The system displays a message indicating the account is permanently deleted.
 
 **Primary Postconditions:**
 - The user will be taken back to the Login page. 
