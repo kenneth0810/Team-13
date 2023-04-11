@@ -18,7 +18,8 @@
 2.  The website has UI interactive interface (for using elements from bootstrap). 
 
 ## Use Cases 
-1. Use case name: Register an email account
+
+**1. Use case name: Register an email account**
 
 **Pre condition:**
 
@@ -53,7 +54,7 @@ The user enters confirmation passwords wrongly.
 - The system prompts the user to reenter the confirmation password. 
 - The user renters the confirmation password. 
 
-2. Use case name: Login 
+**2. Use case name: Login**
 
 **Pre condition:**
 - The user already registered an account on this website. 
@@ -80,7 +81,7 @@ The user enters confirmation passwords wrongly.
 - The system prompts users to reenter the username or password or register instead.  
 - The user either reenter their username or password or choose to register. 
 
-3. Use case name: Send emails 
+**3. Use case name: Send emails**
 
 **Pre condition:**
 - The user is logged in to their email account. 
@@ -114,7 +115,7 @@ The user enters confirmation passwords wrongly.
 - The system displays an error message and prompts users to enter information on the missing field or quit the sending email function. 
 - The user will enter the information of the missing field or quits the drafting email window. 
 
-4. Use case name: Send chat messages
+**4. Use case name: Send chat messages**
 
 **Pre condition:**
 - The user is logged into their account.
@@ -142,7 +143,7 @@ The user enters confirmation passwords wrongly.
 - The system displays an error message that indicates the entered username does not exist and prompts the user to reenter to quit the chat.
 - The user either reenter a valid recipient email to have a chat or to not have a chat with anybody.
 
-5. Use case name: Delete Chat Messages
+**5. Use case name: Delete Chat Messages**
 
 **Pre condition:** 
 - The user is logged into their account.
@@ -167,7 +168,7 @@ The user enters confirmation passwords wrongly.
 - The system will exit out of the delete confirmation dialog box.
 - The user will see the message remains in the chat window.
 
-6. Use case Name: Add a TODO component
+**6. Use case Name: Add a TODO component**
 
 **Pre-condition:**
 - The user must be logged in. 
@@ -195,13 +196,13 @@ The user enters confirmation passwords wrongly.
 - The system does not save the todo list.
 - The user is redirected to the TODO page.
 
-7. Use case name: Edit User Profile
+**7. Use case name: Edit User Profile**
 
 **Pre-condition:** 
 - The user must be logged in.
 - The user is on their profile page.
 
-- **Trigger:** 
+**Trigger:** 
 - The user selects the “Edit profile” option on the user profile page.
 
 **Primary Sequence:**
@@ -219,7 +220,7 @@ The user enters confirmation passwords wrongly.
 - System does not save or update the profile information.
 - The user is redirected to their homepage.
  
-8. Use case name:  Delete account 
+**8. Use case name:  Delete account**
 
 **Pre condition:**
 - The user has a registered account. 
@@ -242,5 +243,5 @@ The user enters confirmation passwords wrongly.
 - The system displays a error message to indicate unsuccessful request to delete account and prompts the user to reenter or cancel the process. 
 - The user either reenter the password or choose to cancel the process. 
 
-**Alternate Sequence 2:** The user clicks “No” to cancel the confirmation to delete the account
-- The deletion popup will disappear and the user will see the profile page.
+**Alternate Sequence #2:** The user clicks “No” to cancel the confirmation to delete the account
+- The user is redirected to their profile page
