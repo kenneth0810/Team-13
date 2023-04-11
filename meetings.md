@@ -11,3 +11,9 @@
 - Team updates: None 
 - Group progress: Continued discussion of requirements for project and assigned task for every member.
               Every member will be working on writing the use cases.
+
+### 2023-04-10 at 19:00 - 21:10 
+- Attendees: Yue Ying Lee, Kenneth Nguyen, Johnny Nguyen
+- Team updates: None
+- Group progress: Went over and improved use cases by every group member. Finished milestone 1 assignment.  
+                  Updated Ruben on changes we made after the meeting.
