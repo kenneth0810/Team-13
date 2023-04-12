@@ -123,7 +123,7 @@ The user enters confirmation passwords wrongly.
 - The user is on the chat message page.
 
 **Trigger:**
-- The user user clicks the "Chat" button.
+- The user clicks the "Chat" button.
 
 **Primary Sequence:**
 1. The user clicks on the chat button on the chat message page to see all their chats.
@@ -135,14 +135,15 @@ The user enters confirmation passwords wrongly.
 7. The user clicks the "send" arrow to successfully send their message.
 
 **Primary Postconditions:**
-- The user will see that their text can be seen in the chat history log of the chat page.
+- The user(sender) will see that their text shown in the chat history log of the chat page.
+- The user(recipient) will see the new messages they received in the chat history log of the chat page. 
 
 **Alternate Sequence #1:** The user enters nothing in the text box.
 - The system shows errors and not allow the user to send a message.
 - The system prompts the user to enter message or quit the chat.
 
 **Alternate Sequence #2:** The user enters an invalid username(email address). 
-- The system displays an error message that indicates the entered username does not exist and prompts the user to reenter or to quit the chat.
+- The system displays an error message that indicates the entered username does not exist and prompts the user to reenter to have a chat or not have a chat with anybody.
 - The user either reenter a valid recipient email to have a chat or to not have a chat with anybody.
 
 **5. Use case name: Delete Chat Messages**
@@ -160,11 +161,11 @@ The user enters confirmation passwords wrongly.
 3. The system removes the message from the chat conversation.
 
 **Primary Postconditions:**
-- The user sees that the specified message has disappeared from the chat window. 
+- The user (sender & receipient) see that the specified message has disappeared from the chat window. 
 - The website’s database has remove the user’s chat history of the specific message. 
 
 **Alternate Sequence #1:** The user attempts to delete a message from the recipient.
-- The system does not pop out the option to delete the message.
+- The system does not pop out the delete button to delete the message.
 
 **Alternate Sequence #2:** The user clicks the “No” option from the confirmation dialog box.
 - The system exit out of the delete confirmation dialog box.
@@ -180,8 +181,8 @@ The user enters confirmation passwords wrongly.
 - The user selects the “Add” option.
 
 **Primary Sequence:**
-1. The system creates a new and empty TODO component.
-2. The user can enter in text to create their todo list and optionally select a due date or priority for their tasks.
+1. The system creates a new and empty TODO list.
+2. The user can enter in text to add to do component to their todo list and optionally select a due date or priority for their tasks.
 3. The system validates the changes and asks the user to confirm the edits. 
 4. The user confirms and saves the todo list.
 5. The system saves and updates the user’s inputs in the todo list. 
@@ -208,7 +209,7 @@ The user enters confirmation passwords wrongly.
 - The user selects the “Edit profile” option on the user profile page.
 
 **Primary Sequence:**
-1. The system displays a window showing all the information (such as, username, password, and biography) which can be edited.
+1. The system displays a window showing all the information (such as full name, password, and biography) which can be edited.
 2. The user adds, deletes, or modifies their profile information.
 3. The system validates the changes and asks the user to confirm the changes. 
 4. The user confirms to finish editing their profile.
