@@ -1,7 +1,7 @@
 ## Functional Requirements 
 
 1. Register an email account (Yue Ying)
-2. Login (Yue Ying)
+2. Login/Logout (Yue Ying)
 3. Send emails (Yue Ying)
 4. Delete emails (Ruben)
 5. Search emails (Ruben)
@@ -10,7 +10,7 @@
 8. Add TO DO component (Kenneth)
 9. Delete TO DO component (Kenneth)
 10. Edit user profile (Kenneth)
-11. Logout (Johnny)
+11. Search chat messages (Johnny)
 12. Delete account (Ruben)
 
 ## Non-functional requirement
@@ -54,7 +54,7 @@ The user enters confirmation passwords wrongly.
 - The system prompts the user to reenter the confirmation password. 
 - The user renters the confirmation password. 
 
-**2. Use case name: Login**
+**2. Use case name: Login/Logout**
 
 **Pre condition:**
 - The user already registered an account on this website. 
@@ -69,12 +69,15 @@ The user enters confirmation passwords wrongly.
 3. The system checks if there is any missing field. 
 4. The user will be prompted to continue to enter if there is any missing field.  
 5. The user clicks on “Login” button. 
-6. The system verifies username and password and log in the user if it matches with the database.
-7. The user will be automatically redirected to their profile page.
+6. The system checks if the username and password entered are correct.
+7. The user will be automatically redirected to their profile page when the information are correct.
+8. The user clicks on "Log out" button. 
+9. The system logs out the user from their email account.
 
 **Primary Postconditions:**
 - The system has verified the information of the user and gives access to the user. 
 - The user has been successfully logged into their account and has access to the features of the website. 
+- The user has been successfully logged out their account. 
 
 **Alternate Sequence:** The user enters the wrong password or username. 
 - The system displays an error message indicating an unsuccessful login request to the user.  
@@ -93,7 +96,7 @@ The user enters confirmation passwords wrongly.
 **Primary Sequence:**
 1. The user is redirected to the drafting email window. 
 2. The system prompts the user to enter the recipients’ username(email address), subject line, and the content of the email. 
-3. The user enters the emails body and the username (email address) they want to send to. 
+3. The user enters the emails body and the username (email address) they want to send to with an option of sending to one or multiple recipients. 
 4. The system checks if the recipients’ usernames are entered correctly. 
 5. The user clicks on “Send” button to send email.
 6. The system prompts the user to confirm sending the email.
