@@ -130,24 +130,23 @@ The user enters confirmation passwords wrongly.
 
 **Primary Sequence:**
 1. The user clicks on the chat button on the chat message page to see all their chats.
-2. The user clicks on the "start a chat" button.
-3. The system prompts the user to enter an existing username(email address) and clicks "start chat."
-4. The user enter the username and click the "start chat" button for confirmation.
-5. The user see a chat box appear with a text entry at the bottom of the page.
-6. The user input any text they want in the text entry box.
-7. The user clicks the "send" arrow to successfully send their message.
+2. The user clicks on the "start a group chat" button.
+3. The system prompts the user to enter multiple existing usernames(email addresses) and clicks "start chat."
+4. The user see a chat box appear with a text entry at the bottom of the page.
+5. The user input any text they want in the text entry box.
+6. The user clicks the "send" arrow to successfully send their message to the group chat.
 
 **Primary Postconditions:**
 - The user(sender) will see that their text shown in the chat history log of the chat page.
-- The user(recipient) will see the new messages they received in the chat history log of the chat page. 
+- The user and the recipients in the group chat will see the new messages sent by the user in the chat history log of the chat page. 
 
 **Alternate Sequence #1:** The user enters nothing in the text box.
 - The system shows errors and not allow the user to send a message.
 - The system prompts the user to enter message or quit the chat.
 
 **Alternate Sequence #2:** The user enters an invalid username(email address). 
-- The system displays an error message that indicates the entered username does not exist and prompts the user to reenter to have a chat or not have a chat with anybody.
-- The user either reenter a valid recipient email to have a chat or to not have a chat with anybody.
+- The system displays an error message that indicates the entered username does not exist and prompts the user to reenter a valid recipient username.
+- The user either reenters a valid recipient email to add to the group chat or create a group chat without adding anybody else.
 
 **5. Use case name: Delete Chat Messages**
 
