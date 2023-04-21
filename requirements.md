@@ -127,7 +127,7 @@ The user enters confirmation passwords wrongly.
 
 **Trigger:**
 - The user clicks the "Chat" button.
-zsh:1: command not found: wq
+
 **Primary Sequence:**
 1. The user clicks on the chat button on the chat message page to see all their chats.
 2. The user clicks on the "start a group chat" button.
