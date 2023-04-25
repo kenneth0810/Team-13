@@ -1,7 +1,6 @@
 from flask import render_template
 from flask import redirect
 from flask import flash
-from .forms import LoginForm
 from app import myapp_obj
 from flask_login import current_user
 from flask_login import login_user
@@ -9,7 +8,8 @@ from flask_login import logout_user
 from flask_login import login_required
 
 from app.register import registerUser 
-
+from app.models import User, Emails
+from app.login import LoginForm
 
 @myapp_obj.route("/")
 @myapp_obj.route("/index.html")
@@ -19,9 +19,9 @@ def index():
                 'book':'bookname1'},
              {'author': 'authorname2',
               'book': 'bookname2'}]
-    return render_template('hello.html',name=name, books=books)
+    return render_template('homepage.html',name=name, books=books)
 
-@myapp_obj.route("/hello")
+@myapp_obj.route("/homepage.html")
 @login_required
 def hello():
     return "Hello World!"
@@ -49,8 +49,8 @@ def getMember(name):
 def register():
         #create registration form
         registerForm  = registerUser()
-        if registerUser.validate_on_submit():
-          same_Username = User.query.filter_by(username = accountForm.username.data).first()
+        if registerForm.validate_on_submit():
+          same_Username = User.query.filter_by(username = registerForm.username.data).first()
           if same_Username == None:
             user = User(registerForm.fullname.data, registerForm.username.data, registerForm.password.data)
             db.session.add(user)
