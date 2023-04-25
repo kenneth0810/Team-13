@@ -1,0 +1,20 @@
+{% extends "base.html"%}
+
+{% block content %}
+<h1>Register</h1>
+<form action="" method="POST" nonvalidate>
+    {{registerForm.hidden_tag()}}
+    <p> {{registerForm.fullname.label}}<br>
+       {{registerForm.fullname(size=32)}}</p>
+    <p> {{registerForm.username.label}} <br>
+       {{registerForm.username(size=32)}}</p>
+
+    <p> {{registerForm.password.label}} <br>
+       {{registerForm.password(size=32)}}</p>
+
+    <p> {{registerForm.confirm.label}} <br>
+       {{registerForm.password(size=32)}}</p>
+
+    <p>{{registerform.submit()}}</p>
+</form>
+{% endblock %}
