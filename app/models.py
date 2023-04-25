@@ -10,7 +10,7 @@ class User(db.Model, UserMixin):
     fullname =db.Column(db.String(45), nullable = False)
     password = db.Column(db.String(20), nullable=False)
 
-   emails = db.relationship('Emails')
+    emails = db.relationship('Emails')
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password, password)
 
     def __repr__(self): #for debugging process
-        return f'<user {self.id}: {self.username}, {{self.fullname}>''
+        return f'<user {self.id}: {self.username}, {self.fullname}>'
 
 class Emails(db.Model):
    id = db.Column(db.Integer, primary_key=True)
@@ -27,7 +27,7 @@ class Emails(db.Model):
    email_body = db.Column (db.String (450))
    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
    def __repr__(self):
-      return f '< Emails {self.id} \n Sender: {self.subject_line} \n Body: {self.email_body}>'
+      return f'< Emails {self.id} Sender: {self.subject_line} Body: {self.email_body}>'
 
 @login.user_loader
 def load_user(id):
