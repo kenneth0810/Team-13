@@ -3,7 +3,7 @@
 1. Register an email account (Yue Ying)
 2. Login/Logout (Yue Ying)
 3. Send emails (Yue Ying)
-4. Delete emails (Ruben)
+4. Sort emails (Ruben)
 5. Search emails (Ruben)
 6. Send chat messages (Johnny)
 7. Delete chat messages (Johnny)
