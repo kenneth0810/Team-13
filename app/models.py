@@ -6,17 +6,28 @@ from flask_login import UserMixin
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    fullname =db.Column(db.String(10), nullable = False)
-    username = db.Column(db.String(15), nullable=False)
-    password = db.Column(db.String(32), nullable=False)
+    username = db.Column(db.String(30), nullable=False)
+    fullname =db.Column(db.String(45), nullable = False)
+    password = db.Column(db.String(20), nullable=False)
+
+   emails = db.relationship('Emails')
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-    def __repr__(self):
-        return f'<user {self.id}: {self.username}>''
+    def __repr__(self): #for debugging process
+        return f'<user {self.id}: {self.username}, {{self.fullname}>''
+
+class Emails(db.Model):
+   id = db.Column(db.Integer, primary_key=True)
+   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+   subject_line = db.Column(db.String(25))
+   email_body = db.Column (db.String (450))
+   timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+   def __repr__(self):
+      return f '< Emails {self.id} \n Sender: {self.subject_line} \n Body: {self.email_body}>'
 
 @login.user_loader
 def load_user(id):
