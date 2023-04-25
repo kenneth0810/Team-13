@@ -1,5 +1,5 @@
 from flask import render_template
-from flask import redirect
+from flask import redirect, request
 from flask import flash
 from app import myapp_obj
 from flask_login import current_user
@@ -32,13 +32,17 @@ def login():
     form = LoginForm()
     # if form inputs are valid
     if form.validate_on_submit():
-        # search database for username
-        # user = User.query.filter_by(...)
-        # check the password
-        # if password matches
-        # login_user(user)
-        flash(f'Here are the input {form.username.data} and {form.password.data}')
-        return redirect('/')
+        valid_user = User.query.filter_by(username = form.username.data).first()
+        if valid_user:
+          if valid_user.check_password(form.password.data):
+             login_user(user)
+             flash(f'Here are the input {form.username.data} and {form.password.data}')
+             return redirect('/')
+          else :
+             flash(f'Invalid password. Try again')
+        else: 
+             flash(f'Invalid username. Try again')  
+
     return render_template('login.html', form=form)
 
 @myapp_obj.route("/members/<string:name>/")
