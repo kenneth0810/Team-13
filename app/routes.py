@@ -49,6 +49,12 @@ def login():
 def getMember(name):
     return escape(name)
 
+@myapp_obj.route("/logout", methods = ['GET', 'POST'])
+@login_required
+def logout():
+       logout_user()
+       return redirect('/')
+
 @myapp_obj.route("/register", methods =['GET', 'POST'])
 def register():
         #create registration form
@@ -56,6 +62,7 @@ def register():
         if registerForm.validate_on_submit():
           same_Username = User.query.filter_by(username = registerForm.username.data).first()
           if same_Username == None:
+            user = User()
             user = User(registerForm.fullname.data, registerForm.username.data, registerForm.password.data)
             db.session.add(user)
             db.session.commit()
