@@ -1,7 +1,7 @@
 from flask import render_template
 from flask import redirect, request
 from flask import flash
-from app import myapp_obj
+from app import myapp_obj, db
 from flask_login import current_user
 from flask_login import login_user
 from flask_login import logout_user
@@ -33,9 +33,10 @@ def login():
     # if form inputs are valid
     if form.validate_on_submit():
         valid_user = User.query.filter_by(username = form.username.data).first()
-        if valid_user:
-          if valid_user.check_password(form.password.data):
-             login_user(user)
+        if valid_user != None:
+          if valid_user.check_password(form.password.data)== True:
+             print("valid username, and valid password")
+             login_user(valid_user)
              flash(f'Here are the input {form.username.data} and {form.password.data}')
              return redirect('/')
           else :
@@ -62,13 +63,17 @@ def register():
         if registerForm.validate_on_submit():
           same_Username = User.query.filter_by(username = registerForm.username.data).first()
           if same_Username == None:
-            user = User()
-            user = User(registerForm.fullname.data, registerForm.username.data, registerForm.password.data)
+            print("password Data is: ")
+            print(registerForm.password.data)
+            user = User(fullname = registerForm.fullname.data, username= registerForm.username.data)
+            user.set_password(registerForm.password.data)
+            print("Created user, adding user to db")
             db.session.add(user)
             db.session.commit()
             #redirect user to login page to log in with their new account
             flash(f'Here are the input {registerForm.username.data}, {registerForm.fullname.data} and {registerForm.password.data}')
             return redirect('/login')
           else :
-              flash('The username is not available. Please choose another username')
+             flash('The username is not available. Please choose another username')
         return render_template('register.html', registerForm=registerForm)
+
