@@ -36,7 +36,6 @@ class Todo(db.Model):
     task = db.Column(db.String(300))
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id'))
 
 @login.user_loader
 def load_user(id):
