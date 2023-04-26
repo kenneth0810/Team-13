@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(20), nullable=False)
 
     emails = db.relationship('Emails')
-    todo = db.relationship('Todo', backref = 'author', lazy = 'dynamic')
+    todo = db.relationship('Todo', backref = 'user', lazy = 'dynamic')
 
     def set_password(self, password):
         self.password = generate_password_hash(password)

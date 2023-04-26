@@ -73,8 +73,7 @@ def register():
 def add_todo():
     form = TodoForm()
     if form.validate_on_submit():
-        todo = Todo(author = current_user, task = form.task.data)
+        todo = Todo(user = current_user, task = form.task.data)
         db.session.add(todo)
         db.session.commit()
-        return render_template('todo.html', form=form)
     return render_template("todo.html", form=form)

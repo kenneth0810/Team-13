@@ -183,23 +183,18 @@ The user enters confirmation passwords wrongly.
 - The user selects the “Add” option.
 
 **Primary Sequence:**
-1. The system creates a new and empty TODO list.
-2. The user can enter in text to add to do component to their todo list and optionally select a due date or priority for their tasks.
-3. The system validates the changes and asks the user to confirm the edits. 
-4. The user confirms and saves the todo list.
-5. The system saves and updates the user’s inputs in the todo list. 
+1. The system prompts user to enter a task to do.
+2. The user can enter in text to add to do component to their todo list.
+3. The user confirms and adds the task into the todo list.
+4. The system saves and updates the user’s inputs in the todo list. 
 
 **Primary Postconditions:**
-- A new TODO component is created and saved in the user’s account.
-- The user will automatically be redirected to the homepage.
+- A new TODO task is created and saved in the user’s account.
+- The user will automatically be redirected to the the TODO page to see all tasks.
 
 **Alternate Sequence #1:** The user entered nothing in the TODO list.
 - The system does not save the todo list.
-- The user is redirected to the TODO page.
-
-**Alternate Sequence #2:** The user selects cancel before saving the to do list content.
-- The system does not save the todo list.
-- The user is redirected to the TODO page.
+- The system prompts for something to be entered into the text box.
 
 **7. Use case name: Edit User Profile**
 
