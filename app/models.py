@@ -6,9 +6,9 @@ from flask_login import UserMixin
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), nullable=False)
+    username = db.Column(db.String(30), nullable=False, unique=True)
     fullname =db.Column(db.String(45), nullable = False)
-    password = db.Column(db.String(20), nullable=False)
+    password = db.Column(db.String(128), nullable=False)
 
     emails = db.relationship('Emails')
     todo = db.relationship('Todo', backref = 'user', lazy = 'dynamic')
@@ -18,6 +18,10 @@ class User(db.Model, UserMixin):
         self.password = generate_password_hash(password)
 
     def check_password(self, password):
+        print("self.password is: ")
+        print(self.password)
+        print("input password is: ")
+        print(password)
         return check_password_hash(self.password, password)
 
     def __repr__(self): #for debugging process
