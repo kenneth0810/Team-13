@@ -12,6 +12,7 @@ class User(db.Model, UserMixin):
 
     emails = db.relationship('Emails')
     todo = db.relationship('Todo', backref = 'user', lazy = 'dynamic')
+    profile = db.relationship('Profile', backref = 'user', lazy = 'dynamic')
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -33,7 +34,13 @@ class Emails(db.Model):
    
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    task = db.Column(db.String(300))
+    task = db.Column(db.String(100))
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+class Profile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    bio = db.Column(db.String(200))
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 

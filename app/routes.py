@@ -9,9 +9,10 @@ from flask_login import logout_user
 from flask_login import login_required
 
 from app.register import registerUser 
-from app.models import User, Emails, Todo
+from app.models import User, Emails, Todo, Profile
 from app.login import LoginForm
 from app.todo import TodoForm
+from app.profile import ProfileForm
 
 @myapp_obj.route("/")
 @myapp_obj.route("/index.html")
@@ -76,4 +77,15 @@ def add_todo():
         todo = Todo(user = current_user, task = form.task.data)
         db.session.add(todo)
         db.session.commit()
+        flash('Successfully added a new task.')
     return render_template("todo.html", form=form)
+
+@myapp_obj.route("/profile", methods = ['GET', 'POST'])
+def profile():
+    form = ProfileForm()
+    if form.validate_on_submit():
+        new_bio = Profile(user = current_user, bio = form.bio.data)
+        db.session.add(new_bio)
+        db.session.commit()
+        flash('Successfully updated a new bio.')
+    return render_template('profile.html', form=form)
