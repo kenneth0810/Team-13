@@ -24,3 +24,8 @@
 - Team updates: None 
 - Group progress: Briefly discussed on milestone 2 assignment. Updated Kenneth and Ruben after class about advices from  Professor regarding requirments we chose.
  
+### 2023-04-26 at 20:00 - 21:00
+- Attendees: Yue Ying Lee, Kenneth Nguyen
+- Team updates: Yue Ying and Kenneth updated the Github repo with the structure of the project and started working on their requirements. 
+- Group progress: Discussed our progress with the requirements. Got the databases set up and working good. Made merges to the main branch, there were few conflicts but it was resolved easily. Updated Johnny and Ruben on the progress.
+ 
