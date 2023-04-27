@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Register</h1>
-<form action="" method="POST" nonvalidate>
+<form action="/register" method="POST" nonvalidate>
     {{registerForm.hidden_tag()}}
     <p> {{registerForm.fullname.label}}<br>
        {{registerForm.fullname(size=32)}}</p>
@@ -13,7 +13,7 @@
        {{registerForm.password(size=32)}}</p>
 
     <p> {{registerForm.confirm.label}} <br>
-       {{registerForm.password(size=32)}}</p>
+       {{registerForm.confirm(size=32)}}</p>
 
     <p>{{registerForm.submit()}}</p>
 </form>
