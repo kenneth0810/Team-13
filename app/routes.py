@@ -32,8 +32,9 @@ def homepage():
 def login():
     # create form
     form = LoginForm()
+    #if 'login' in request.form:
     # if form inputs are valid
-    if form.validate_on_submit():
+     if form.validate_on_submit():
         valid_user = User.query.filter_by(username = form.username.data).first()
         if valid_user != None:
           if valid_user.check_password(form.password.data)== True:
@@ -44,7 +45,11 @@ def login():
           else :
              flash(f'Invalid password. Try again')
         else: 
-             flash(f'Invalid username. Try again')  
+             flash(f'Invalid username. Try again or register an account')  
+     # if register button is clicked
+    #elif 'register' in request.form:
+     #   print('1')
+      #  return redirect(url_for('register'))
 
     return render_template('login.html', form=form)
 
@@ -67,6 +72,10 @@ def register():
           if same_Username == None:
             print("password Data is: ")
             print(registerForm.password.data)
+           # if (registerForm.password.data != registerForm.confirm.data):
+            #   flash('Passwords do not match. Please try again.')
+             #  print("password deos not match")
+               #return render_template('register.html',registerForm = registerForm)
             user = User(fullname = registerForm.fullname.data, username= registerForm.username.data)
             user.set_password(registerForm.password.data)
             print("Created user, adding user to db")
