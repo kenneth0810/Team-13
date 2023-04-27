@@ -4,4 +4,4 @@ from wtforms.validators import DataRequired
 
 class ProfileForm(FlaskForm):
     bio = StringField("Change Bio", validators = [DataRequired()])
-    submit = SubmitField("Save")
+    submit = SubmitField("Save and Update")

@@ -1,5 +1,5 @@
 from flask import render_template
-from flask import redirect, request
+from flask import redirect, request, url_for
 from flask import flash
 from app import myapp_obj, db
 from flask_login import current_user
@@ -87,14 +87,53 @@ def add_todo():
         db.session.add(todo)
         db.session.commit()
         flash('Successfully added a new task.')
-    return render_template("todo.html", form=form)
+        return redirect(url_for('add_todo'))
 
-@myapp_obj.route("/profile", methods = ['GET', 'POST'])
+    user = current_user
+    all_tasks = Todo.query.all()
+    task_list = [] #a list to append all exisiting tasks for current user to be passed into the html file
+    for t in all_tasks:
+        if t.user_id == user.id:
+            task_list.append(t)
+    return render_template("todo.html", form=form, tasks=task_list, user=user)
+
+@myapp_obj.route('/delete-task/<int:id>', methods=['GET','POST']) 
+def delete_task(id):
+    task = Todo.query.filter(Todo.id == id).first()
+    if task:
+        db.session.delete(task) 
+        db.session.commit()
+        flash('Task deleted')
+    else:
+        flash('There is no task to be deleted.')
+    return redirect(url_for('add_todo'))
+
+@myapp_obj.route("/profile", methods=['GET', 'POST'])
 def profile():
     form = ProfileForm()
     if form.validate_on_submit():
-        new_bio = Profile(user = current_user, bio = form.bio.data)
+        #if a current bio exists and a new bio is submitted, delete the current bio and replace it with the new bio
+        curr_bio = Profile.query.filter_by(user=current_user).first()
+        if curr_bio:
+            db.session.delete(curr_bio)
+        new_bio = Profile(user=current_user, bio=form.bio.data)
         db.session.add(new_bio)
         db.session.commit()
         flash('Successfully updated a new bio.')
-    return render_template('profile.html', form=form)
+    else:
+        #if nothing is submitted, the bio form will be empty, so assign the bio to the current bio
+        curr_bio = Profile.query.filter_by(user=current_user).first()
+        if curr_bio:
+            form.bio.data = curr_bio.bio
+    return render_template('profile.html', form=form, user=current_user)
+
+@myapp_obj.route('/delete-bio/<int:id>', methods=['GET','POST']) 
+def delete_bio(id):
+    b = Profile.query.filter(Profile.user_id == id).first()
+    if b:
+        db.session.delete(b) 
+        db.session.commit()
+        flash('Bio deleted')
+    else:
+        flash('There is no bio to be deleted.')
+    return redirect(url_for('profile'))

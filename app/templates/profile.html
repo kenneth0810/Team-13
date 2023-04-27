@@ -4,8 +4,15 @@
 <h1>Profile.</h1>
 <form action="" method="POST" novalidate>
     {{form.hidden_tag()}}
+    <h2>Hello {{user.username}}! </h2>
     <p> {{form.bio.label}} <br>
        {{form.bio(size=32)}}</p>
+
+    <a href="{{url_for('delete_bio', id=user.id)}}">Delete Bio</a>
+
+    {% if form.bio  %}
+        {{form.bio.data}}
+    {% endif %}
 
     <p>{{form.submit()}}</p>
 </form>
