@@ -34,7 +34,7 @@ def login():
     form = LoginForm()
     #if 'login' in request.form:
     # if form inputs are valid
-     if form.validate_on_submit():
+    if form.validate_on_submit():
         valid_user = User.query.filter_by(username = form.username.data).first()
         if valid_user != None:
           if valid_user.check_password(form.password.data)== True:
@@ -84,7 +84,7 @@ def register():
             #redirect user to login page to log in with their new account
             flash(f'Here are the input {registerForm.username.data}, {registerForm.fullname.data} and {registerForm.password.data}')
             return redirect('/login')
-          else :
+        else :
              flash('The username is not available. Please choose another username')
         return render_template('register.html', registerForm=registerForm)
 
