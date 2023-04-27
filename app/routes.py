@@ -1,5 +1,5 @@
 from flask import render_template
-from flask import redirect, request, url_for
+from flask import redirect, request, session, url_for
 from flask import flash
 from app import myapp_obj, db
 from flask_login import current_user
@@ -23,15 +23,18 @@ def index():
               'book': 'bookname2'}]
     return render_template('homepage.html',name=name, books=books)
 
-@myapp_obj.route("/homepage.html")
+@myapp_obj.route("/homepage")
 @login_required
-def hello():
-    return "Hello World!"
+def homepage():
+    user = current_user
+    user_fullname = user.fullname
+    return render_template('homepage.html', user_fullname = user_fullname)
 
 @myapp_obj.route("/login", methods=['GET', 'POST'])
 def login():
     # create form
     form = LoginForm()
+    #if 'login' in request.form:
     # if form inputs are valid
     if form.validate_on_submit():
         valid_user = User.query.filter_by(username = form.username.data).first()
@@ -40,11 +43,15 @@ def login():
              print("valid username, and valid password")
              login_user(valid_user)
              flash(f'Here are the input {form.username.data} and {form.password.data}')
-             return redirect('/')
+             return redirect(url_for('homepage'))
           else :
              flash(f'Invalid password. Try again')
         else: 
-             flash(f'Invalid username. Try again')  
+             flash(f'Invalid username. Try again or register an account')  
+     # if register button is clicked
+    #elif 'register' in request.form:
+     #   print('1')
+      #  return redirect(url_for('register'))
 
     return render_template('login.html', form=form)
 
@@ -56,7 +63,7 @@ def getMember(name):
 @login_required
 def logout():
        logout_user()
-       return redirect('/')
+       return redirect(url_for('login'))
 
 @myapp_obj.route("/register", methods =['GET', 'POST'])
 def register():
@@ -67,6 +74,10 @@ def register():
           if same_Username == None:
             print("password Data is: ")
             print(registerForm.password.data)
+           # if (registerForm.password.data != registerForm.confirm.data):
+            #   flash('Passwords do not match. Please try again.')
+             #  print("password deos not match")
+               #return render_template('register.html',registerForm = registerForm)
             user = User(fullname = registerForm.fullname.data, username= registerForm.username.data)
             user.set_password(registerForm.password.data)
             print("Created user, adding user to db")
@@ -75,7 +86,7 @@ def register():
             #redirect user to login page to log in with their new account
             flash(f'Here are the input {registerForm.username.data}, {registerForm.fullname.data} and {registerForm.password.data}')
             return redirect('/login')
-          else :
+        else :
              flash('The username is not available. Please choose another username')
         return render_template('register.html', registerForm=registerForm)
 
