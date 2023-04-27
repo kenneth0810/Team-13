@@ -24,7 +24,9 @@ def index():
 @myapp_obj.route("/homepage")
 @login_required
 def homepage():
-    return render_template('homepage.html')
+    user = current_user
+    user_fullname = user.fullname
+    return render_template('homepage.html', user_fullname = user_fullname)
 
 @myapp_obj.route("/login", methods=['GET', 'POST'])
 def login():
