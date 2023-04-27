@@ -2,9 +2,6 @@
 
 {% block content %}
         <h1>Hello, {{name}} !</h1>
-        {% for i in books %}
-        <ul>
-            <li><p>{{i.author}}: {{i.book}}</p></li>
-        </ul>
-        {% endfor %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        
 {% endblock %}
