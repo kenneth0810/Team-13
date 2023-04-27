@@ -1,5 +1,5 @@
 from flask import render_template
-from flask import redirect, request
+from flask import redirect, request, session, url_for
 from flask import flash
 from app import myapp_obj, db
 from flask_login import current_user
@@ -21,10 +21,10 @@ def index():
               'book': 'bookname2'}]
     return render_template('homepage.html',name=name, books=books)
 
-@myapp_obj.route("/homepage.html")
+@myapp_obj.route("/homepage")
 @login_required
-def hello():
-    return "Hello World!"
+def homepage():
+    return render_template('homepage.html')
 
 @myapp_obj.route("/login", methods=['GET', 'POST'])
 def login():
@@ -38,7 +38,7 @@ def login():
              print("valid username, and valid password")
              login_user(valid_user)
              flash(f'Here are the input {form.username.data} and {form.password.data}')
-             return redirect('/')
+             return redirect(url_for('homepage'))
           else :
              flash(f'Invalid password. Try again')
         else: 
@@ -54,7 +54,7 @@ def getMember(name):
 @login_required
 def logout():
        logout_user()
-       return redirect('/')
+       return redirect(url_for('login'))
 
 @myapp_obj.route("/register", methods =['GET', 'POST'])
 def register():
