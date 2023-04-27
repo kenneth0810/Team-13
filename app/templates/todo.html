@@ -1,0 +1,21 @@
+{% extends "base.html"%}
+
+{% block content %}
+<h1>Create a task.</h1>
+<h2>Hello {{user.username}}</h2>
+<form action="" method="POST" novalidate>
+    {{form.hidden_tag()}}
+    <p> {{form.task.label}} <br>
+       {{form.task(size=32)}}</p>
+
+       {% if tasks %}
+            {% for t in tasks %}
+                <li><a href="{{url_for('delete_task', id=t.id)}}">Delete</a> {{t.task}}</li>
+            {% endfor %}
+        {% else %}
+            <p>There are no tasks.</p>
+       {% endif %}
+
+    <p>{{form.submit()}}</p>
+</form>
+{% endblock %}

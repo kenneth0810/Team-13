@@ -11,6 +11,9 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(128), nullable=False)
 
     emails = db.relationship('Emails')
+    todo = db.relationship('Todo', backref = 'user', lazy = 'dynamic')
+    profile = db.relationship('Profile', backref = 'user', lazy = 'dynamic')
+
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
@@ -32,6 +35,18 @@ class Emails(db.Model):
    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
    def __repr__(self):
       return f'< Emails {self.id} Sender: {self.subject_line} Body: {self.email_body}>'
+   
+class Todo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    task = db.Column(db.String(100))
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+class Profile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    bio = db.Column(db.String(200))
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 @login.user_loader
 def load_user(id):
