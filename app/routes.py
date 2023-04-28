@@ -11,7 +11,7 @@ from app.register import registerUser
 from app.models import User, Emails, Todo, Profile
 from app.login import LoginForm
 from app.todo import TodoForm
-from app.profile import ProfileForm
+from app.profile import BioForm, PasswordForm
 
 @myapp_obj.route("/")
 @myapp_obj.route("/index.html")
@@ -85,6 +85,7 @@ def register():
         return render_template('register.html', registerForm=registerForm)
 
 @myapp_obj.route("/todo", methods = ['GET', 'POST'])
+@login_required
 def add_todo():
     form = TodoForm()
     if form.validate_on_submit():
@@ -102,7 +103,8 @@ def add_todo():
             task_list.append(t)
     return render_template("todo.html", form=form, tasks=task_list, user=user)
 
-@myapp_obj.route('/delete-task/<int:id>', methods=['GET','POST']) 
+@myapp_obj.route('/delete-task/<int:id>', methods=['GET','POST'])
+@login_required
 def delete_task(id):
     task = Todo.query.filter(Todo.id == id).first()
     if task:
@@ -114,25 +116,40 @@ def delete_task(id):
     return redirect(url_for('add_todo'))
 
 @myapp_obj.route("/profile", methods=['GET', 'POST'])
+@login_required
 def profile():
-    form = ProfileForm()
-    if form.validate_on_submit():
+    bio_form = BioForm()
+    if bio_form.validate_on_submit():
         #if a current bio exists and a new bio is submitted, delete the current bio and replace it with the new bio
         curr_bio = Profile.query.filter_by(user=current_user).first()
         if curr_bio:
             db.session.delete(curr_bio)
-        new_bio = Profile(user=current_user, bio=form.bio.data)
+        new_bio = Profile(user=current_user, bio=bio_form.bio.data)
         db.session.add(new_bio)
         db.session.commit()
         flash('Successfully updated a new bio.')
     else:
-        #if nothing is submitted, the bio form will be empty, so assign the bio to the current bio
+        #if nothing is submitted, the bio form will be empty, so assign the form.bio to the current bio
         curr_bio = Profile.query.filter_by(user=current_user).first()
         if curr_bio:
-            form.bio.data = curr_bio.bio
-    return render_template('profile.html', form=form, user=current_user)
+            bio_form.bio.data = curr_bio.bio
+    
+    pw_form = PasswordForm()
+    if pw_form.validate_on_submit():
+        user = current_user
+        if user.check_password(pw_form.old_password.data):
+            if not user.check_password(pw_form.new_password.data):
+                user.set_password(pw_form.new_password.data)
+                db.session.commit()
+                flash('Successfully updated password.')
+            else:
+                flash('New password and old password are the same. Please try again.')
+        else:
+            flash('Wrong password entered. Please try again.')
+    return render_template('profile.html', bform=bio_form, pform=pw_form, user=current_user)
 
-@myapp_obj.route('/delete-bio/<int:id>', methods=['GET','POST']) 
+@myapp_obj.route('/delete-bio/<int:id>', methods=['GET','POST'])
+@login_required
 def delete_bio(id):
     b = Profile.query.filter(Profile.user_id == id).first()
     if b:

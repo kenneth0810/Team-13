@@ -206,19 +206,16 @@ The user enters confirmation passwords wrongly.
 - The user selects the “Edit profile” option on the user profile page.
 
 **Primary Sequence:**
-1. The system displays a window showing all the information (such as full name, password, and biography) which can be edited.
+1. The system displays a window showing all the information (such as full name, password, and biography).
 2. The user adds, deletes, or modifies their profile information.
-3. The system validates the changes and asks the user to confirm the changes. 
-4. The user confirms to finish editing their profile.
-5. The system updates and saves all the information edited by the user.
+3. The user confirms to finish editing their profile.
+4. The system updates and saves all the information edited by the user.
 
 **Primary Postconditions:** 
 - The user’s profile information is updated and saved.
-- The user is redirected to their homepage. 
 
-**Alternate Sequence:** The user selects “cancel/discard” (user chooses not to save)
+**Alternate Sequence:** The user does not modify anything.
 - System does not save or update the profile information.
-- The user is redirected to their homepage.
  
 **8. Use case name:  Delete account**
 
