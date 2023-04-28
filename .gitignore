@@ -7,3 +7,5 @@ app/__pycache__
 #ignore any .pyc files from being commited 
 *.pyc
 
+#ignore os generated files
+*.DS_Store

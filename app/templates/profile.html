@@ -2,18 +2,23 @@
 
 {% block content %}
 <h1>Profile.</h1>
+<a href="{{url_for('homepage')}}">Homepage</a>
 <form action="" method="POST" novalidate>
-    {{form.hidden_tag()}}
-    <h2>Hello {{user.username}}! </h2>
-    <p> {{form.bio.label}} <br>
-       {{form.bio(size=32)}}</p>
-
+    {{bform.hidden_tag()}} {{pform.hidden_tag()}}
+    <h2>Hello {{user.fullname}}! </h2>
+    <h3 style="display: inline;">Username:</h3>
+    <p style="display: inline;">{{user.username}}</p>
+    <p> {{bform.bio.label}} <br> 
+        {{bform.bio(size=32)}}</p>
     <a href="{{url_for('delete_bio', id=user.id)}}">Delete Bio</a>
 
-    {% if form.bio  %}
-        {{form.bio.data}}
-    {% endif %}
-
-    <p>{{form.submit()}}</p>
+    <p>{{bform.submit()}}</p>
+    <br> 
+    <h3>Want to change your password?</h3>
+    <p>{{pform.old_password.label}} <br>
+        {{pform.old_password(size=32)}}</p>
+    <p>{{pform.new_password.label}} <br>
+        {{pform.new_password(size=32)}}</p>
+    <p>{{pform.submit()}}</p>
 </form>
 {% endblock %}
