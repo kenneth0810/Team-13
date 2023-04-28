@@ -11,10 +11,14 @@
 
     <p> {{registerForm.password.label}} <br>
        {{registerForm.password(size=32)}}</p>
-
+ {%for error in registerForm.password.errors%}
+    <span style= "color: red;">[{{error}}]</span>
+    {%endfor %}
     <p> {{registerForm.confirm.label}} <br>
        {{registerForm.confirm(size=32)}}</p>>  
-
+    {%for error in registerForm.confirm.errors%}
+    <span style= "color: red;">[{{error}}]</span>
+    {%endfor %}
     <p>{{registerForm.submit()}}</p>
 </form>
 <a href = "/login">
