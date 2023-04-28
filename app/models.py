@@ -32,20 +32,29 @@ class User(db.Model, UserMixin):
 class Emails(db.Model):
    id = db.Column(db.Integer, primary_key=True)
    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-   recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+  # recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
    subject_line = db.Column(db.String(25))
    email_body = db.Column (db.String (600))
    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
    def __repr__(self):
       return f'< Emails {self.id} Sender: {self.subject_line} Body: {self.email_body}>'
 
+class Todo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    task = db.Column(db.String(100))
 
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+class Profile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    bio = db.Column(db.String(200))
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 #received emails function 
 #class received_emails (db.Model) 
 
 #class sent_emails(db.Model)
-
 
 @login.user_loader
 def load_user(id):
