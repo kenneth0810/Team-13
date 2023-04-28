@@ -91,6 +91,7 @@ def register():
         return render_template('register.html', registerForm=registerForm)
 
 @myapp_obj.route("/todo", methods = ['GET', 'POST'])
+@login_required
 def add_todo():
     form = TodoForm()
     if form.validate_on_submit():
@@ -108,7 +109,8 @@ def add_todo():
             task_list.append(t)
     return render_template("todo.html", form=form, tasks=task_list, user=user)
 
-@myapp_obj.route('/delete-task/<int:id>', methods=['GET','POST']) 
+@myapp_obj.route('/delete-task/<int:id>', methods=['GET','POST'])
+@login_required
 def delete_task(id):
     task = Todo.query.filter(Todo.id == id).first()
     if task:
@@ -120,6 +122,7 @@ def delete_task(id):
     return redirect(url_for('add_todo'))
 
 @myapp_obj.route("/profile", methods=['GET', 'POST'])
+@login_required
 def profile():
     form = ProfileForm()
     if form.validate_on_submit():
@@ -138,7 +141,8 @@ def profile():
             form.bio.data = curr_bio.bio
     return render_template('profile.html', form=form, user=current_user)
 
-@myapp_obj.route('/delete-bio/<int:id>', methods=['GET','POST']) 
+@myapp_obj.route('/delete-bio/<int:id>', methods=['GET','POST'])
+@login_required
 def delete_bio(id):
     b = Profile.query.filter(Profile.user_id == id).first()
     if b:

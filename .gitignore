@@ -1,0 +1,11 @@
+#ignore datbase file for now until we reach final stage where we test the functions 
+*.db
+
+#ignore pycache directory from being commited from app 
+app/__pycache__
+
+#ignore any .pyc files from being commited 
+*.pyc
+
+#ignore os generated files
+*.DS_Store
