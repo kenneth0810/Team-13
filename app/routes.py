@@ -7,21 +7,20 @@ from flask_login import login_user
 from flask_login import logout_user
 from flask_login import login_required
 
+#from wtforms.validators import Email 
+#from flask_mail import Mail
+#from app.send_emails import send_emails
+from app.delete_account import deleteAccount
 from app.register import registerUser 
 from app.models import User, Emails, Todo, Profile
 from app.login import LoginForm
 from app.todo import TodoForm
 from app.profile import BioForm, PasswordForm
 
+#index page is the page user see before registering or logging in
 @myapp_obj.route("/")
-@myapp_obj.route("/index.html")
 def index():
-    name = 'Carlos'
-    books = [ {'author': 'authorname1',
-                'book':'bookname1'},
-             {'author': 'authorname2',
-              'book': 'bookname2'}]
-    return render_template('homepage.html',name=name, books=books)
+    return render_template('index.html', )
 
 @myapp_obj.route("/homepage")
 @login_required
@@ -65,13 +64,8 @@ def register():
         registerForm  = registerUser()
         if registerForm.validate_on_submit():
           same_Username = User.query.filter_by(username = registerForm.username.data).first()
+          print("starting to find user")
           if same_Username == None:
-            print("password Data is: ")
-            print(registerForm.password.data)
-           # if (registerForm.password.data != registerForm.confirm.data):
-            #   flash('Passwords do not match. Please try again.')
-             #  print("password deos not match")
-               #return render_template('register.html',registerForm = registerForm)
             user = User(fullname = registerForm.fullname.data, username= registerForm.username.data)
             user.set_password(registerForm.password.data)
             print("Created user, adding user to db")
@@ -80,9 +74,16 @@ def register():
             #redirect user to login page to log in with their new account
             flash(f'Here are the input {registerForm.username.data}, {registerForm.fullname.data} and {registerForm.password.data}')
             return redirect('/login')
-        else :
+          else :
              flash('The username is not available. Please choose another username')
         return render_template('register.html', registerForm=registerForm)
+
+#@myapp_obj.route("/send_emails", methods = ['GET', 'POST'])
+#@login_required
+#def send_emails():
+  #  send_emails_form = send_emails()
+ #   if send_emails_form.validate_on_submit():
+#       email = Emails(user = current_use
 
 @myapp_obj.route("/todo", methods = ['GET', 'POST'])
 @login_required
