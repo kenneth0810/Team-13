@@ -135,7 +135,7 @@ def profile():
         db.session.commit()
         flash('Successfully updated a new bio.')
     else:
-        #if nothing is submitted, the bio form will be empty, so assign the bio to the current bio
+        #if nothing is submitted, the bio form will be empty, so assign the form.bio to the current bio
         curr_bio = Profile.query.filter_by(user=current_user).first()
         if curr_bio:
             form.bio.data = curr_bio.bio

@@ -5,15 +5,17 @@
 <a href="{{url_for('homepage')}}">Homepage</a>
 <form action="" method="POST" novalidate>
     {{form.hidden_tag()}}
-    <h2>Hello {{user.username}}! </h2>
-    <p> {{form.bio.label}} <br>
-       {{form.bio(size=32)}}</p>
-
+    <h2>Hello {{user.fullname}}! </h2>
+    <h3 style="display: inline;">Username:</h3>
+    <p style="display: inline;">{{user.username}}</p>
+    <br>
+    <h3 style="display: inline;">Password:</h3>
+    <p style="display: inline;">{{user.password}}</p>
+    <p> {{form.bio.label}} <br> 
+        {{form.bio(size=32)}}</p>
+    <br>
+    <br>
     <a href="{{url_for('delete_bio', id=user.id)}}">Delete Bio</a>
-
-    {% if form.bio  %}
-        {{form.bio.data}}
-    {% endif %}
 
     <p>{{form.submit()}}</p>
 </form>
