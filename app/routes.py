@@ -34,8 +34,6 @@ def homepage():
 def login():
     # create form
     form = LoginForm()
-    #if 'login' in request.form:
-    # if form inputs are valid
     if form.validate_on_submit():
         valid_user = User.query.filter_by(username = form.username.data).first()
         if valid_user != None:
@@ -48,10 +46,6 @@ def login():
              flash(f'Invalid password. Try again')
         else: 
              flash(f'Invalid username. Try again or register an account')  
-     # if register button is clicked
-    #elif 'register' in request.form:
-     #   print('1')
-      #  return redirect(url_for('register'))
 
     return render_template('login.html', form=form)
 
