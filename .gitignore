@@ -9,6 +9,3 @@ app/__pycache__
 
 #ignore os generated files
 *.DS_Store
-
-#ignore os generated files
-*.DS_Store
