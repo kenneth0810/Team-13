@@ -1,0 +1,28 @@
+{% extends "base.html"%}{% block title %}Chat{% endblock %}
+
+{% block content %}
+<h1>Chat</h1>
+<form action="{{ url_for('start_chat') }}" method="POST" nonvalidate>
+    {{ form.hidden_tag() }}
+    <p>{{ form.recipient_name.label }}<br>
+       {{ form.recipient_name(size=32) }}</p>
+    <p>{{ form.subject.label }}<br>
+       {{ form.subject(size=32) }}</p>
+    <p>{{ form.message.label }}<br>
+       {{ form.message(size=32) }}</p>
+    <p>{{ form.submit() }}</p>
+</form>
+
+{% if messages %}
+    <h2>Received Messages:</h2>
+    {% for message in messages %}
+            <div class="message">
+                <p>Time: {{ message.timestamp }}</p>
+                <p>From: {{ message.username }}</p>
+                <p>Subject: {{ message.subject }}</p>
+                <p>Message: {{ message.message }}</p>
+            </div>
+    {% endfor %}
+{% else %}
+    <p>No messages received.</p>
+{% endif %}
