@@ -101,7 +101,6 @@ def send_emails():
         return redirect('/homepage')
     else:
      flash(f' Invalid recipients. Retype username or go back to homepage.')
-     return redirect('/homepage')
 
    return render_template('send_emails.html', send_emails_form = send_emails_form)
 
