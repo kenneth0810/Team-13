@@ -3,20 +3,28 @@
 {% block content %}
 <h1>Homepage</h1>
 <h1>Hello, {{user_fullname}} !</h1>
-      
+<p>      
 <a href = "/logout">
       <button type="submit2" name="submit_button2">Logout</button>
     </a>
-<a href = "{{ url_for('add_todo') }}">
+</p>
+<p> <a href = "{{ url_for('add_todo') }}">
       <button type="submit3" name="submit_button3">Add to do</button>
     </a> 
-<a href = "/login">
+</p>
+<p>
+ <a href = "/send_emails">
+    <button type="submit7" name="submit_button4">Send Emails</button>
+</p>
+ <p><a href = "/login">
       <button type="submit4" name="submit_button4">Login</button>
     </a>
-<a href = "/profile">
+</p>
+<p><a href = "/profile">
       <button type="submit5" name="submit_button5">Profile</button>
     </a>
-<a href = "/delete_account">
+</p>
+<p> <a href = "/delete_account">
       <button type="submit6" name="submit_button6">Delete Account</button>
     </a>        
 {% endblock %}
