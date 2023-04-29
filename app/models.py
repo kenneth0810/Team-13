@@ -10,7 +10,7 @@ class User(db.Model, UserMixin):
     fullname =db.Column(db.String(45), nullable = False)
     password = db.Column(db.String(128), nullable=False)
 
-    emails = db.relationship('Emails')
+    # emails = db.relationship('Emails', backref = 'user', lazy = 'dynamic')
     todo = db.relationship('Todo', backref = 'user', lazy = 'dynamic')
     profile = db.relationship('Profile', backref = 'user', lazy = 'dynamic')
 
@@ -30,13 +30,17 @@ class User(db.Model, UserMixin):
 #sending emails function
 class Emails(db.Model):
    id = db.Column(db.Integer, primary_key=True)
-   sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-   #recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-   subject_line = db.Column(db.String(25))
+   sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable =False)
+   recipients_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+   # recipients_id = db.Column(db.ARRAY(db.Integer), nullable=False)
+   subject_line = db.Column(db.String(25), nullable = False)
    email_body = db.Column (db.String (600))
    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+   sender = db.relationship("User", foreign_keys=[sender_id])
+   # recipient = db.relationship("User", foreign_keys=[recipients_id])
    def __repr__(self):
-      return f'< Emails {self.id} Sender: {self.subject_line} Body: {self.email_body}>'
+      return f'< Emails {self.id} Subject: {self.subject_line} Body: {self.email_body}>'
    
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -49,14 +53,6 @@ class Profile(db.Model):
     bio = db.Column(db.String(200))
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-
-
-#received emails function 
-#class received_emails (db.Model) 
-
-#class sent_emails(db.Model)
-
 
 @login.user_loader
 def load_user(id):
