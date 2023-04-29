@@ -42,7 +42,6 @@ def login():
         valid_user = User.query.filter_by(username = form.username.data).first()
         if valid_user != None:
           if valid_user.check_password(form.password.data)== True:
-             print("valid username, and valid password")
              login_user(valid_user)
              flash(f'Here are the input {form.username.data} and {form.password.data}')
              return redirect(url_for('homepage'))
@@ -71,11 +70,9 @@ def register():
         registerForm  = registerUser()
         if registerForm.validate_on_submit():
           same_Username = User.query.filter_by(username = registerForm.username.data).first()
-          print("starting to find user")
           if same_Username == None:
             user = User(fullname = registerForm.fullname.data, username= registerForm.username.data)
             user.set_password(registerForm.password.data)
-            print("Created user, adding user to db")
             db.session.add(user)
             db.session.commit()
             #redirect user to login page to log in with their new account
