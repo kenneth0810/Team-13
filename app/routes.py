@@ -183,7 +183,7 @@ def delete_bio(id):
         flash('There is no bio to be deleted.')
     return redirect(url_for('profile'))
 
-@myapp_obj.route('/delete_accoutn', methods=['GET', 'POST'])
+@myapp_obj.route('/delete_account', methods=['GET', 'POST'])
 @login_required
 def delete_account():
     form = DeleteForm()
