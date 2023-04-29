@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Email Page</h1>>
 <form action="" method="POST" novalidate>
-    {{send_emails_form.hidden_tag()}}
+    {{send_emails_form.hidden_tag()}} {{send_emails_form.hidden_tag()}}
     <p>
         {{send_emails_form.recipients.label}} <br>
         {{send_emails_form.recipients(size=32)}}
