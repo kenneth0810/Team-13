@@ -7,21 +7,23 @@ from flask_login import login_user
 from flask_login import logout_user
 from flask_login import login_required
 
-#from wtforms.validators import Email 
-#from flask_mail import Mail
-#from app.send_emails import send_emails
-from app.delete_account import deleteAccount
+from wtforms.validators import Email
+#from flask_mail import Mail, Message
+#from app import mail
+from app.send_emails import sendEmails
 from app.register import registerUser 
 from app.models import User, Emails, Todo, Profile
 from app.login import LoginForm
 from app.todo import TodoForm
 from app.profile import BioForm, PasswordForm
 
-#index page is the page user see before registering or logging in
+#Yue Ying Lee
+# ndex page is the page user see before registering or logging in
 @myapp_obj.route("/")
 def index():
-    return render_template('index.html', )
+    return render_template('index.html' )
 
+#Yue Ying Lee
 @myapp_obj.route("/homepage")
 @login_required
 def homepage():
@@ -29,6 +31,7 @@ def homepage():
     user_fullname = user.fullname
     return render_template('homepage.html', user_fullname = user_fullname)
 
+#Yue Ying Lee
 @myapp_obj.route("/login", methods=['GET', 'POST'])
 def login():
     # create form
@@ -52,12 +55,14 @@ def login():
 def getMember(name):
     return escape(name)
 
+#Yue Ying Lee
 @myapp_obj.route("/logout", methods = ['GET', 'POST'])
 @login_required
 def logout():
        logout_user()
        return redirect(url_for('login'))
 
+#Yue Ying Lee
 @myapp_obj.route("/register", methods =['GET', 'POST'])
 def register():
         #create registration form
@@ -78,12 +83,28 @@ def register():
              flash('The username is not available. Please choose another username')
         return render_template('register.html', registerForm=registerForm)
 
-#@myapp_obj.route("/send_emails", methods = ['GET', 'POST'])
-#@login_required
-#def send_emails():
-  #  send_emails_form = send_emails()
- #   if send_emails_form.validate_on_submit():
-#       email = Emails(user = current_use
+#Yue Ying Lee
+@myapp_obj.route("/send_emails", methods = ['GET', 'POST'])
+@login_required
+def send_emails():
+   send_emails_form = sendEmails()
+   if send_emails_form.validate_on_submit():
+    sender_id = current_user.id
+    valid_recipients =  User.query.filter_by(username = send_emails_form.recipients.data).first()
+    if (valid_recipients):
+        flash(f' Valid recipients.')
+        recipients_id = valid_recipients.id
+        email = Emails (sender_id = sender_id, recipients_id = recipients_id, subject_line=send_emails_form.subject_line.data, email_body= send_emails_form.email_body.data)
+        db.session.add(email)
+        db.session.commit()
+        flash(f'Email successfully sent!')
+        return redirect('/homepage')
+    else:
+     flash(f' Invalid recipients. Retype username or go back to homepage.')
+     return redirect('/homepage')
+
+   return render_template('send_emails.html', send_emails_form = send_emails_form)
+
 
 @myapp_obj.route("/todo", methods = ['GET', 'POST'])
 @login_required
