@@ -10,16 +10,18 @@
        {{registerForm.username(size=32)}}</p>
 
     <p> {{registerForm.password.label}} <br>
-       {{registerForm.password(size=32)}}</p>
- {%for error in registerForm.password.errors%}
+       {{registerForm.password(size=32)}}
+    {%for error in registerForm.password.errors%}
     <span style= "color: red;">[{{error}}]</span>
-    {%endfor %}
+    {%endfor %}</p>
     <p> {{registerForm.confirm.label}} <br>
        {{registerForm.confirm(size=32)}}</p>>  
     {%for error in registerForm.confirm.errors%}
     <span style= "color: red;">[{{error}}]</span>
+    </p>
     {%endfor %}
-    <p>{{registerForm.submit()}}</p>
+    <p>{{registerForm.submit()}}
+    </p>
 </form>
 <a href = "/login">
       <button type="submit2" name="submit_button2">Login</button>
