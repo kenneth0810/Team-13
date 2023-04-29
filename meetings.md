@@ -1,4 +1,5 @@
 ## Meetings
+
 - Meeting Schedule: Meet at least once per week (in class and outside of class) 
 
 ### 2023-04-06 at 13:45 - 14:37
@@ -23,6 +24,11 @@
 - Attendees: Yue Ying Lee, Johnny Nguyen 
 - Team updates: None 
 - Group progress: Briefly discussed on milestone 2 assignment. Updated Kenneth and Ruben after class about advices from  Professor regarding requirments we chose.
+
+### 2023-04-21 at 10:30 - 13:00
+- Attendees: Yue Ying Lee, Kenneth Nguyen, Johnny Nguyen, Ruben Martinez-Martinez
+- Team updates: Yue Ying has basic templates for login and register. 
+- Group progress: Discussed about the plans for milestone2 assginment, confirmed requirements we could implement in our project. Everyone is assigned to work on their respective requirements.
  
 ### 2023-04-26 at 20:00 - 21:00
 - Attendees: Yue Ying Lee, Kenneth Nguyen
