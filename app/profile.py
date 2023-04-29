@@ -10,3 +10,7 @@ class PasswordForm(FlaskForm):
     old_password = PasswordField("Enter your old password", validators = [DataRequired()])
     new_password = PasswordField("Enter a new password", validators = [DataRequired()])
     submit = SubmitField("Update Password")
+
+class DeleteForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Delete Account')
