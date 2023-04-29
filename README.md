@@ -61,7 +61,7 @@ exit()
 5. Run the project with the following command: 
 ```
 python3 run.py
-```
+
 
 ## Credits: 
 - Yue Ying Lee (@YueYingLee)
