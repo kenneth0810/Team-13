@@ -2,7 +2,9 @@
 
 {% block content %}
 <h1>Profile.</h1>
-<a href="{{url_for('homepage')}}">Homepage</a>
+<a href="{{url_for('homepage')}}">
+    <button type="submit6" name="submit_button6">Homepage</button>
+</a>
 <form action="" method="POST" novalidate>
     {{bform.hidden_tag()}} {{pform.hidden_tag()}}
     <h2>Hello {{user.fullname}}! </h2>
@@ -20,5 +22,11 @@
     <p>{{pform.new_password.label}} <br>
         {{pform.new_password(size=32)}}</p>
     <p>{{pform.submit()}}</p>
+
+    <br><br><br>
+    <h3>Want to delete your account?</h3>
+    <p>{{dform.password.label}} <br>
+        {{dform.password(size=32)}}</p>
+    <p>{{dform.submit()}}</p>
 </form>
 {% endblock %}
