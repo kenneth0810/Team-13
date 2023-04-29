@@ -183,6 +183,18 @@ def profile():
             if b:
                 delete_bio(b.user_id)
 
+
+        #cannot delete messages and emails yet, they will show as null id's for now
+            # m = Message.query.filter_by(username=current_user.username).all()
+            # for message in m:
+            #     db.session.delete(m)
+            #     db.commit()
+
+            # e = Emails.query.filter_by(sender_id=current_user.id).all()
+            # for emails in e:
+            #     db.session.delete(e)
+            #     db.session.commit()
+
             db.session.delete(user)
             db.session.commit()
             logout_user
