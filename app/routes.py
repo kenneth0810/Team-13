@@ -6,16 +6,18 @@ from flask_login import current_user
 from flask_login import login_user
 from flask_login import logout_user
 from flask_login import login_required
+from datetime import datetime
 
 from wtforms.validators import Email
 #from flask_mail import Mail, Message
 #from app import mail
 from app.send_emails import sendEmails
 from app.register import registerUser 
-from app.models import User, Emails, Todo, Profile
+from app.models import User, Emails, Todo, Profile, Message
 from app.login import LoginForm
 from app.todo import TodoForm
-from app.profile import BioForm, PasswordForm
+from app.profile import BioForm, PasswordForm, DeleteForm
+from app.chat import ChatForm
 
 #Yue Ying Lee
 # index page is the page user see before registering or logging in
@@ -195,3 +197,20 @@ def delete_account():
     else:
         flash('Incorrect password.')
         return redirect(url_for('homepage'))
+    
+@myapp_obj.route('/chat', methods=['GET', 'POST'])
+@login_required
+def start_chat():
+    form = ChatForm()
+    if form.validate_on_submit():
+        if User.query.filter_by(username=form.recipient_name.data).first() is not None:
+            dateAndTime = datetime.now()
+            message = Message(username=current_user.username, subject=form.subject.data, message=form.message.data, sending_user=current_user.id, 
+            receiving_user=User.query.filter_by(username=form.recipient_name.data).first().id, timestamp=dateAndTime)
+            db.session.add(message)
+            db.session.commit()
+            return redirect(url_for('start_chat'))
+        else:
+            flash('Invalid recipient', 'danger')
+    messages = Message.query.filter_by(receiving_user=current_user.id).all()
+    return render_template('chat.html', user=current_user, form=form, messages=messages)

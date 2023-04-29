@@ -54,6 +54,19 @@ class Profile(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(250), nullable=True)
+    subject = db.Column(db.String(250), nullable=False)
+    message = db.Column(db.String(5000))
+    timestamp = db.Column(db.DateTime, nullable=False)
+
+    sending_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    receiving_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def repr(self):
+        return f'{self.id} : {self.subject}'
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
