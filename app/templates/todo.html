@@ -2,7 +2,9 @@
 
 {% block content %}
 <h1>TODO List</h1>
-<a href="{{url_for('homepage')}}">Homepage</a>
+<a href="{{url_for('homepage')}}">
+    <button type="submit6" name="submit_button6">Homepage</button>
+</a>
 <h2>Hello {{user.fullname}}</h2>
 <form action="" method="POST" novalidate>
     {{form.hidden_tag()}}

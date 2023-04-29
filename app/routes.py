@@ -166,7 +166,40 @@ def profile():
                 flash('New password and old password are the same. Please try again.')
         else:
             flash('Wrong password entered. Please try again.')
-    return render_template('profile.html', bform=bio_form, pform=pw_form, user=current_user)
+    
+    #find all items associated with the current_user and delete them
+    delete_form = DeleteForm()
+    if delete_form.validate_on_submit():
+        user = current_user
+        if user.check_password(delete_form.password.data):
+            deleteTodo = Todo.query.filter_by(user=current_user).all()
+            for item in deleteTodo:
+                delete_task(item.id)
+
+            b = Profile.query.filter_by(user=current_user).first()
+            if b:
+                delete_bio(b.user_id)
+
+
+        #cannot delete messages and emails yet, they will show as null id's for now
+            # m = Message.query.filter_by(username=current_user.username).all()
+            # for message in m:
+            #     db.session.delete(m)
+            #     db.commit()
+
+            # e = Emails.query.filter_by(sender_id=current_user.id).all()
+            # for emails in e:
+            #     db.session.delete(e)
+            #     db.session.commit()
+
+            db.session.delete(user)
+            db.session.commit()
+            logout_user
+            flash('Successfully deleted account.')
+            return redirect(url_for('login'))
+        else:
+            flash('wrong password!')
+    return render_template('profile.html', bform=bio_form, pform=pw_form, user=current_user, dform=delete_form)
 
 @myapp_obj.route('/delete-bio/<int:id>', methods=['GET','POST'])
 @login_required
@@ -175,25 +208,9 @@ def delete_bio(id):
     if b:
         db.session.delete(b) 
         db.session.commit()
-        flash('Bio deleted')
     else:
         flash('There is no bio to be deleted.')
     return redirect(url_for('profile'))
-
-@myapp_obj.route('/delete_account', methods=['GET', 'POST'])
-@login_required
-def delete_account():
-    form = DeleteForm()
-    if form.validate_on_submit():
-        if current_user.verify_password(form.password.data):
-            db.session.delete(current_user)
-            db.session.commit()
-            logout_user()
-            flash('Account was successfully deleted.')
-            return redirect(url_for('/login'))
-    else:
-        flash('Incorrect password.')
-        return redirect(url_for('homepage'))
     
 @myapp_obj.route('/chat', methods=['GET', 'POST'])
 @login_required
