@@ -33,24 +33,30 @@ pip3 install flask-login
 pip3 install flask-sqlachemy
 pip3 install flask-wtf
 pip3 install git 
+```
 
 2. Clone this project repository into folder of your choice using the following command
 ```
     git clone https://github.com/kenneth0810/Team-13.git
-    
+```
+
 3. Move to the Team-13 directory with this command(assumption of you are currently in the home directory): 
 ```
    cd Team-13
 ```
     
 4. Set up a database
+
  a. Run `flask shell`
+
  b. Copy and paste the code block below
+
 ```
 from app import db
 from app.models import User, Emails, Todo, Profile, Message
 db.create_all()
 exit()
+```
 
 5. Run the project with the following command: 
 ```
