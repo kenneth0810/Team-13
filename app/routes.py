@@ -180,3 +180,18 @@ def delete_bio(id):
     else:
         flash('There is no bio to be deleted.')
     return redirect(url_for('profile'))
+
+@myapp_obj.route('/delete_accoutn', methods=['GET', 'POST'])
+@login_required
+def delete_account():
+    form = DeleteForm()
+    if form.validate_on_submit():
+        if current_user.verify_password(form.password.data):
+            db.session.delete(current_user)
+            db.session.commit()
+            logout_user()
+            flash('Account was successfully deleted.')
+            return redirect(url_for('/login'))
+    else:
+        flash('Incorrect password.')
+        return redirect(url_for('homepage'))
