@@ -2,6 +2,9 @@
 
 {% block content %}
 <h1>Chat</h1>
+<a href="/homepage">
+    <button type="submit6" name="submit_button6">Homepage</button>
+</a>
 <form action="{{ url_for('start_chat') }}" method="POST" nonvalidate>
     {{ form.hidden_tag() }}
     <p>{{ form.recipient_name.label }}<br>
