@@ -1,0 +1,29 @@
+{% extends "base.html"%}
+
+{% block content %}
+<h1>Email Page</h1>>
+<form action="" method="POST" novalidate>
+    {{send_emails_form.hidden_tag()}}
+    <p>
+        {{send_emails_form.recipients.label}} <br>
+        {{send_emails_form.recipients(size=32)}}
+    </p>
+
+    <p>
+        {{send_emails_form.subject_line.label}} <br>
+        {{send_emails_form.subject_line(size=32)}}
+    </p>
+
+    <p>
+        {{send_emails_form.email_body.label}} <br>
+        {{send_emails_form.email_body(size=600)}}
+    </p>
+
+    <p>{{send_emails_form.submit()}}</p>
+</form>
+
+<a href="/homepage">
+    <button type="submit2" name="submit_button2">Homepage</button>
+</a>
+
+{% endblock %}
