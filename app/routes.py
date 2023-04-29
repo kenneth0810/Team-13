@@ -18,7 +18,7 @@ from app.todo import TodoForm
 from app.profile import BioForm, PasswordForm
 
 #Yue Ying Lee
-# ndex page is the page user see before registering or logging in
+# index page is the page user see before registering or logging in
 @myapp_obj.route("/")
 def index():
     return render_template('index.html' )
