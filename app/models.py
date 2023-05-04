@@ -10,9 +10,11 @@ class User(db.Model, UserMixin):
     fullname =db.Column(db.String(45), nullable = False)
     password = db.Column(db.String(128), nullable=False)
 
-    # emails = db.relationship('Emails', backref = 'user', lazy = 'dynamic')
+    emails = db.relationship('Emails', backref = 'user', lazy = 'dynamic')
     todo = db.relationship('Todo', backref = 'user', lazy = 'dynamic')
     profile = db.relationship('Profile', backref = 'user', lazy = 'dynamic')
+    #emails_sent = db.relationship('Email', backref='sender', lazy='dynamic')
+    #email_recipients = db.relationship('Recipient', backref='user', lazy='dynamic')
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -26,22 +28,78 @@ class User(db.Model, UserMixin):
 
     def __repr__(self): #for debugging process
         return f'<user {self.id}: {self.username}, {self.fullname}>'
+    
 
-#sending emails function
+# class emails_recipients (db.Model):
+#       __tablename__ = "email_recipients"
+#       id = db.Column(db.Integer, primary_key=True)
+#       email_id=db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True),
+#       recipient_id=db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+#       def __repr__(self):
+#        return f'< Recipients id {self.id} Email id: {self.email_id} Recipients: {self.recipient_id}>'
+
+# class Emails(db.Model):
+   
+#    id = db.Column(db.Integer, primary_key=True)
+#    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable =False)
+#    recipients_id = db.Column(db.String(200), nullable = False)
+  
+#    subject_line = db.Column(db.String(100), nullable = False)
+#    email_body = db.Column (db.String (1000))
+#    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+#    sender = db.relationship("User", foreign_keys=[sender_id])
+#    recipient = db.relationship("User", secondary=emails_recipients,
+#                                 primaryjoin=(id == emails_recipients.email_id),
+#                                 secondaryjoin=(emails_recipients.recipient_id == User.id),
+#                                 backref="emails_received")
+#    #primary join means between email and email recipients 
+#    #secondary join means email_recipiennts and user model 
+#    #backref = back reference on user model and allow access the emails received by a user using the emails_received attribute
+#    #recipient = db.relationship("User", foreign_keys=[recipients_id])
+#    def __repr__(self):
+#       return f'< Emails {self.id} Subject: {self.subject_line} Body: {self.email_body}>'
+
+# class Emails(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
+#     username = db.Column(db.String(250), nullable=True)
+#     subject = db.Column(db.String(255), nullable=False)
+#     emaiil_body = db.Column(db.Text, nullable=False)
+#     timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+#     recipients = db.relationship('Recipient', backref='email', lazy='dynamic')
+
+#     def __repr__(self):
+#         return f'<Email {self.id} Subject: {self.subject}>'
+
+# class Recipient(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+#     email_id = db.Column(db.Integer, db.ForeignKey('email.id'), nullable=False)
+
+#     def __repr__(self):
+#         return f'<Recipient {self.id}>'
+   
+
 class Emails(db.Model):
    id = db.Column(db.Integer, primary_key=True)
    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable =False)
-   recipients_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-   # recipients_id = db.Column(db.ARRAY(db.Integer), nullable=False)
    subject_line = db.Column(db.String(25), nullable = False)
    email_body = db.Column (db.String (600))
    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
    sender = db.relationship("User", foreign_keys=[sender_id])
-   # recipient = db.relationship("User", foreign_keys=[recipients_id])
+   recipients = db.relationship("Recipient", )
    def __repr__(self):
       return f'< Emails {self.id} Subject: {self.subject_line} Body: {self.email_body}>'
-   
+
+
+# do we need to connec the relationship ? 
+class Recipient(db.Model):
+    email_id = db.Column(db.Integer, db.ForeignKey(Emails.id), primary_key=True, nullable=False)
+    recipient_id = db.Column(db.Integer, db.ForeignKey(User.id), primary_key=True, nullable=False)
+
+
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String(100))
