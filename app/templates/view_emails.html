@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Emails page for {{user.fullname}}</h1>
+<p>      
+    <a href="/homepage">
+        <button type="submit6" name="submit_button6">Homepage</button>
+    </a>
+</p>
+<!--fix showing the username -->
+{% if emails %}
+    {% for email in emails %}
+      <p>
+        <div class="emails"> 
+            <p>Time: {{ email.timestamp }} </p>
+            <p>From: {{ email.recipient_username}} </p>
+            <p> Subject: {{ email.subject}} </p>
+            <p> Body: </p> <textarea style="width:50%;height:200px;"> {{ email.email_body }}</textarea> 
+            <p>      
+                <a href="/send_emails">
+                    <button type="submit6" name="submit_button6">Reply</button>
+                </a>
+            </p>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!-- create big whitespace in between emails--> 
+    </div>
+      </p>
+    {% endfor %}
+{% else %}
+  <p>No Emails received.</p>
+
+{% endif %}
+<!--Put back to send_emails for now, but i will update the link it redirect if we have time to do reply function-->
+
+
+
+{% endblock %}

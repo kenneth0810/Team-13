@@ -14,7 +14,7 @@ from wtforms.validators import Email
 #from app import mail
 from app.send_emails import sendEmails
 from app.register import registerUser 
-from app.models import User, Emails, Todo, Profile, Message
+from app.models import User, Emails, Todo, Profile, Message, Thread
 from app.login import LoginForm
 from app.todo import TodoForm
 from app.profile import BioForm, PasswordForm, DeleteForm
@@ -83,147 +83,29 @@ def register():
              flash('The username is not available. Please choose another username')
         return render_template('register.html', registerForm=registerForm)
 
-# #not sending two users 
-# #Yue Ying Lee
-# @myapp_obj.route("/send_emails", methods = ['GET', 'POST'])
-# @login_required
-# def send_emails():
-#    send_emails_form = sendEmails()
-#    if send_emails_form.validate_on_submit():
-#     sender_id = current_user.id
-#     recipients_list = send_emails_form.recipients.data.split(',')
-#     print("recipients_list is: ")
-#     print(*recipients_list)
-#     valid_recipients = [] 
-#     for recipient_email in recipients_list:
-#         recipient_email = recipient_email.strip()
-#         print("recipient_email is: ")
-#         print(recipient_email)
-#         user = User.query.filter_by( username =recipient_email).first()
-#         if user: 
-#             print("valid user")
-#             valid_recipients.append(user.id)
-#         else:
-#             flash(f'{recipient_email} does not exist. Retype the username or go back to homepage')
-        
-#     if valid_recipients:
-#         print("There are valid recipients")
-#         print("valid_recipients: ")
-#         print(*valid_recipients)
-#         recipient_ids = np.array(valid_recipients)
-#         print("recipient_ids are: ")
-#         print(*recipient_ids)
-#         email = Emails (sender_id = sender_id, recipients_id = recipient_ids, subject_line=send_emails_form.subject_line.data, email_body= send_emails_form.email_body.data)
-#         db.session.add(email)
-#         db.session.commit()
-#         flash(f'These are valid recipients. Email successfully sent!')
-#         return redirect('/homepage')
 
-#    return render_template('send_emails.html', send_emails_form = send_emails_form)
-
-# @myapp_obj.route("/send_emails", methods = ['GET', 'POST'])
-# @login_required
-# def send_emails():
-#     send_emails_form = sendEmails()
-#     if send_emails_form.validate_on_submit():
-#         sender_id = current_user.id
-#         recipients_list= send_emails_form.recipients.data.split(',')
-#         print("recipients_list is: ")
-#         print(*recipients_list)
-#         valid_recipients = User.query.filter(User.username.in_(recipients_list)).all()
-#         if len(valid_recipients) == len(recipients_list):
-#             flash(f'Valid recipients.')
-#             for recipient in valid_recipients:
-#                 email = Emails(sender_id=sender_id, recipients_id=recipient.id, subject_line=send_emails_form.subject_line.data,
-#                                email_body=send_emails_form.email_body.data)
-#                 db.session.add(email)
-#                 db.session.commit()
-#             flash(f'Email successfully sent to all recipients!')
-#             return redirect('/homepage')
-#         else:
-#             flash(f'does not exist. Retype the username or go back to homepage')
-    
-
-#     return render_template('send_emails.html', send_emails_form = send_emails_form)
-
-#YueYingLee 
-#reply email function 
-
-
-#Yue Ying Lee@myapp_obj.route("/send_emails", methods=['GET', 'POST'])
-@myapp_obj.route("/send_emails", methods=['GET', 'POST'])
+#Yue Ying Lee
+@myapp_obj.route("/send_emails", methods = ['GET', 'POST'])
 @login_required
 def send_emails():
-    '''
-    Send Emails pseudocode:
-    send_emails_form = sendEmails()
-    if send_emails_form.validate_on_submit():
-        sender_id = current_user.id
-        recipients_list = send_emails_form.recipients.data.split(',')
-        recipient_ids = convertRecipientEmailsToRecipientIds(recipients_list) -> get recipient user id 
-        email_id = getNewEmailId() -> functon tog et the next available email id
-        email = Emails(id=email_id, ...) -> create a instance of email 
-        db.session.add(email) -> add the instance as a new row to the email table 
-        for recipient_id in recipient_ids: -> add new recipient row into recipient table 
-            recipient = Recipient(email_id=email_id, recipient_id=recipient_id)
-            db.session.add(recipient)
-        db.session.commit()
-    
-    recipieint id    emailid 
-    1                    1
-    2                    1
-    
-    def convertRecipientEmailsToRecipientIds(recipients_list)
-        recipient_ids = []
-        for recipient_email in recipients_list:
-            recipient_info = User.query.filter_by(username=recipient_email).first()
-            recipient_ids.append(recipient_info.id)
-        return recipient_ids
-        
-    def getNewEmailId():
-        foundNewId = False
-        while foundNewId == False:
-            candidate_id = randint(1, 1000000000000) #avialable id 
-            response = Emails.query.filter_by(id=candidate_id()) #loooking into hash table to see if there is any collisoni 
-            if response == null: #no collision 
-                # candidate_id can be used as the email_id
-                return candidate_id
-    '''
-    send_emails_form = sendEmails()
-    if send_emails_form.validate_on_submit():
-        sender_id = current_user.id
-        recipients_list = send_emails_form.recipients.data.split(',')  # Get the recipient usernames
-        recipients = []
-        for username in recipients_list:
-            user = User.query.filter_by(username=username.strip()).first()  # Find the user with this username
-            if user:
-                recipients.append(user)
-            else:
-                flash(f'Invalid recipient: {username.strip()}', 'error')
-        # determine the next available email id
-        foundNewId = False
-        email_id = -1
-        while foundNewId == False:
-            candidate_id = randint(1, 1000000000000) #avialable id 
-            response = Emails.query.filter_by(id=candidate_id()) #loooking into hash table to see if there is any collisoni 
-            if response == null: #no collision 
-                # candidate_id can be used as the email_id
-                email_id = candidate_id
-        # add the single email row
-        email = Emails(id=email_id, ...)
+   send_emails_form = sendEmails()
+   if send_emails_form.validate_on_submit():
+    sender_id = current_user.id
+    valid_recipients =  User.query.filter_by(username = send_emails_form.recipients.data).first()
+    if (valid_recipients):
+        recipient_username= valid_recipients.username
+        flash(f' Valid recipients: {valid_recipients.username}')
+        recipient_id = valid_recipients.id
+        recipient_username= valid_recipients.username
+        email = Emails (recipient_username = recipient_username,sender_id = sender_id, recipient_id = recipient_id, subject=send_emails_form.subject.data, email_body= send_emails_form.email_body.data)
         db.session.add(email)
-        # add every single recipient
-        for recipient in recipients:
-            recipient_entry = Recipient(email_id=email_id, recipient_id=recipient)
-            db.session.add(recipient_entry)
-        if recipients:
-            for recipient in recipients:
-                email = Emails(recipients_username = recipients, sender_id= current_user.id, recipients_id= recipients.id,subject_line=send_emails_form.subject_line.data, email_body=send_emails_form.email_body.data)
-                db.session.add(email)
-                db.session.commit()
-            flash('Email successfully sent!', 'success')
-            return redirect('/homepage')
-    return render_template('send_emails.html', send_emails_form=send_emails_form)
+        db.session.commit()
+        flash(f'Email successfully sent!')
+        return redirect('/homepage')
+    else:
+     flash(f' Invalid recipients. Retype username or go back to homepage.')
+
+   return render_template('send_emails.html', send_emails_form = send_emails_form)
 
 
 #view emails need to fix username
@@ -231,11 +113,7 @@ def send_emails():
 @myapp_obj.route("/view_emails", methods = ['GET', 'POST'])
 @login_required
 def view_emails():
-    emails = Emails.query.filter_by(recipients_id = current_user.id).all()
-
-    #emails = Emails.query.filter(Emails.recipients_id.any(current_user.id)).all()
-    #emails = session.query(Emails).filter(Emails.recipients_id.contains([current_user.id])).all()
-
+    emails = Emails.query.filter_by(recipient_id = current_user.id).all()
     return render_template('view_emails.html', user=current_user, emails = emails)
 
 @myapp_obj.route("/todo", methods = ['GET', 'POST'])
