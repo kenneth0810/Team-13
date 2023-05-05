@@ -30,7 +30,18 @@
 
 {% endif %}
 <!--Put back to send_emails for now, but i will update the link it redirect if we have time to do reply function-->
-
+<script>
+    // When the user scrolls down 20px from the top of the document, slide down the navbar
+    window.onscroll = function() {scrollFunction()};
+    
+    function scrollFunction() {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("navbar").style.top = "0";
+      } else {
+        document.getElementById("navbar").style.top = "-50px";
+      }
+    }
+    </script>
 
 
 {% endblock %}
