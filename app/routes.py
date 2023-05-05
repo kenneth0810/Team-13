@@ -315,14 +315,54 @@ def delete_bio(id):
 def start_chat():
     form = ChatForm()
     if form.validate_on_submit():
-        if User.query.filter_by(username=form.recipient_name.data).first() is not None:
-            dateAndTime = datetime.now()
-            message = Message(username=current_user.username, subject=form.subject.data, message=form.message.data, sending_user=current_user.id, 
-            receiving_user=User.query.filter_by(username=form.recipient_name.data).first().id, timestamp=dateAndTime)
-            db.session.add(message)
-            db.session.commit()
-            return redirect(url_for('start_chat'))
+        recipients = []
+        for recipient_name in form.recipient_name.data:
+            recipient = User.query.filter_by(username=recipient_name).first()
+            if recipient is None:
+                continue
+            recipients.append(recipient)
+        if not recipients:
+            flash('At least one recipient must be entered.')
         else:
-            flash('Invalid recipient', 'danger')
+            dateAndTime = datetime.now()
+            for recipient in recipients:
+                message = Message(
+                    username=current_user.username,
+                    subject=form.subject.data,
+                    message=form.message.data,
+                    sending_user=current_user.id, 
+                    receiving_user=recipient.id,
+                    timestamp=dateAndTime
+                )
+                db.session.add(message)
+            db.session.commit()
+            flash('Message sent successfully!')
+            return redirect(url_for('start_chat'))
     messages = Message.query.filter_by(receiving_user=current_user.id).all()
     return render_template('chat.html', user=current_user, form=form, messages=messages)
+
+@myapp_obj.route('/chat/<int:id>', methods=['POST'])
+@login_required
+def delete_chat(id):
+    message = Message.query.filter(Message.id == id, Message.receiving_user == current_user.id).first()
+    if message:
+        db.session.delete(message)
+        db.session.commit()
+        flash('Chat deleted', category='success')
+        return redirect(url_for('start_chat'))
+    else:
+        flash('There is no chat to be deleted')
+        return redirect(url_for('start_chat'))
+    
+@myapp_obj.route('/chat/search', methods=['POST'])
+def search_messages():
+    search_type = request.form.get('search_type')
+    search_term = request.form.get('search_term')
+    messages = Message.query.filter_by(receiving_user=current_user.id).all()
+    if search_type == 'from_user':
+        messages = [msg for msg in messages if search_term.lower() in msg.username.lower()]
+    elif search_type == 'subject':
+        messages = [msg for msg in messages if search_term.lower() in msg.subject.lower()]
+    elif search_type == 'message':
+        messages = [msg for msg in messages if search_term.lower() in msg.message.lower()]
+    return render_template('chat.html', form=ChatForm(), messages=messages)
