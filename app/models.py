@@ -11,14 +11,12 @@ class User(db.Model, UserMixin):
     fullname =db.Column(db.String(45), nullable = False)
     password = db.Column(db.String(128), nullable=False)
   
-    #one to many relationship between user and emails 
-    #sent_emails = db.relationship('Emails', backref ='sender')
+    sent_emails = db.relationship('Emails', backref='sender', foreign_keys='Emails.sender_id', lazy = 'dynamic')
+    received_emails = db.relationship('Emails', backref='recipient', foreign_keys='Emails.recipient_id', lazy = 'dynamic')
 
-   # emails = db.relationship('Emails', backref = 'user', lazy = 'dynamic')
     todo = db.relationship('Todo', backref = 'user', lazy = 'dynamic')
     profile = db.relationship('Profile', backref = 'user', lazy = 'dynamic')
-    #emails_sent = db.relationship('Email', backref='sender', lazy='dynamic')
-    #email_recipients = db.relationship('Recipient', backref='user', lazy='dynamic')
+   
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -34,38 +32,16 @@ class User(db.Model, UserMixin):
         return f'<user {self.id}: {self.username}, {self.fullname}>'
     
 
-
-
-# class Emails(db.Model):
-#    id = db.Column(db.Integer, primary_key=True)
-#    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable =False)
-#    subject_line = db.Column(db.String(25), nullable = False)
-#    email_body = db.Column (db.String (600))
-#    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-
-#    sender = db.relationship("User", foreign_keys=[sender_id])
-#    recipients = db.relationship("Recipient", )
-#    def __repr__(self):
-#       return f'< Emails {self.id} Subject: {self.subject_line} Body: {self.email_body}>'
-
-
-# # do we need to connec the relationship ? 
-# class Recipient(db.Model):
-#     email_id = db.Column(db.Integer, db.ForeignKey(Emails.id), primary_key=True, nullable=False)
-#     recipient_id = db.Column(db.Integer, db.ForeignKey(User.id), primary_key=True, nullable=False)
- 
-
-#back_populates : bidirectional, change on one side of the relationship impact the other. 
-
 class Emails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    recipient_username= db.Column(db.String(1000), nullable=False)
     subject= db.Column(db.String(1000), nullable=False)
     email_body = db.Column(db.Text(5000), nullable = False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     sender_id= db.Column(db.Integer, db.ForeignKey('user.id'))
+    sender_username=db.Column(db.String(1000), nullable=False)
     recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    recipient_username= db.Column(db.String(1000), nullable=False)
 
     def __repr__(self): #for debugging process
         return f'<emails {self.id}: {self.subject}, {self.message}>'

@@ -7,13 +7,13 @@
         <button type="submit6" name="submit_button6">Homepage</button>
     </a>
 </p>
-<!--fix showing the username -->
+<!--doing some passsing parameters so the user will be redirected to a page with the thread id  --> 
 {% if emails %}
     {% for email in emails %}
       <p>
         <div class="emails"> 
             <p>Time: {{ email.timestamp }} </p>
-            <p>From: {{ email.recipient_username}} </p>
+            <p>From: {{ email.sender_username}} </p>
             <p> Subject: {{ email.subject}} </p>
             <p> Body: </p> <textarea style="width:50%;height:200px;"> {{ email.email_body }}</textarea> 
             <p>      
