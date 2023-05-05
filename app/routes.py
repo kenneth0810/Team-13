@@ -8,10 +8,7 @@ from flask_login import logout_user
 from flask_login import login_required
 from datetime import datetime
 
-import numpy as np 
 from wtforms.validators import Email
-#from flask_mail import Mail, Message
-#from app import mail
 from app.reply_emails import replyEmails
 from app.send_emails import sendEmails
 from app.register import registerUser 
@@ -86,7 +83,6 @@ def register():
 
 
 #Yue Ying Lee
-'''send emails function still need to do split ,  so it read more than one recipients'''
 @myapp_obj.route("/send_emails", methods = ['GET', 'POST'])
 @login_required
 def send_emails():
@@ -117,7 +113,7 @@ def send_emails():
    return render_template('send_emails.html', send_emails_form = send_emails_form)
 
 '''
-view emails need to modify in the future so next time i can reply in the emails '''
+view emails need to modify so next time i can reply in the emails '''
 #YueYingLee
 @myapp_obj.route("/view_emails", methods = ['GET', 'POST'])
 @login_required
