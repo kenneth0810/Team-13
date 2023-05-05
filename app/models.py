@@ -35,7 +35,7 @@ class User(db.Model, UserMixin):
 class Emails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     subject= db.Column(db.String(1000), nullable=False)
-    email_body = db.Column(db.Text(5000), nullable = False)
+    email_body = db.Column(db.String(5000), nullable = False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     sender_id= db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -62,11 +62,11 @@ many to one: one email can have multiple replies where each reply is linked to a
 '''
 
 #thread is used to group emails together 
-class Thread(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    subject = db.Column(db.String(1000), nullable = False)
-    def __repr__(self):
-        return f'<thread{self.id}: {self.subject}>'
+# class Thread(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     subject = db.Column(db.String(1000), nullable = False)
+#     def __repr__(self):
+#         return f'<thread{self.id}: {self.subject}>'
 
 
 

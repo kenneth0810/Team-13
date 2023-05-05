@@ -15,7 +15,7 @@ from wtforms.validators import Email
 from app.reply_emails import replyEmails
 from app.send_emails import sendEmails
 from app.register import registerUser 
-from app.models import User, Emails, Todo, Profile, Message, Thread
+from app.models import User, Emails, Todo, Profile, Message
 from app.login import LoginForm
 from app.todo import TodoForm
 from app.profile import BioForm, PasswordForm, DeleteForm
@@ -126,6 +126,19 @@ def view_emails():
     return render_template('view_emails.html', user=current_user, emails = emails)
 
 
+'''reply email 
+from original email page, click reply 
+pops to reply email template: 
+to: origial sender email 
+subject: RE: original subject 
+message: show original email body 
+
+textbox: to enter reply 
+'''
+
+
+
+
 # #Yue Ying Lee
 # @myapp_obj.route('/reply_email/<int:email_id>', methods=['GET','POST'])
 # @login_required
@@ -157,7 +170,40 @@ def view_emails():
 
 #     return render_template('reply_emails.html', reply_emails_form = reply_emails_form)
 
+'''@myapp_obj.route("/reply_email/<int:email_id>", methods=["GET", "POST"])
+@login_required
+def reply_email(email_id):
+    email = Emails.query.get(email_id)
+    if not email:
+        flash("Invalid email ID.")
+        return redirect("/inbox")
+    if email.recipient_id != current_user.id:
+        flash("You are not authorized to reply to this email.")
+        return redirect("/inbox")
 
+    reply_form = sendEmails()
+    if reply_form.validate_on_submit():
+        sender_id = current_user.id
+        recipient_id = email.sender_id
+        subject = "RE: " + email.subject
+        email_body = reply_form.email_body.data
+
+        reply_email = Emails(
+            recipient_id=recipient_id,
+            sender_id=sender_id,
+            subject=subject,
+            email_body=email_body,
+            parent_email_id=email.id,
+        )
+        db.session.add(reply_email)
+        db.session.commit()
+
+        flash("Reply sent successfully!")
+        return redirect("/inbox")
+
+    reply_form.email_body.data = f"\n\n\n---- Original Message ----\n{email.email_body}"
+    return render_template("send_emails.html", send_emails_form=reply_form)
+'''
 
 
 @myapp_obj.route("/todo", methods = ['GET', 'POST'])

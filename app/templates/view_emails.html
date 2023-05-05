@@ -15,7 +15,7 @@
             <p>Time: {{ email.timestamp }} </p>
             <p>From: {{ email.sender_username}} </p>
             <p> Subject: {{ email.subject}} </p>
-            <p> Body: </p> <textarea style="width:50%;height:200px;"> {{ email.email_body }}</textarea> 
+            <p> Body: {{ email.email_body }} </p>
             <p>      
                 <a href="/send_emails">
                     <button type="submit6" name="submit_button6">Reply</button>
@@ -29,7 +29,7 @@
   <p>No Emails received.</p>
 
 {% endif %}
-<!--Put back to send_emails for now, but i will update the link it redirect if we have time to do reply function-->
+
 <script>
     // When the user scrolls down 20px from the top of the document, slide down the navbar
     window.onscroll = function() {scrollFunction()};
