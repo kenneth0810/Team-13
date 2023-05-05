@@ -1,24 +1,56 @@
 {% extends "base.html"%}
 
 {% block content %}
-<h1>TODO List</h1>
-<a href="{{url_for('homepage')}}">
-    <button type="submit6" name="submit_button6">Homepage</button>
-</a>
-<h2>Hello {{user.fullname}}</h2>
-<form action="" method="POST" novalidate>
-    {{form.hidden_tag()}}
-    <p> {{form.task.label}} <br>
-       {{form.task(size=32)}}</p>
-
-       {% if tasks %}
-            {% for t in tasks %}
-                <li><a href="{{url_for('delete_task', id=t.id)}}">Delete</a> {{t.task}}</li>
-            {% endfor %}
-        {% else %}
-            <p>There are no tasks.</p>
-       {% endif %}
-
-    <p>{{form.submit()}}</p>
-</form>
+<body>
+    <section class="vh-100" style="background-color: #eee;">
+        <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-9 col-xl-7">
+            <div class="card rounded-3">
+                <div class="card-body p-4">
+    
+                <h4 class="text-center my-3 pb-3">To Do List</h4>
+    
+                <form class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2" action=""  novalidate method="POST">
+                    {{form.hidden_tag()}}
+                    <label class="form-label" for="task_form">Enter a task here</label>
+                    <div class="col">
+                        {{form.task(size=32, id=task_form, class="form-control")}}
+                    </div>
+    
+                    <div class="col">
+                    {{form.submit(class="btn btn-primary")}}
+                    </div>
+                </form>
+    
+                <table class="table mb-4">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    {% if tasks %}
+                        <tr>
+                            <th scope="col">Tasks</th>
+                            <th scope="col"></th>
+                        </tr>
+                        {% for t in tasks %}
+                            <tr>
+                                <td>{{t.task}}</td>
+                                <td>
+                                <a href="{{url_for('delete_task', id=t.id)}}" class="btn btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <p>There are no tasks.</p>
+                    {% endif %}
+                    </tbody>
+                </table>
+    
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </section>
+</body>
 {% endblock %}
