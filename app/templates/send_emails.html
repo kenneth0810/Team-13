@@ -1,22 +1,23 @@
+<!DOCTYPE html>
+<html>
 {% extends "base.html"%}
 
 {% block content %}
-<h1>Email Page</h1>>
+<h1>Email Page</h1>
 <form action="" method="POST" novalidate>
     {{send_emails_form.hidden_tag()}} {{send_emails_form.hidden_tag()}}
     <p>
         {{send_emails_form.recipients.label}} <br>
-        {{send_emails_form.recipients(size=32)}}
+        {{send_emails_form.recipients(size=50)}}
     </p>
-
     <p>
-        {{send_emails_form.subject_line.label}} <br>
-        {{send_emails_form.subject_line(size=32)}}
+        {{send_emails_form.subject.label}} <br>
+        {{send_emails_form.subject(size=50)}}
     </p>
 
     <p>
         {{send_emails_form.email_body.label}} <br>
-        {{send_emails_form.email_body(size=600)}}
+        {{send_emails_form.email_body(rows=10, cols=80)}}
     </p>
 
     <p>{{send_emails_form.submit()}}</p>
@@ -27,3 +28,4 @@
 </a>
 
 {% endblock %}
+</html>

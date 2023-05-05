@@ -3,11 +3,7 @@
 {% block content %}
 <h1>Homepage</h1>
 <h1>Hello, {{user_fullname}} !</h1>
-<p>      
-<a href = "/logout">
-      <button type="submit2" name="submit_button2">Logout</button>
-    </a>
-</p>
+
 <p> <a href = "{{ url_for('add_todo') }}">
       <button type="submit3" name="submit_button3">Add to do</button>
     </a> 
@@ -17,6 +13,12 @@
     <button type="submit7" name="submit_button4">Send Emails</button>
 </p>
 </p>
+
+<p><a href = "/view_emails">
+  <button type="submit5" name="submit_button5">View Emails</button>
+</a>
+</p> 
+
 <p> <a href = "/chat">
       <button type="submit6" name="submit_button6">Send Chat</button>
     </a>        
@@ -24,4 +26,10 @@
       <button type="submit5" name="submit_button5">Profile</button>
     </a>
 </p>
+
+<p>      
+  <a href = "/logout">
+        <button type="submit2" name="submit_button2">Logout</button>
+      </a>
+  </p>
 {% endblock %}
