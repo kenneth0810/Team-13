@@ -25,18 +25,18 @@
     
                 <table class="table mb-4">
                     <thead>
-                    </thead>
-                    <tbody>
-                    {% if tasks %}
-                        <tr>
-                            <th scope="col">Tasks</th>
-                            <th scope="col"></th>
-                        </tr>
+                        <tbody>
+                            {% if tasks %}
+                            <tr>
+                                <th scope="col">Tasks</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
                         {% for t in tasks %}
                             <tr>
                                 <td>{{t.task}}</td>
                                 <td>
-                                <a href="{{url_for('delete_task', id=t.id)}}" class="btn btn-danger">Delete</a>
+                                    <a href="{{url_for('delete_task', id=t.id)}}" class="btn btn-danger">Delete</a>
                                 </td>
                             </tr>
                         {% endfor %}
