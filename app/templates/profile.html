@@ -1,30 +1,6 @@
 {% extends "base.html"%}
 
 {% block content %}
-<!-- <form action="" method="POST" novalidate>
-    {{bform.hidden_tag()}} {{pform.hidden_tag()}} {{dform.hidden_tag()}}
-    <h2>Hello {{user.fullname}}! </h2>
-    <h3 style="display: inline;">Username:</h3>
-    <p style="display: inline;">{{user.username}}</p>
-    <p> {{bform.bio.label}} <br> 
-        {{bform.bio(size=32)}}</p>
-    <a href="{{url_for('delete_bio', id=user.id)}}">Delete Bio</a>
-
-    <p>{{bform.submit()}}</p>
-    <br> 
-    <h3>Want to change your password?</h3>
-    <p>{{pform.old_password.label}} <br>
-        {{pform.old_password(size=32)}}</p>
-    <p>{{pform.new_password.label}} <br>
-        {{pform.new_password(size=32)}}</p>
-    <p>{{pform.submit()}}</p>
-
-    <br><br><br>
-    <h3>Want to delete your account?</h3>
-    <p>{{dform.password.label}} <br>
-        {{dform.password(size=32)}}</p>
-    <p>{{dform.submit()}}</p>
-</form> -->
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
     <title>Profile Page</title>

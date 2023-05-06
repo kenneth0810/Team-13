@@ -228,6 +228,7 @@ def finish_task(id):
     task = Todo.query.filter(Todo.id == id). first()
     if not task.finished:
         task.finished = True
+        flash(f'Task: "{task.task}" has been completed.' )
     else:
         task.finished = False
     db.session.commit()
