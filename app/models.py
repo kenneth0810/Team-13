@@ -74,6 +74,7 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime, nullable=False)
+    finished = db.Column(db.Boolean, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 

@@ -16,7 +16,7 @@
 
         <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col col-lg-9 col-xl-7">
+            <div class="col col-xl-9 col-xl-7">
             <div class="card rounded-3" style=" box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);">
                 <div class="card-body p-4">
     
@@ -45,10 +45,15 @@
                         </thead>
                         {% for t in tasks %}
                             <tr>
-                                <td>{{t.task}}</td>
-                                <td style="display: flex; justify-content: right;">
+                                {% if not t.finished %}
+                                    <td>{{t.task}}</td>
+                                {% else %}
+                                    <td><strike>{{t.task}}</strike></td>
+                                {% endif %}
+                                <td style="display: flex; justify-content: right;" class="d-flex align-items-center">
                                     <p style="margin-right: 5%;">{{t.timestamp.strftime("%b %d, %Y %H:%M:%S")}}</p>
-                                    <a href="{{url_for('delete_task', id=t.id)}}" class="btn btn-danger">Delete</a>
+                                    <a style="margin-right: 2%;" href="{{url_for('delete_task', id=t.id)}}" class="btn btn-danger">Delete</a>
+                                    <a href="{{url_for('finish_task', id=t.id)}}" class="btn btn-success">Finish</a>
                                 </td>
                             </tr>
                         {% endfor %}

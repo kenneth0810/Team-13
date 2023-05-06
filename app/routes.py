@@ -1,6 +1,6 @@
 from flask import render_template
 from flask import redirect, request, session, url_for
-from flask import flash
+from flask import flash, get_flashed_messages
 from app import myapp_obj, db
 from flask_login import current_user
 from flask_login import login_user
@@ -207,7 +207,7 @@ def reply_email(email_id):
 def add_todo():
     form = TodoForm()
     if form.validate_on_submit():
-        todo = Todo(user = current_user, task = form.task.data, timestamp=datetime.now())
+        todo = Todo(user = current_user, task = form.task.data, timestamp=datetime.now(), finished=False)
         db.session.add(todo)
         db.session.commit()
         flash('Successfully added a new task.')
@@ -220,6 +220,18 @@ def add_todo():
         if t.user_id == user.id:
             task_list.append(t)
     return render_template("todo.html", form=form, tasks=task_list, user=user)
+
+#kenneth
+@myapp_obj.route("/finish-task/<int:id>", methods = ['GET', 'POST'])
+@login_required
+def finish_task(id):
+    task = Todo.query.filter(Todo.id == id). first()
+    if not task.finished:
+        task.finished = True
+    else:
+        task.finished = False
+    db.session.commit()
+    return redirect(url_for('add_todo'))
 
 #kenneth
 @myapp_obj.route('/delete-task/<int:id>', methods=['GET','POST'])
