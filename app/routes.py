@@ -237,7 +237,7 @@ def delete_task(id):
 @login_required
 def profile():
     bio_form = BioForm()
-    if bio_form.validate_on_submit():
+    if bio_form.validate_on_submit() and request.method == "POST":
         #if a current bio exists and a new bio is submitted, delete the current bio and replace it with the new bio
         curr_bio = Profile.query.filter_by(user=current_user).first()
         if curr_bio:
@@ -246,6 +246,7 @@ def profile():
         db.session.add(new_bio)
         db.session.commit()
         flash('Successfully updated a new bio.')
+        return redirect(url_for('profile'))
     else:
         #if nothing is submitted, the bio form will be empty, so assign the form.bio to the current bio
         curr_bio = Profile.query.filter_by(user=current_user).first()
@@ -253,21 +254,18 @@ def profile():
             bio_form.bio.data = curr_bio.bio
     
     pw_form = PasswordForm()
-    if pw_form.validate_on_submit():
+    if pw_form.validate_on_submit() and request.method == "POST":
         user = current_user
         if user.check_password(pw_form.old_password.data):
             if not user.check_password(pw_form.new_password.data):
                 user.set_password(pw_form.new_password.data)
                 db.session.commit()
                 flash('Successfully updated password.', 'success')
-        #     else:
-        #         flash('New password and old password are the same. Please try again.', 'danger')
-        # else:
-        #     flash('Wrong password entered. Please try again.', 'danger')
+                return redirect(url_for('profile'))
     
     #find all items associated with the current_user and delete them
     delete_form = DeleteForm()
-    if delete_form.validate_on_submit():
+    if delete_form.validate_on_submit() and request.method == "POST":
         user = current_user
         if user.check_password(delete_form.password.data):
             deleteTodo = Todo.query.filter_by(user=current_user).all()

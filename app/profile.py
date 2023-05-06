@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import flash
 
 class BioForm(FlaskForm):
-    bio = StringField("Bio:", validators = [DataRequired()], render_kw ={"placeholder":"Add your bio"})
+    bio = StringField("Bio:", validators = [DataRequired(), Length(max=100)], render_kw ={"placeholder":"Add your bio"})
     submit = SubmitField("Save Bio")
 
 class PasswordForm(FlaskForm):
@@ -24,5 +24,9 @@ class PasswordForm(FlaskForm):
             raise ValidationError('Passwords do not match')
 
 class DeleteForm(FlaskForm):
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Enter your password', validators=[DataRequired()])
     submit = SubmitField('Delete Account')
+
+    def validate_password(self, form):
+        if not check_password_hash(current_user.password, form.data):
+            raise ValidationError('Incorrect password')
