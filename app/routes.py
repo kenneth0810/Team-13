@@ -259,11 +259,11 @@ def profile():
             if not user.check_password(pw_form.new_password.data):
                 user.set_password(pw_form.new_password.data)
                 db.session.commit()
-                flash('Successfully updated password.')
-            else:
-                flash('New password and old password are the same. Please try again.')
-        else:
-            flash('Wrong password entered. Please try again.')
+                flash('Successfully updated password.', 'success')
+        #     else:
+        #         flash('New password and old password are the same. Please try again.', 'danger')
+        # else:
+        #     flash('Wrong password entered. Please try again.', 'danger')
     
     #find all items associated with the current_user and delete them
     delete_form = DeleteForm()

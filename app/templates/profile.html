@@ -1,9 +1,8 @@
 {% extends "base.html"%}
 
 {% block content %}
-<!-- <h1>Profile.</h1> -->
-<form action="" method="POST" novalidate>
-    {{bform.hidden_tag()}} {{pform.hidden_tag()}}
+<!-- <form action="" method="POST" novalidate>
+    {{bform.hidden_tag()}} {{pform.hidden_tag()}} {{dform.hidden_tag()}}
     <h2>Hello {{user.fullname}}! </h2>
     <h3 style="display: inline;">Username:</h3>
     <p style="display: inline;">{{user.username}}</p>
@@ -25,5 +24,47 @@
     <p>{{dform.password.label}} <br>
         {{dform.password(size=32)}}</p>
     <p>{{dform.submit()}}</p>
-</form>
+</form> -->
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
+<body>
+    <section class="section_top">
+        <h1>Hello {{user.fullname}}!</h1>
+        <form action="" method="POST" novalidate>
+            {{bform.hidden_tag()}} {{pform.hidden_tag()}} {{dform.hidden_tag()}}
+            <p>{{bform.bio(size=50, class="form-control")}}</p>
+            <div class="bform_buttons">
+                <a>{{bform.submit(class="btn btn-primary")}}</a>
+                <a class="btn btn-danger" href="{{url_for('delete_bio', id=user.id)}}">Delete Bio</a>
+            </div>
+    </section>
+    <section class="section_bottom">
+        <div class="card" style="width: 22rem;">
+            <div class="card-body">
+                <h5 class="card-title">Want to change your password?</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Create a new password below.</h6>
+                <p>{{pform.old_password.label}} {{pform.old_password(size=32)}}</p>
+                {% for error in pform.old_password.errors %}
+                    <span class="text-danger">[{{ error }}]</span>
+                {% endfor %}
+                <p>{{pform.new_password.label}} {{pform.new_password(size=32)}}</p>
+                <p>{{pform.confirm.label}} {{pform.confirm(size=32)}}</p>
+                <p>{{pform.submit()}}</p>     
+                {% for error in pform.new_password.errors %}
+                    <span class="text-danger">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+        </div>        <div class="card" style="width: 22rem;">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="#" class="card-link">Card link</a>
+              <a href="#" class="card-link">Another link</a>
+            </div>
+        </div>
+    </section>
+</body>
+
 {% endblock %}
