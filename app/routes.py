@@ -201,7 +201,7 @@ def reply_email(email_id):
     return render_template("send_emails.html", send_emails_form=reply_form)
 '''
 
-
+#kenneth
 @myapp_obj.route("/todo", methods = ['GET', 'POST'])
 @login_required
 def add_todo():
@@ -221,6 +221,7 @@ def add_todo():
             task_list.append(t)
     return render_template("todo.html", form=form, tasks=task_list, user=user)
 
+#kenneth
 @myapp_obj.route('/delete-task/<int:id>', methods=['GET','POST'])
 @login_required
 def delete_task(id):
@@ -233,6 +234,7 @@ def delete_task(id):
         flash('There is no task to be deleted.')
     return redirect(url_for('add_todo'))
 
+#kenneth
 @myapp_obj.route("/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
@@ -276,17 +278,15 @@ def profile():
             if b:
                 delete_bio(b.user_id)
 
+            m = Message.query.filter_by(username=current_user.username).all()
+            for message in m:
+                db.session.delete(message)
+                db.session.commit()
 
-        #cannot delete messages and emails yet, they will show as null id's for now
-            # m = Message.query.filter_by(username=current_user.username).all()
-            # for message in m:
-            #     db.session.delete(m)
-            #     db.commit()
-
-            # e = Emails.query.filter_by(sender_id=current_user.id).all()
-            # for emails in e:
-            #     db.session.delete(e)
-            #     db.session.commit()
+            e = Emails.query.filter_by(sender_id=current_user.id).all()
+            for emails in e:
+                db.session.delete(emails)
+                db.session.commit()
 
             db.session.delete(user)
             db.session.commit()
@@ -297,6 +297,7 @@ def profile():
             flash('wrong password!')
     return render_template('profile.html', bform=bio_form, pform=pw_form, user=current_user, dform=delete_form)
 
+#kenneth
 @myapp_obj.route('/delete-bio/<int:id>', methods=['GET','POST'])
 @login_required
 def delete_bio(id):
