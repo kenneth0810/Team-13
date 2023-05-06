@@ -207,19 +207,22 @@ def reply_email(email_id):
 def add_todo():
     form = TodoForm()
     if form.validate_on_submit():
-        todo = Todo(user = current_user, task = form.task.data, timestamp=datetime.now(), finished=False)
+        todo = Todo(user = current_user, task = form.task.data, timestamp=datetime.now(), finished=False, favorite=False)
         db.session.add(todo)
         db.session.commit()
         flash('Successfully added a new task.')
         return redirect(url_for('add_todo'))
 
     user = current_user
-    all_tasks = Todo.query.all()
-    task_list = [] #a list to append all exisiting tasks for current user to be passed into the html file
+    all_tasks = Todo.query.filter(Todo.user_id == current_user.id).all()
+    fav_list = []
+    not_fav_list = []
     for t in all_tasks:
-        if t.user_id == user.id:
-            task_list.append(t)
-    return render_template("todo.html", form=form, tasks=task_list, user=user)
+        if t.favorite == True:
+            fav_list.append(t)
+        else:
+            not_fav_list.append(t)
+    return render_template("todo.html", form=form, fav_list=fav_list, not_fav_list=not_fav_list, user=user)
 
 #kenneth
 @myapp_obj.route("/finish-task/<int:id>", methods = ['GET', 'POST'])
@@ -228,9 +231,20 @@ def finish_task(id):
     task = Todo.query.filter(Todo.id == id). first()
     if not task.finished:
         task.finished = True
-        flash(f'Task: "{task.task}" has been completed.' )
     else:
         task.finished = False
+    db.session.commit()
+    return redirect(url_for('add_todo'))
+
+#kenneth
+@myapp_obj.route("/favorite-task/<int:id>", methods = ['GET', 'POST'])
+@login_required
+def favorite_task(id):
+    task = Todo.query.filter(Todo.id == id). first()
+    if not task.favorite:
+        task.favorite = True
+    else:
+        task.favorite = False
     db.session.commit()
     return redirect(url_for('add_todo'))
 

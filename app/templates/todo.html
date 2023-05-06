@@ -3,6 +3,7 @@
 {% block content %}
 <head>
     <title>Todo Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/todo.css') }}">
 </head>
 <body>
     <section class="vh-100" style="background-color: #fafafa;">
@@ -37,32 +38,78 @@
                 <table class="table mb-4">
                     <thead>
                         <tbody>
-                            {% if tasks %}
+                            {% if not_fav_list or fav_list %}
                             <tr>
                                 <th scope="col">Tasks</th>
-                                <th scope="col">Time Added</th>
-                                <th scope="col">Action</th>
+                                <th scope="col" class="text-center">Time Added</th>
+                                <th scope="col" class="text-center">Action</th>
+                                <th scope="col" class="text-center">Pin to Top</th>
                             </tr>
                         </thead>
-                        {% for t in tasks %}
-                            <tr>
-                                {% if not t.finished %}
-                                    <td>{{t.task}}</td>
-                                {% else %}
-                                    <td><strike>{{t.task}}</strike></td>
-                                {% endif %}
-                                <td>
-                                    <p>{{t.timestamp.strftime("%b %d, %Y %H:%M:%S")}}</p>
-                                </td>
-                                <td>
-                                    <a style="margin: 3%;" href="{{url_for('delete_task', id=t.id)}}" class="btn btn-danger">Delete</a>
-                                    {% if not t.finished %}
-                                        <a href="{{url_for('finish_task', id=t.id)}}" class="btn btn-success">Finish</a>
+
+
+                        {% for t in fav_list %}
+                            {% if t.favorite %}
+                                <tr>
+                                    {% if not t.finished%}
+                                        <td>{{t.task}}</td>
                                     {% else %}
-                                        <a href="{{url_for('finish_task', id=t.id)}}" class="btn btn-success">Cancel</a>
+                                        <td><strike>{{t.task}}</strike></td>
                                     {% endif %}
-                                </td>
-                            </tr>
+
+                                    <td align="center">
+                                        <p>{{t.timestamp.strftime("%b %d, %Y %H:%M:%S")}}</p>
+                                    </td>
+                                    <td align="center">
+                                        <a style="margin-bottom: 5%;" href="{{url_for('delete_task', id=t.id)}}" class="btn btn-danger">Delete</a>
+                                        <br>
+                                        {% if not t.finished %}
+                                            <a href="{{url_for('finish_task', id=t.id)}}" class="btn btn-success">Finish</a>
+                                        {% else %}
+                                            <a href="{{url_for('finish_task', id=t.id)}}" class="btn btn-success">Cancel</a>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center" id="star">
+                                        {% if not t.favorite %}
+                                            <a href="{{url_for('favorite_task', id=t.id)}}" class="star"><i class="far fa-star"></i></a>
+                                        {% else %}
+                                            <a href="{{url_for('favorite_task', id=t.id)}}" class="star" style="color: #efef00"><i class="fas fa-star"></i></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% for t in not_fav_list %}
+                            {% if not t.favorite %}
+                                <tr>
+                                    {% if not t.finished%}
+                                        <td>{{t.task}}</td>
+                                    {% else %}
+                                        <td><strike>{{t.task}}</strike></td>
+                                    {% endif %}
+
+                                    <td align="center">
+                                        <p>{{t.timestamp.strftime("%b %d, %Y %H:%M:%S")}}</p>
+                                    </td>
+                                    <td align="center">
+                                        <a style="margin-bottom: 5%;" href="{{url_for('delete_task', id=t.id)}}" class="btn btn-danger">Delete</a>
+                                        <br>
+                                        {% if not t.finished %}
+                                            <a href="{{url_for('finish_task', id=t.id)}}" class="btn btn-success">Finish</a>
+                                        {% else %}
+                                            <a href="{{url_for('finish_task', id=t.id)}}" class="btn btn-success">Cancel</a>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center" id="star">
+                                        {% if not t.favorite %}
+                                            <a href="{{url_for('favorite_task', id=t.id)}}" class="star"><i class="far fa-star"></i></a>
+                                        {% else %}
+                                            <a href="{{url_for('favorite_task', id=t.id)}}" class="star"><i class="fas fa-star"></i></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     {% else %}
                         <p>You have no tasks.</p>
