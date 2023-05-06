@@ -31,6 +31,7 @@
 <body>
     <section class="section_top">
         <h1>Hello {{user.fullname}}!</h1>
+        <p>Username: {{user.username}}</p>
         <form action="{{url_for('profile')}}" method="POST" novalidate id="bform">
             {{bform.hidden_tag()}}
             <p>{{bform.bio(size=100, class="form-control text-center")}}</p>
