@@ -207,7 +207,7 @@ def reply_email(email_id):
 def add_todo():
     form = TodoForm()
     if form.validate_on_submit():
-        todo = Todo(user = current_user, task = form.task.data)
+        todo = Todo(user = current_user, task = form.task.data, timestamp=datetime.now())
         db.session.add(todo)
         db.session.commit()
         flash('Successfully added a new task.')
