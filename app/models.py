@@ -1,5 +1,6 @@
 from app import db
 from datetime import datetime
+from sqlalchemy.types import Boolean, Date, DateTime, Float, Integer, Text, Time, Interval
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import login
 from flask_login import UserMixin
@@ -9,10 +10,13 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(30), nullable=False, unique=True)
     fullname =db.Column(db.String(45), nullable = False)
     password = db.Column(db.String(128), nullable=False)
+  
+    sent_emails = db.relationship('Emails', backref='sender', foreign_keys='Emails.sender_id', lazy = 'dynamic')
+    received_emails = db.relationship('Emails', backref='recipient', foreign_keys='Emails.recipient_id', lazy = 'dynamic')
 
-    # emails = db.relationship('Emails', backref = 'user', lazy = 'dynamic')
     todo = db.relationship('Todo', backref = 'user', lazy = 'dynamic')
     profile = db.relationship('Profile', backref = 'user', lazy = 'dynamic')
+   
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -26,22 +30,46 @@ class User(db.Model, UserMixin):
 
     def __repr__(self): #for debugging process
         return f'<user {self.id}: {self.username}, {self.fullname}>'
+    
 
-#sending emails function
 class Emails(db.Model):
-   id = db.Column(db.Integer, primary_key=True)
-   sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable =False)
-   recipients_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-   # recipients_id = db.Column(db.ARRAY(db.Integer), nullable=False)
-   subject_line = db.Column(db.String(25), nullable = False)
-   email_body = db.Column (db.String (600))
-   timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    id = db.Column(db.Integer, primary_key=True)
+    subject= db.Column(db.String(1000), nullable=False)
+    email_body = db.Column(db.String(5000), nullable = False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
-   sender = db.relationship("User", foreign_keys=[sender_id])
-   # recipient = db.relationship("User", foreign_keys=[recipients_id])
-   def __repr__(self):
-      return f'< Emails {self.id} Subject: {self.subject_line} Body: {self.email_body}>'
-   
+    sender_id= db.Column(db.Integer, db.ForeignKey('user.id'))
+    sender_username=db.Column(db.String(1000), nullable=False)
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    recipient_username= db.Column(db.String(1000), nullable=False)
+
+    def __repr__(self): #for debugging process
+        return f'<emails {self.id}: {self.subject}, {self.message}>'
+    
+
+'''
+one to many relationships 
+one sender has many emails 
+one sender has many recipients 
+
+
+replying: 
+one to many: original message = parent , new message = child 
+one to many: each reply can have one or more recipients 
+
+many to many: one user send to multiple recipients, each recipient can receive emails from multiple users
+many to one: one email can have multiple replies where each reply is linked to a single parent email 
+'''
+
+#thread is used to group emails together 
+# class Thread(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     subject = db.Column(db.String(1000), nullable = False)
+#     def __repr__(self):
+#         return f'<thread{self.id}: {self.subject}>'
+
+
+
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String(100))

@@ -3,30 +3,57 @@
 {% block content %}
 <h1>Chat</h1>
 <a href="/homepage">
-    <button type="submit6" name="submit_button6">Homepage</button>
+  <button type="submit6" name="submit_button6">Homepage</button>
 </a>
-<form action="{{ url_for('start_chat') }}" method="POST" nonvalidate>
-    {{ form.hidden_tag() }}
-    <p>{{ form.recipient_name.label }}<br>
-       {{ form.recipient_name(size=32) }}</p>
-    <p>{{ form.subject.label }}<br>
-       {{ form.subject(size=32) }}</p>
-    <p>{{ form.message.label }}<br>
-       {{ form.message(size=32) }}</p>
-    <p>{{ form.submit() }}</p>
-</form>
+<head>
+    <style>
+      ul {
+        list-style-type: none;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="{{ url_for('start_chat') }}" method="POST" nonvalidate>
+      {{ form.hidden_tag() }}
+      <p>{{ form.recipient_name.label }}<br>
+         {{ form.recipient_name(size=32) }}</p>
+      <p>{{ form.subject.label }}<br>
+         {{ form.subject(size=32) }}</p>
+      <p>{{ form.message.label }}<br>
+         {{ form.message(size=32) }}</p>
+      <p>{{ form.submit() }}</p>
+    </form>
+    <form action="{{ url_for('search_messages') }}" method="POST">
+      {{ form.hidden_tag() }}
+      <p>Search messages by:</p>
+      <select name="search_type">
+          <option value="from_user">Sender</option>
+          <option value="subject">Subject</option>
+          <option value="message">Message</option>
+      </select>
+      <input type="text" name="search_term">
+      <button type="submit">Search</button>
+    </form>
+  </body>
 
 {% if messages %}
     <h2>Received Messages:</h2>
     {% for message in messages %}
-            <div class="message">
-                <p>Time: {{ message.timestamp }}</p>
-                <p>From: {{ message.username }}</p>
-                <p>Subject: {{ message.subject }}</p>
-                <p>Message: {{ message.message }}</p>
-            </div>
+        <div class="message">
+            <p>Time: {{ message.timestamp }}</p>
+            <p>From: {{ message.username }}</p>
+            <p>Subject: {{ message.subject }}</p>
+            <p>Message: {{ message.message }}</p>
+            {% if message.receiving_user == current_user.id %}
+                <form action="{{ url_for('delete_chat', id=message.id) }}" method="POST">
+                    <input type="hidden" name="id" value="{{ message.id }}">
+                    <button type="submit">Delete</button>
+                </form>
+            {% endif %}
+        </div>
     {% endfor %}
 {% else %}
     <p>No messages received.</p>
 {% endif %}
+
 {% endblock %}

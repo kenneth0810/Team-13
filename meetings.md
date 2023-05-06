@@ -39,3 +39,13 @@
 - Attendees: Yue Ying Lee, Kenneth Nguyen, Ruben Martinez-Martinez, Johnny Nguyen
 - Team updates: Slightly behind on schedule 
 - Group progress: Discussed our progress in trying to get the minimum amount of the needed requirements for Milestone #2. Fixed merge conflict issues by creating a .gitignore file to ignore databases and compiler generated files. 
+
+### 2023-04-28 at 10:30 - 13:00
+- Attendees: Yue Ying Lee, Kenneth Nguyen, Ruben Martinez-Martinez, Johnny Nguyen 
+- Team updates: Kenneth finished the function for add to do task, delete to do task and edit user profile and the html files needed for these functions. Yue Ying finished the functions for register, login, log out, and worked on different templates for diffent functions such as homepage, register page, and login page. 
+- Group progress: All of us discussed about the deleted account function. Yue Ying continued working on the send emails functions and debugged errors for delete account with Kenneth. Ruben worked on the delete account function. Johnny worked on sending chat message function and some part of the delete account function. Decided to meet up at night to finish the milestone2 assignment. 
+
+### 2023-04-28 at 20:00 - 23:50
+- Attendees: Yue Ying Lee, Kenneth Nguyen, Ruben Martinez-Martinez, Johnny Nguyen 
+- Team updates: Yue Ying finished sending emails functions and has it working. Johnny has some bugs on the send chat messages function. Ruben showed code he worked on for the delete account. 
+- Group progress: Successful debugged Johnny errors for the add chat message function. Merged working code from each other branches to main branch. Finished milestone 2 assignment. Everyone is assigned to continue improving their codes.

@@ -9,8 +9,7 @@ from flask_login import login_required
 from datetime import datetime
 
 from wtforms.validators import Email
-#from flask_mail import Mail, Message
-#from app import mail
+#from app.reply_emails import replyEmails
 from app.send_emails import sendEmails
 from app.register import registerUser 
 from app.models import User, Emails, Todo, Profile, Message
@@ -82,6 +81,7 @@ def register():
              flash('The username is not available. Please choose another username')
         return render_template('register.html', registerForm=registerForm)
 
+
 #Yue Ying Lee
 @myapp_obj.route("/send_emails", methods = ['GET', 'POST'])
 @login_required
@@ -89,19 +89,117 @@ def send_emails():
    send_emails_form = sendEmails()
    if send_emails_form.validate_on_submit():
     sender_id = current_user.id
-    valid_recipients =  User.query.filter_by(username = send_emails_form.recipients.data).first()
-    if (valid_recipients):
-        flash(f' Valid recipients.')
-        recipients_id = valid_recipients.id
-        email = Emails (sender_id = sender_id, recipients_id = recipients_id, subject_line=send_emails_form.subject_line.data, email_body= send_emails_form.email_body.data)
+    recipients_list = send_emails_form.recipients.data.split(',')
+    print("recipients_list is: ")
+    print(recipients_list)
+    valid_recipients = [] 
+    for recipient in recipients_list:
+     valid_recipient =  User.query.filter_by(username = recipient.strip()).first()
+     if (valid_recipient):
+        recipient_username= valid_recipient.username
+        flash(f' Valid recipients: {valid_recipient.username}')
+        recipient_id = valid_recipient.id
+        
+        email = Emails (recipient_username = recipient_username, sender_username =  current_user.username, sender_id = sender_id, recipient_id = recipient_id, subject=send_emails_form.subject.data, email_body= send_emails_form.email_body.data)
         db.session.add(email)
+        valid_recipients.append(valid_recipient)
+    if valid_recipients:
         db.session.commit()
-        flash(f'Email successfully sent!')
+        flash(f'Email successfully sent to {", ".join([r.username for r in valid_recipients])}!')
         return redirect('/homepage')
     else:
      flash(f' Invalid recipients. Retype username or go back to homepage.')
 
    return render_template('send_emails.html', send_emails_form = send_emails_form)
+
+'''
+view emails need to modify so next time i can reply in the emails '''
+#YueYingLee
+@myapp_obj.route("/view_emails", methods = ['GET', 'POST'])
+@login_required
+def view_emails():
+    emails = Emails.query.filter_by(recipient_id = current_user.id).all()
+    return render_template('view_emails.html', user=current_user, emails = emails)
+
+
+'''reply email 
+from original email page, click reply 
+pops to reply email template: 
+to: origial sender email 
+subject: RE: original subject 
+message: show original email body 
+
+textbox: to enter reply 
+'''
+
+
+
+
+# #Yue Ying Lee
+# @myapp_obj.route('/reply_email/<int:email_id>', methods=['GET','POST'])
+# @login_required
+# def reply_emails():
+#     reply_emails_form = replyEmails() 
+# def reply(message_id):
+#     message = Emails.query.get_or_404(message_id)
+#     task = Todo.query.filter(Todo.id == id).first()
+#     form = ReplyForm()
+#     if form.validate_on_submit():
+#         recipient = User.query.filter_by(email=form.recipient.data).first()
+#         if not recipient:
+#             flash('Invalid recipient email address.')
+#             return redirect(url_for('reply', message_id=message_id))
+#         elif not form.body.data.strip():
+#             flash('Message body cannot be empty.')
+#             return redirect(url_for('reply', message_id=message_id))
+#         reply = Emails(
+#             sender_id=current_user.id,
+#             recipient_id=recipient.id,
+#             subject=form.subject.data,
+#             email_body=form.body.data,
+#             parent_id=message_id
+#         )
+#         db.session.add(reply)
+#         db.session.commit()
+#         flash('Your reply has been sent.')
+#         return redirect(url_for('thread', message_id=message_id))
+
+#     return render_template('reply_emails.html', reply_emails_form = reply_emails_form)
+
+'''@myapp_obj.route("/reply_email/<int:email_id>", methods=["GET", "POST"])
+@login_required
+def reply_email(email_id):
+    email = Emails.query.get(email_id)
+    if not email:
+        flash("Invalid email ID.")
+        return redirect("/inbox")
+    if email.recipient_id != current_user.id:
+        flash("You are not authorized to reply to this email.")
+        return redirect("/inbox")
+
+    reply_form = sendEmails()
+    if reply_form.validate_on_submit():
+        sender_id = current_user.id
+        recipient_id = email.sender_id
+        subject = "RE: " + email.subject
+        email_body = reply_form.email_body.data
+
+        reply_email = Emails(
+            recipient_id=recipient_id,
+            sender_id=sender_id,
+            subject=subject,
+            email_body=email_body,
+            parent_email_id=email.id,
+        )
+        db.session.add(reply_email)
+        db.session.commit()
+
+        flash("Reply sent successfully!")
+        return redirect("/inbox")
+
+    reply_form.email_body.data = f"\n\n\n---- Original Message ----\n{email.email_body}"
+    return render_template("send_emails.html", send_emails_form=reply_form)
+'''
 
 
 @myapp_obj.route("/todo", methods = ['GET', 'POST'])
@@ -217,14 +315,54 @@ def delete_bio(id):
 def start_chat():
     form = ChatForm()
     if form.validate_on_submit():
-        if User.query.filter_by(username=form.recipient_name.data).first() is not None:
-            dateAndTime = datetime.now()
-            message = Message(username=current_user.username, subject=form.subject.data, message=form.message.data, sending_user=current_user.id, 
-            receiving_user=User.query.filter_by(username=form.recipient_name.data).first().id, timestamp=dateAndTime)
-            db.session.add(message)
-            db.session.commit()
-            return redirect(url_for('start_chat'))
+        recipients = []
+        for recipient_name in form.recipient_name.data:
+            recipient = User.query.filter_by(username=recipient_name).first()
+            if recipient is None:
+                continue
+            recipients.append(recipient)
+        if not recipients:
+            flash('At least one recipient must be entered.')
         else:
-            flash('Invalid recipient', 'danger')
+            dateAndTime = datetime.now()
+            for recipient in recipients:
+                message = Message(
+                    username=current_user.username,
+                    subject=form.subject.data,
+                    message=form.message.data,
+                    sending_user=current_user.id, 
+                    receiving_user=recipient.id,
+                    timestamp=dateAndTime
+                )
+                db.session.add(message)
+            db.session.commit()
+            flash('Message sent successfully!')
+            return redirect(url_for('start_chat'))
     messages = Message.query.filter_by(receiving_user=current_user.id).all()
     return render_template('chat.html', user=current_user, form=form, messages=messages)
+
+@myapp_obj.route('/chat/<int:id>', methods=['POST'])
+@login_required
+def delete_chat(id):
+    message = Message.query.filter(Message.id == id, Message.receiving_user == current_user.id).first()
+    if message:
+        db.session.delete(message)
+        db.session.commit()
+        flash('Chat deleted', category='success')
+        return redirect(url_for('start_chat'))
+    else:
+        flash('There is no chat to be deleted')
+        return redirect(url_for('start_chat'))
+    
+@myapp_obj.route('/chat/search', methods=['POST'])
+def search_messages():
+    search_type = request.form.get('search_type')
+    search_term = request.form.get('search_term')
+    messages = Message.query.filter_by(receiving_user=current_user.id).all()
+    if search_type == 'from_user':
+        messages = [msg for msg in messages if search_term.lower() in msg.username.lower()]
+    elif search_type == 'subject':
+        messages = [msg for msg in messages if search_term.lower() in msg.subject.lower()]
+    elif search_type == 'message':
+        messages = [msg for msg in messages if search_term.lower() in msg.message.lower()]
+    return render_template('chat.html', form=ChatForm(), messages=messages)
