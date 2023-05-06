@@ -262,7 +262,7 @@ def profile():
             if not user.check_password(pw_form.new_password.data):
                 user.set_password(pw_form.new_password.data)
                 db.session.commit()
-                flash('Successfully updated password.', 'success')
+                flash('Successfully updated password.')
                 return redirect(url_for('profile'))
     
     #find all items associated with the current_user and delete them
@@ -305,6 +305,7 @@ def delete_bio(id):
     if b:
         db.session.delete(b) 
         db.session.commit()
+        flash('Successfully deleted bio')
     else:
         flash('There is no bio to be deleted.')
     return redirect(url_for('profile'))
