@@ -1,6 +1,6 @@
 from flask import render_template
 from flask import redirect, request, session, url_for
-from flask import flash
+from flask import flash, get_flashed_messages
 from app import myapp_obj, db
 from flask_login import current_user
 from flask_login import login_user
@@ -201,26 +201,54 @@ def reply_email(email_id):
     return render_template("send_emails.html", send_emails_form=reply_form)
 '''
 
-
+#kenneth
 @myapp_obj.route("/todo", methods = ['GET', 'POST'])
 @login_required
 def add_todo():
     form = TodoForm()
     if form.validate_on_submit():
-        todo = Todo(user = current_user, task = form.task.data)
+        todo = Todo(user = current_user, task = form.task.data, timestamp=datetime.now(), finished=False, favorite=False)
         db.session.add(todo)
         db.session.commit()
         flash('Successfully added a new task.')
         return redirect(url_for('add_todo'))
 
     user = current_user
-    all_tasks = Todo.query.all()
-    task_list = [] #a list to append all exisiting tasks for current user to be passed into the html file
+    all_tasks = Todo.query.filter(Todo.user_id == current_user.id).all()
+    fav_list = []
+    not_fav_list = []
     for t in all_tasks:
-        if t.user_id == user.id:
-            task_list.append(t)
-    return render_template("todo.html", form=form, tasks=task_list, user=user)
+        if t.favorite == True:
+            fav_list.append(t)
+        else:
+            not_fav_list.append(t)
+    return render_template("todo.html", form=form, fav_list=fav_list, not_fav_list=not_fav_list, user=user)
 
+#kenneth
+@myapp_obj.route("/finish-task/<int:id>", methods = ['GET', 'POST'])
+@login_required
+def finish_task(id):
+    task = Todo.query.filter(Todo.id == id). first()
+    if not task.finished:
+        task.finished = True
+    else:
+        task.finished = False
+    db.session.commit()
+    return redirect(url_for('add_todo'))
+
+#kenneth
+@myapp_obj.route("/favorite-task/<int:id>", methods = ['GET', 'POST'])
+@login_required
+def favorite_task(id):
+    task = Todo.query.filter(Todo.id == id). first()
+    if not task.favorite:
+        task.favorite = True
+    else:
+        task.favorite = False
+    db.session.commit()
+    return redirect(url_for('add_todo'))
+
+#kenneth
 @myapp_obj.route('/delete-task/<int:id>', methods=['GET','POST'])
 @login_required
 def delete_task(id):
@@ -233,11 +261,12 @@ def delete_task(id):
         flash('There is no task to be deleted.')
     return redirect(url_for('add_todo'))
 
+#kenneth
 @myapp_obj.route("/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
     bio_form = BioForm()
-    if bio_form.validate_on_submit():
+    if bio_form.validate_on_submit() and request.method == "POST":
         #if a current bio exists and a new bio is submitted, delete the current bio and replace it with the new bio
         curr_bio = Profile.query.filter_by(user=current_user).first()
         if curr_bio:
@@ -246,6 +275,7 @@ def profile():
         db.session.add(new_bio)
         db.session.commit()
         flash('Successfully updated a new bio.')
+        return redirect(url_for('profile'))
     else:
         #if nothing is submitted, the bio form will be empty, so assign the form.bio to the current bio
         curr_bio = Profile.query.filter_by(user=current_user).first()
@@ -253,21 +283,18 @@ def profile():
             bio_form.bio.data = curr_bio.bio
     
     pw_form = PasswordForm()
-    if pw_form.validate_on_submit():
+    if pw_form.validate_on_submit() and request.method == "POST":
         user = current_user
         if user.check_password(pw_form.old_password.data):
             if not user.check_password(pw_form.new_password.data):
                 user.set_password(pw_form.new_password.data)
                 db.session.commit()
                 flash('Successfully updated password.')
-            else:
-                flash('New password and old password are the same. Please try again.')
-        else:
-            flash('Wrong password entered. Please try again.')
+                return redirect(url_for('profile'))
     
     #find all items associated with the current_user and delete them
     delete_form = DeleteForm()
-    if delete_form.validate_on_submit():
+    if delete_form.validate_on_submit() and request.method == "POST":
         user = current_user
         if user.check_password(delete_form.password.data):
             deleteTodo = Todo.query.filter_by(user=current_user).all()
@@ -278,17 +305,15 @@ def profile():
             if b:
                 delete_bio(b.user_id)
 
+            m = Message.query.filter_by(username=current_user.username).all()
+            for message in m:
+                db.session.delete(message)
+                db.session.commit()
 
-        #cannot delete messages and emails yet, they will show as null id's for now
-            # m = Message.query.filter_by(username=current_user.username).all()
-            # for message in m:
-            #     db.session.delete(m)
-            #     db.commit()
-
-            # e = Emails.query.filter_by(sender_id=current_user.id).all()
-            # for emails in e:
-            #     db.session.delete(e)
-            #     db.session.commit()
+            e = Emails.query.filter_by(sender_id=current_user.id).all()
+            for emails in e:
+                db.session.delete(emails)
+                db.session.commit()
 
             db.session.delete(user)
             db.session.commit()
@@ -299,6 +324,7 @@ def profile():
             flash('wrong password!')
     return render_template('profile.html', bform=bio_form, pform=pw_form, user=current_user, dform=delete_form)
 
+#kenneth
 @myapp_obj.route('/delete-bio/<int:id>', methods=['GET','POST'])
 @login_required
 def delete_bio(id):
@@ -306,6 +332,7 @@ def delete_bio(id):
     if b:
         db.session.delete(b) 
         db.session.commit()
+        flash('Successfully deleted bio')
     else:
         flash('There is no bio to be deleted.')
     return redirect(url_for('profile'))
