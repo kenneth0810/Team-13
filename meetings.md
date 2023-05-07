@@ -49,3 +49,8 @@
 - Attendees: Yue Ying Lee, Kenneth Nguyen, Ruben Martinez-Martinez, Johnny Nguyen 
 - Team updates: Yue Ying finished sending emails functions and has it working. Johnny has some bugs on the send chat messages function. Ruben showed code he worked on for the delete account. 
 - Group progress: Successful debugged Johnny errors for the add chat message function. Merged working code from each other branches to main branch. Finished milestone 2 assignment. Everyone is assigned to continue improving their codes.
+
+### 2023-05-06 at 12:00 - 13:10
+- Attendees: Yue Ying Lee, Johnny Nguyen, Ruben Martinez-Martinez
+- Team updates: Yue Ying modified the send emails functions so now users can send emails to multiple recipients. Yue Ying also added view email functions, its html, and started using bootstrap elements in different pages. Johnny finished worked on the searching and deleting chat messages function. Ruben is working on the searching emails and sorting emails function.
+- Group progress: Briefly discussed about how our website will look like. Everyone is assigned to continue working on their parts such as adding bootstrap elements. Updated Kenneth after. 
