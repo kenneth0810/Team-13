@@ -39,7 +39,7 @@
 }
 
 .col:hover {
-    transform: perspective(3000px) rotatey(5deg) rotatex(5deg);
+    transform: perspective(3000px) rotatey(7deg) rotatex(7deg);
 }
 
 @keyframes colAppear {
