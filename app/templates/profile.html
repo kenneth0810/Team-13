@@ -6,52 +6,50 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 </head>
 <body>
-    {% for messages in get_flashed_messages() %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        {{messages}}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %}
-
-    <section class="section_top">
+    <div class="sidenav">
         <h1 class="pfp"><strong>{{ user.fullname[0] }}</strong></h1>
         <h1>Hello {{user.fullname}}!</h1>
-        <p>Username: {{user.username}}</p>
-        <form action="{{url_for('profile')}}" method="POST" novalidate id="bform">
-            {{bform.hidden_tag()}}
-            <p>{{bform.bio(size=100, class="form-control text-center")}}</p>
-            <div class="bform_buttons">
-                <a>{{bform.submit(class="btn btn-primary")}}</a>
-                <a class="btn btn-danger" href="{{url_for('delete_bio', id=user.id)}}">Delete Bio</a>
-            </div>
-        </form>
-    </section>
-    <section class="section_bottom">
-        <div class="card" style="width: 30rem;">
-            <div class="card-body">
-                <h5 class="card-title">Want to change your password?</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Create a new password below.</h6>
-                <form action="{{url_for('profile')}}" method="POST" novalidate id="pform">
-                    {{pform.hidden_tag()}}
-                    <p>{{pform.old_password.label}} {{pform.old_password(size=32, class="form-control")}}</p>
-                    {% for error in pform.old_password.errors %}
-                        <span class="text-danger">[{{ error }}]</span>
-                    {% endfor %}
-                    <p>{{pform.new_password.label}} {{pform.new_password(size=32, class="form-control")}}</p>
-                    {% for error in pform.new_password.errors %}
-                        <span class="text-danger">[{{ error }}]</span>
-                    {% endfor %}
-                    <p>{{pform.confirm.label}} {{pform.confirm(size=32, class="form-control")}}</p>
-                    {% for error in pform.confirm.errors %}
-                        <span class="text-danger">[{{ error }}]</span>
-                    {% endfor %}
-                    <p>{{pform.submit(class="btn btn-success")}}</p>
-                </form>
-            </div>
-        </div>        
-        <div class="card" style="width: 30rem;">
-            <div class="card-body">
-                <h5 class="card-title">Want to delete your account?</h5>
+     </div>
+     <div class="main">
+        <div>
+            <h4>Account Information</h4>
+            <hr>
+            <p><strong>Username: </strong>{{user.username}}</p>
+            <p><strong>Password: </strong>**********</p>
+            <hr>
+            <h5 class="text-center"><strong>About Me</strong></h5>
+            <form class="mb-4" action="{{url_for('profile')}}" method="POST" novalidate id="bform">
+                {{bform.hidden_tag()}}
+                <p>{{bform.bio(size=60, class="form-control text-center")}}</p>
+                <div class="bform_buttons text-center d-flex justify-content-around">
+                    <a>{{bform.submit(class="btn btn-primary")}}</a>
+                    <a class="btn btn-danger" href="{{url_for('delete_bio', id=user.id)}}">Delete Bio</a>
+                </div>
+            </form>
+            <hr>
+        <div>
+            <h5>Want to change your password?</h5>
+            <h6 class="text-muted">Create a new password below.</h6>
+            <form action="{{url_for('profile')}}" method="POST" novalidate id="pform">
+                {{pform.hidden_tag()}}
+                <p>{{pform.old_password.label}} {{pform.old_password(size=32, class="form-control")}}</p>
+                {% for error in pform.old_password.errors %}
+                    <span class="text-danger">[{{ error }}]</span>
+                {% endfor %}
+                <p>{{pform.new_password.label}} {{pform.new_password(size=32, class="form-control")}}</p>
+                {% for error in pform.new_password.errors %}
+                    <span class="text-danger">[{{ error }}]</span>
+                {% endfor %}
+                <p>{{pform.confirm.label}} {{pform.confirm(size=32, class="form-control")}}</p>
+                {% for error in pform.confirm.errors %}
+                    <span class="text-danger">[{{ error }}]</span>
+                {% endfor %}
+                <p>{{pform.submit(class="btn btn-success")}}</p>
+                <hr>
+            </form>
+        </div>
+        <div>
+            <h5 class="card-title">Want to delete your account?</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Note: This will PERMANENTLY delete your account.</h6>
                 <form action="{{url_for('profile')}}" method="POST" novalidate id="dform">
                     {{dform.hidden_tag()}}
@@ -63,9 +61,7 @@
                 </form>
             </div>
         </div>
-    </section>
-
-
+    </div>
 </body>
 
 {% endblock %}
