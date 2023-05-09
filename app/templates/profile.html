@@ -2,8 +2,8 @@
 
 {% block content %}
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
     <title>Profile Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 </head>
 <body>
     {% for messages in get_flashed_messages() %}
@@ -14,6 +14,7 @@
     {% endfor %}
 
     <section class="section_top">
+        <h1 class="pfp"><strong>{{ user.fullname[0] }}</strong></h1>
         <h1>Hello {{user.fullname}}!</h1>
         <p>Username: {{user.username}}</p>
         <form action="{{url_for('profile')}}" method="POST" novalidate id="bform">
@@ -63,6 +64,8 @@
             </div>
         </div>
     </section>
+
+
 </body>
 
 {% endblock %}

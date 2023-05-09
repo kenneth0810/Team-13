@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/todo.css') }}">
 </head>
 <body>
-    <section class="vh-100" style="background-color: #fafafa;">
+    <section style="background-color: #fafafa; height: auto;">
 
         {% for messages in get_flashed_messages() %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
