@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en">
-   <body style="background-color:rgb(239, 248, 247);"> 
+  <body style="background-color:#b1e9fb;"> 
       <head>
+       <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}"> --> 
          <meta charset="utf-8">
          <meta name="viewport" content="width=device-width, initial-scale=1">
          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -58,9 +59,14 @@
         </div>
       </form>
       <div class="text-center mt-4">
-        <span>Already have an account?</span>
+        <span>Already have an account?     </span>
+        <br /> 
         <a href="/login" class="btn btn-info" role="button">Login</a>
       </div>
+      <br />
+      <div class="text-center mt-4"> 
+        <a href="/" class="btn btn-info" role="button">Back</a>
+        </div>
     </div>
   </div>
 {% endblock %}
