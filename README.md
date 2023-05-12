@@ -53,7 +53,7 @@ pip3 install git
 
 ```
 from app import db
-from app.models import User, Emails, Todo, Profile, Message
+from app.models import User, Emails, Note, Todo, Profile, Message
 db.create_all()
 exit()
 ```

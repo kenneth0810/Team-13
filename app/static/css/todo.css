@@ -6,3 +6,15 @@
 .star {
     color: rgba(0, 0, 0, 0.7);
 }
+
+a {
+    text-decoration: none;
+}
+
+.back {
+    transition: 0.2s;
+}
+
+.back:hover {
+    color: black
+}
