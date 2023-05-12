@@ -7,8 +7,7 @@ from flask_login import login_user
 from flask_login import logout_user
 from flask_login import login_required
 from datetime import datetime
-import os 
-from wtforms.validators import Email
+#from wtforms.validators import Email
 #from app.reply_emails import replyEmails
 from app.send_emails import sendEmails
 from app.register import registerUser 
@@ -44,9 +43,9 @@ def login():
              login_user(valid_user)
              return redirect(url_for('homepage'))
           else :
-             flash(f'Invalid password. Try again')
+             flash(f'Invalid password. Try again.')
         else: 
-             flash(f'Invalid username. Try again or register an account')  
+             flash(f'Invalid username. Try again or register an account.')  
 
     return render_template('login.html', form=form)
 
@@ -74,7 +73,7 @@ def register():
             db.session.commit()
             return redirect('/login')
           else :
-             flash('The username is not available. Please choose another username')
+             flash('The username is not available. Please choose another username.')
         return render_template('register.html', registerForm=registerForm)
 
 #YueYingLee
@@ -136,13 +135,13 @@ def view_emails():
     return render_template('view_emails.html', user=current_user, emails = emails)
 
 
-# @myapp_obj.route("/reply_emails/<int:email_id>", methods=['GET', 'POST'])
+# @myapp_obj.route("/reply_emails/<int:id>", methods=['GET', 'POST'])
 # @login_required
-# def reply_email(email_id):
-#     email_to_reply = Emails.query.filter_by(id=email_id).first()
+# def reply_email(id):
+#     email_to_reply = Emails.query.filter_by(id=id).first()
 
 #     # create a new sendEmails form object
-#     reply_email_form = sendEmails()
+#     reply_email_form = replyEmails()
 
 #     # populate the form fields with the necessary information
 #     reply_email_form.recipients.data = email_to_reply.sender_username

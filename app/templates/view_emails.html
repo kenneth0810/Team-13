@@ -1,34 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Emails page for {{user.fullname}}</h1>
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/view_emails.css') }}">
+</head>
+<h1>Inbox for {{user.fullname}}</h1>
 <p>      
     <a href="/homepage">
         <button type="submit6" name="submit_button6">Homepage</button>
     </a>
 </p>
+
 <!--doing some passsing parameters so the user will be redirected to a page with the thread id  --> 
 {% if emails %}
     {% for email in emails %}
-      <p>
+      <p>  <body>
         <div class="emails"> 
-            <p>Time: {{ email.timestamp }} </p>
-            <p>From: {{ email.sender_username}} </p>
-            <p> Subject: {{ email.subject}} </p>
-            <p> Body: {{ email.email_body }} </p>
-            <p>      
-                <a href="/send_emails">
-                    <button type="submit6" name="submit_button6">Reply</button>
-                </a>
-            </p>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!-- create big whitespace in between emails--> 
-    </div>
+          <div class="card">
+            <div class="container">
+            <p> <b> Time: </b> {{ email.timestamp }} </p>
+            <p> <b> From:</b> {{ email.sender_username}} </p>
+            <p> <b> Subject: </b>{{ email.subject}} </p>
+            <p> <b> Body:</b> <br>{{ email.email_body }} </p>
+             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!-- create big whitespace in between emails--> 
+             <!--- <a href="/reply_emails">
+             <button type="button" class="btn btn-primary">Reply</button>
+             </a>             
+            
+                     reply emails link need to fix--> 
+            </div>
+          </div>
+            </div>
+              </body>
       </p>
     {% endfor %}
-{% else %}
-  <p>No Emails received.</p>
-
-{% endif %}
+{% else %} 
+<body>
+  <p>No Emails received.</p> </body>
+{% endif %} 
 
 <script>
     // When the user scrolls down 20px from the top of the document, slide down the navbar
