@@ -54,3 +54,8 @@
 - Attendees: Yue Ying Lee, Johnny Nguyen, Ruben Martinez-Martinez
 - Team updates: Yue Ying modified the send emails functions so now users can send emails to multiple recipients. Yue Ying also added view email functions, its html, and started using bootstrap elements in different pages. Johnny finished worked on the searching and deleting chat messages function. Ruben is working on the searching emails and sorting emails function.
 - Group progress: Briefly discussed about how our website will look like. Everyone is assigned to continue working on their parts such as adding bootstrap elements. Updated Kenneth after. 
+
+### 2023-05-11 at 20:30 - 21:50
+- Attendees: Yue Ying Lee, Kenneth Nguyen, Johnny Nguyen 
+- Team updates: Yue Ying modified the index, register, login page with bootstraps. Kenneth updated the to do function, and did bootstraps on responsibles pages. Johnny added chat room function. 
+- Group progress: Discussed about our website theme. Johnny will fix some bugs on his funtions, Kenneth will continue working on doing bootstraps. Yue Ying will look into virtual environment, add new feature for sending emails function and continue working on the bootstraps. We decided to merge all of our stuffs tomorrow in class.
