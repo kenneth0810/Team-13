@@ -98,7 +98,7 @@ def send_emails():
         recipient_usernames = [r.username for r in valid_recipients_list]
         if current_user.username not in recipient_usernames: 
          valid_recipients_string = valid_recipients_string + "," +  current_user.username
-         email_body = send_emails_form.email_body.data +  "\n\n Respond to:  "+  valid_recipients_string 
+         email_body = send_emails_form.email_body.data +  "\n\n" + "Respond to:  "+  valid_recipients_string 
         else:
          email_body = send_emails_form.email_body.data + "\n\n Respond to: "+ valid_recipients_string
          
