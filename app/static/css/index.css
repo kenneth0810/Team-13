@@ -10,7 +10,7 @@ html {
 
 h1{
     font-family: "Monaco", Monaco, monospace;
-    font-size: 4em;
+    font-size: 6em;
     color: #191715;
 }
 
@@ -19,16 +19,17 @@ h1{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50vh;
+    height: 40vh;
 }
-.typewriter::after{
+.typewriter::after{ 
+    /*content: url('letter-cursor.png') 8 8, auto; */ 
     content: '|';
     position: absolute;
     right: 0;
     color: white;
     background-color: #b1e9fb;
-    width: 100%;
-    animation: typing 4s steps(40) alternate infinite,
+    width: 80%;
+    animation: typing 4s steps(20) alternate infinite,
                 line 2s infinite;
 }
 @keyframes typing{
@@ -37,7 +38,7 @@ h1{
     }
 }
 @keyframes line {
-    50%{
+    40%{
         color: transparent;
     }
 }
@@ -49,7 +50,7 @@ h1{
     padding: 18px 36px;
     display: inline-block;
     font-family: "Lucida Console", Monaco, monospace;
-    font-size: 14px;
+    font-size: 15px;
     letter-spacing: 1px;
     cursor: pointer;
     box-shadow: inset 0 0 0 0 #f1db9d;
