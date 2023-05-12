@@ -1,9 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_socketio import SocketIO
 import os
 from flask_login import LoginManager
 
 myapp_obj = Flask(__name__)
+
+socketio = SocketIO(myapp_obj)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
