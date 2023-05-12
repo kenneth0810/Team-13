@@ -62,7 +62,9 @@
       const sendMessage = () => {
         const message = document.getElementById("message");
         if (message.value == "") return;
-        socketio.emit("message", message.value);
+        const room = "{{ room_code }}";
+        const user_id = "{{ user.id }}";
+        socketio.emit("message", user_id, {'message': message.value, 'room': room});
         message.value = "";
       };
 

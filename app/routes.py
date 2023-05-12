@@ -383,14 +383,20 @@ def room(room_code):
 
 @socketio.on('message')
 def handle_message(message):
-    emit('message', {'name': current_user.fullname, 'message': message}, broadcast=True)
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    emit('message', {'name': user.fullname, 'message': message}, broadcast=True)
 
 @socketio.on('join')
 def handle_join(data):
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
     join_room(data['room'])
-    emit('join_message', {'name': current_user.fullname, 'message': ' has entered the room.'}, room=data['room'])
+    emit('join_message', {'name': user.fullname, 'message': ' has entered the room.'}, room=data['room'])
 
 @socketio.on('leave')
 def handle_leave(data):
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
     leave_room(['room'])
-    emit('leave_message', {'name': current_user.fullname, 'message': ' has left the room.'}, room=data['room'])
+    emit('leave_message', {'name': user.fullname, 'message': ' has left the room.'}, room=data['room'])
