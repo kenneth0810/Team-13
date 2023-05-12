@@ -20,7 +20,6 @@ from app.profile import BioForm, PasswordForm, DeleteForm
 from app.chat import CreateRoomForm, JoinRoomForm, SendMessageForm
 
 #Yue Ying Lee
-# index page is the page user see before registering or logging in
 @myapp_obj.route("/")
 def index():
     return render_template('index.html' )
@@ -36,7 +35,6 @@ def homepage():
 #Yue Ying Lee
 @myapp_obj.route("/login", methods=['GET', 'POST'])
 def login():
-    # create form
     form = LoginForm()
     if form.validate_on_submit():
         valid_user = User.query.filter_by(username = form.username.data).first()

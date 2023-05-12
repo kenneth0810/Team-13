@@ -5,12 +5,6 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/view_emails.css') }}">
 </head>
 <h1>Inbox for {{user.fullname}}</h1>
-<p>      
-    <a href="/homepage">
-        <button type="submit6" name="submit_button6">Homepage</button>
-    </a>
-</p>
-
 <!--doing some passsing parameters so the user will be redirected to a page with the thread id  --> 
 {% if emails %}
     {% for email in emails %}
@@ -18,7 +12,7 @@
         <div class="emails"> 
           <div class="card">
             <div class="container">
-            <p> <b> Time: </b> {{ email.timestamp }} </p>
+            <p> <b> Time: </b> {{ email.timestamp.strftime("%b %d, %Y %H:%M:%S") }} </p>
             <p> <b> From:</b> {{ email.sender_username}} </p>
             <p> <b> Subject: </b>{{ email.subject}} </p>
             <p> <b> Body:</b> <br>{{ email.email_body }} </p>
