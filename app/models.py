@@ -96,16 +96,16 @@ class Profile(db.Model):
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(250), nullable=True)
-    subject = db.Column(db.String(250), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    room_id = db.Column(db.Integer, db.ForeignKey('chat_room.id'))
     message = db.Column(db.String(5000))
     timestamp = db.Column(db.DateTime, nullable=False)
 
-    sending_user = db.Column(db.Integer, db.ForeignKey('user.id'))
-    receiving_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+class ChatRoom(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    room_id = db.Column(db.String(10), nullable=False)
 
-    def repr(self):
-        return f'{self.id} : {self.subject}'
+    messages = db.relationship('Message', backref='chat_room', lazy='dynamic')
 
 @login.user_loader
 def load_user(id):

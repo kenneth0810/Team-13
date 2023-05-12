@@ -1,59 +1,38 @@
-{% extends "base.html"%}{% block title %}Chat{% endblock %}
+{% extends 'base.html' %}
 
 {% block content %}
-<h1>Chat</h1>
-<a href="/homepage">
-  <button type="submit6" name="submit_button6">Homepage</button>
-</a>
-<head>
-    <style>
-      ul {
-        list-style-type: none;
-      }
-    </style>
-  </head>
-  <body>
-    <form action="{{ url_for('start_chat') }}" method="POST" nonvalidate>
-      {{ form.hidden_tag() }}
-      <p>{{ form.recipient_name.label }}<br>
-         {{ form.recipient_name(size=32) }}</p>
-      <p>{{ form.subject.label }}<br>
-         {{ form.subject(size=32) }}</p>
-      <p>{{ form.message.label }}<br>
-         {{ form.message(size=32) }}</p>
-      <p>{{ form.submit() }}</p>
-    </form>
-    <form action="{{ url_for('search_messages') }}" method="POST">
-      {{ form.hidden_tag() }}
-      <p>Search messages by:</p>
-      <select name="search_type">
-          <option value="from_user">Sender</option>
-          <option value="subject">Subject</option>
-          <option value="message">Message</option>
-      </select>
-      <input type="text" name="search_term">
-      <button type="submit">Search</button>
-    </form>
-  </body>
+  <h1>Chat Room</h1>
+  
+  <h2>Create Chat Room</h2>
+  <form action="{{ url_for('chatroom') }}" method="POST">
+    {{ create_form.hidden_tag() }}
+    <p>{{ create_form.room_id.label }}<br>
+      {{ create_form.room_id(size=5) }}</p>
+    <p>{{ create_form.submit() }}</p>
+  </form>
+  
+  <h2>Join Chat Room</h2>
+  <form action="{{ url_for('chatroom') }}" method="POST">
+    {{ join_form.hidden_tag() }}
+    <p>{{ join_form.valid_room_id.label }}<br>
+      {{ join_form.valid_room_id(size=5) }}</p>
+    <p>{{ join_form.submit() }}</p>
+  </form>
 
-{% if messages %}
-    <h2>Received Messages:</h2>
-    {% for message in messages %}
-        <div class="message">
-            <p>Time: {{ message.timestamp }}</p>
-            <p>From: {{ message.username }}</p>
-            <p>Subject: {{ message.subject }}</p>
-            <p>Message: {{ message.message }}</p>
-            {% if message.receiving_user == current_user.id %}
-                <form action="{{ url_for('delete_chat', id=message.id) }}" method="POST">
-                    <input type="hidden" name="id" value="{{ message.id }}">
-                    <button type="submit">Delete</button>
-                </form>
-            {% endif %}
-        </div>
-    {% endfor %}
-{% else %}
-    <p>No messages received.</p>
-{% endif %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        {% if category == 'error' %}
+          <div class="alert alert-danger">
+            {{ message }}
+          </div>
+        {% else %}
+          <div class="alert alert-{{ category }}">
+            {{ message }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
 
 {% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chat App</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/chat.css')}}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="content">
+      <div class="message-box">
+        <h2>Chat Room</h2>
+        <div class="search-box">
+          <input type="text" id="search-bar" placeholder="Search messages...">
+          <select id="search-type">
+            <option value="text">Search by Text</option>
+            <option value="user">Search by User</option>
+          </select>
+          <button id="search-btn" onclick="searchMessages()">Search</button>
+        </div>
+        <div class="messages" id="messages"></div>
+        <div class="inputs">
+          <input type="text" rows="3" placeholder="Message" name="message" id="message" />
+          <button type="button" name="send" id="send-btn" class="send-btn" onClick="sendMessage()">Send</button>
+          <div class="delete-box-container">
+            <div class="delete-box">
+              <form method="POST" action="{{ url_for('deletechatroom', room_code=room_code) }}" id="delete-form">
+                <input type="hidden" name="_method" value="DELETE" />
+                <button type="submit" class="btn btn-danger">Delete Chat Room</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      var socketio = io();
+
+      const messages = document.getElementById("messages");
+        
+      const createMessage = (name, msg) => {
+        const content = `
+        <div class="text" id="msg-${new Date().getTime()}">
+            <span>
+                <strong>${name}</strong>: ${msg}
+            </span>
+            <span class="muted">
+                ${new Date().toLocaleString()}
+            </span>
+        </div>
+        `;
+        messages.innerHTML += content;
+      };
+
+      socketio.on("message", (data) => {
+        createMessage(data.name, data.message);
+      });
+
+      const sendMessage = () => {
+        const message = document.getElementById("message");
+        if (message.value == "") return;
+        socketio.emit("message", message.value);
+        message.value = "";
+      };
+
+      socketio.on("join_message", (data) => {
+        createMessage(data.name, data.message);
+      });
+
+      socketio.on("leave_message", (data) => {
+        createMessage(data.name, data.message);
+      });
+
+      const searchMessages = () => {
+        const searchBar = document.getElementById("search-bar");
+        const filter = searchBar.value.toUpperCase();
+        const messageTexts = messages.querySelectorAll(".text");
+        const searchType = document.getElementById("search-type").value;
+
+        for (let i = 0; i < messageTexts.length; i++) {
+          const text = messageTexts[i].getElementsByTagName("span")[0];
+          const txtValue = text.textContent || text.innerText;
+          const user = messageTexts[i].getElementsByTagName("strong")[0].textContent;
+    
+          if (searchType === "text") {
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              messageTexts[i].style.display = "";
+            } else {
+              messageTexts[i].style.display = "none";
+            }
+          } else if (searchType === "user") {
+            if (user.toUpperCase().indexOf(filter) > -1) {
+              messageTexts[i].style.display = "";
+            } else {
+              messageTexts[i].style.display = "none";
+            }
+          }
+        }
+    };
+    </script>
+  </body>
+</html>
+  
+{% endblock %}

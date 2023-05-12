@@ -1,23 +1,24 @@
 from flask import render_template
 from flask import redirect, request, session, url_for
 from flask import flash, get_flashed_messages
-from app import myapp_obj, db
+from app import myapp_obj, db, socketio
 from flask_login import current_user
 from flask_login import login_user
 from flask_login import logout_user
 from flask_login import login_required
+from flask_socketio import join_room, leave_room, emit
 from datetime import datetime
 
 from wtforms.validators import Email
 #from app.reply_emails import replyEmails
 from app.send_emails import sendEmails
 from app.register import registerUser 
-from app.models import User, Emails, Todo, Profile, Message, Note
+from app.models import User, Emails, Todo, Profile, Message, ChatRoom, Note
 from app.login import LoginForm
 from app.notes import NoteForm
 from app.todo import TodoForm
 from app.profile import BioForm, PasswordForm, DeleteForm
-from app.chat import ChatForm
+from app.chat import CreateRoomForm, JoinRoomForm, SendMessageForm
 
 #Yue Ying Lee
 # index page is the page user see before registering or logging in
@@ -341,11 +342,6 @@ def profile():
                 db.session.delete(b)
                 db.session.commit()
 
-            m = Message.query.filter_by(username=current_user.username).all()
-            for message in m:
-                db.session.delete(message)
-                db.session.commit()
-
             e = Emails.query.filter_by(sender_id=current_user.id).all()
             for emails in e:
                 db.session.delete(emails)
@@ -375,57 +371,62 @@ def delete_bio(id):
     
 @myapp_obj.route('/chat', methods=['GET', 'POST'])
 @login_required
-def start_chat():
-    form = ChatForm()
-    if form.validate_on_submit():
-        recipients = []
-        for recipient_name in form.recipient_name.data:
-            recipient = User.query.filter_by(username=recipient_name).first()
-            if recipient is None:
-                continue
-            recipients.append(recipient)
-        if not recipients:
-            flash('At least one recipient must be entered.')
-        else:
-            dateAndTime = datetime.now()
-            for recipient in recipients:
-                message = Message(
-                    username=current_user.username,
-                    subject=form.subject.data,
-                    message=form.message.data,
-                    sending_user=current_user.id, 
-                    receiving_user=recipient.id,
-                    timestamp=dateAndTime
-                )
-                db.session.add(message)
-            db.session.commit()
-            flash('Message sent successfully!')
-            return redirect(url_for('start_chat'))
-    messages = Message.query.filter_by(receiving_user=current_user.id).all()
-    return render_template('chat.html', user=current_user, form=form, messages=messages)
-
-@myapp_obj.route('/chat/<int:id>', methods=['POST'])
-@login_required
-def delete_chat(id):
-    message = Message.query.filter(Message.id == id, Message.receiving_user == current_user.id).first()
-    if message:
-        db.session.delete(message)
-        db.session.commit()
-        flash('Chat deleted', category='success')
-        return redirect(url_for('start_chat'))
+def chatroom():
+    if request.method == 'GET':
+        create_form = CreateRoomForm()
+        join_form = JoinRoomForm()
     else:
-        flash('There is no chat to be deleted')
-        return redirect(url_for('start_chat'))
-    
-@myapp_obj.route('/chat/search', methods=['POST'])
-def search_messages():
-    search_type = request.form.get('search_type')
-    search_term = request.form.get('search_term')
-    messages = Message.query.filter_by(receiving_user=current_user.id).all()
-    if search_type == 'from_user':
-        messages = [msg for msg in messages if search_term.lower() in msg.username.lower()]
-    elif search_type == 'subject':
-        messages = [msg for msg in messages if search_term.lower() in msg.subject.lower()]
-    elif search_type == 'message':
-        messages = [msg for msg in messages if search_term.lower() in msg.message.lower()]
-    return render_template('chat.html', form=ChatForm(), messages=messages)
+        create_form = CreateRoomForm(request.form)
+        join_form = JoinRoomForm(request.form)
+
+    if create_form.validate_on_submit():
+        room_id = create_form.room_id.data
+        chat_room = ChatRoom.query.filter_by(room_id=room_id).first()
+        if chat_room:
+            flash('Chat room with the same ID already exists. Please choose a different ID.', 'error')
+            return redirect(url_for('chatroom'))
+        else:
+            chat_room = ChatRoom(room_id=room_id)
+            db.session.add(chat_room)
+            db.session.commit()
+            return redirect(url_for('room', room_code=create_form.room_id.data))
+            
+    if join_form.validate_on_submit():
+        valid_id = join_form.valid_room_id.data
+        chat_room = ChatRoom.query.filter_by(room_id=valid_id).first()
+        if chat_room:
+            return redirect(url_for('room', room_code=join_form.valid_room_id.data))
+        else:
+            flash('Invalid chat room code. Please try again.', 'error')
+            return redirect(url_for('chatroom'))
+
+    return render_template('chat.html', create_form=create_form, join_form=join_form)
+
+@myapp_obj.route('/chat/<room_code>/delete', methods=['POST'])
+@login_required
+def deletechatroom(room_code):
+    chat_room = ChatRoom.query.filter_by(room_id=room_code).first()
+    if chat_room:
+        db.session.delete(chat_room)
+        db.session.commit()
+        flash('Chat room has been deleted', 'success')
+    return redirect(url_for('chatroom'))
+
+@myapp_obj.route('/room/<string:room_code>')
+@login_required
+def room(room_code):
+    return render_template('room.html', room_code=room_code)
+
+@socketio.on('message')
+def handle_message(message):
+    emit('message', {'name': current_user.username, 'message': message}, broadcast=True)
+
+@socketio.on('join')
+def handle_join(data):
+    join_room(data['room'])
+    emit('join_message', {'name': current_user.username, 'message': ' has entered the room.'}, room=data['room'])
+
+@socketio.on('leave')
+def handle_leave(data):
+    leave_room(['room'])
+    emit('leave_message', {'name': current_user.username, 'message': ' has left the room.'}, room=data['room'])
