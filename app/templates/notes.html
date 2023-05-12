@@ -31,7 +31,7 @@
                     <a href="{{url_for('add_todo', name=note.name)}}">
                         <div class="card note-card">
                             <div class="card-body text-center">
-                                <h4 class="card-title">{{note.name}}</h4>
+                                <h4 class="card-title name">{{note.name}}</h4>
                                 <h6 class="text-muted">Date Created: {{note.timestamp.strftime("%m/%d/%Y")}}</h6>
                                 <a href="{{url_for('delete_note', id=note.id)}}"><i class="fas fa-trash"></i></a>
                             </div>

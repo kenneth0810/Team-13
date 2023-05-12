@@ -25,3 +25,11 @@ a {
 .note-card:hover {
     transform: scale(1.05);
 }
+
+.fas, .name{
+    transition: 0.3s;
+}
+
+.fas:hover, .name:hover {
+    color: black;
+}
