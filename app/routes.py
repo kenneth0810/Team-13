@@ -90,15 +90,17 @@ def send_emails():
      valid_recipient =  User.query.filter_by(username = recipient.strip()).first()
      if (valid_recipient):
         valid_recipients_list.append(valid_recipient)
-        valid_recipients_string =  valid_recipients_string + ", " + valid_recipient.username
+        if valid_recipients_string == "":
+          valid_recipients_string = valid_recipient.username
+        else: 
+         valid_recipients_string =  valid_recipients_string + ", " + valid_recipient.username
     for valid_recipient in valid_recipients_list:
         recipient_username= valid_recipient.username
         recipient_id = valid_recipient.id
         flash(f' Valid recipients: {valid_recipient.username}')
         recipient_usernames = [r.username for r in valid_recipients_list]
         if current_user.username not in recipient_usernames: 
-         valid_recipients_string = valid_recipients_string + "," +  current_user.username
-         email_body = send_emails_form.email_body.data +  "\n\n" + "Respond to:  "+  valid_recipients_string 
+         email_body = send_emails_form.email_body.data +  "\n\n" + "Respond to:  "+  valid_recipients_string + current_user.username
         else:
          email_body = send_emails_form.email_body.data + "\n\n Respond to: "+ valid_recipients_string
          
@@ -126,6 +128,7 @@ def myFunction(email):
     last_line = getLastLineOfString(email.email_body)
     return [email.sender_username] +  last_line.split(',')
 '''
+
 
 #YueYingLee
 @myapp_obj.route("/view_emails", methods = ['GET', 'POST'])
