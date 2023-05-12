@@ -25,6 +25,7 @@ sending emails, sending chats, and make a todo list once they created an account
 12. Delete account (Ruben)
 
 ## Instructions on running the project
+1. Temporary instructions: clone project, make and activate the environment, download the packages,run.py
 1. First, download the following technologies on the Linux Terminal if you do not have it in your computer
 ```
 sudo apt install python3 (download this first)
