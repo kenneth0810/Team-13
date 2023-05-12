@@ -8,4 +8,4 @@ app/__pycache__
 *.pyc
 
 #ignore os generated files
-*.DS_Store
+.DS_Store
