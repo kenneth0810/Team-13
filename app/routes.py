@@ -338,7 +338,8 @@ def profile():
 
             b = Profile.query.filter_by(user=current_user).first()
             if b:
-                delete_bio(b.user_id)
+                db.session.delete(b)
+                db.session.commit()
 
             m = Message.query.filter_by(username=current_user.username).all()
             for message in m:
