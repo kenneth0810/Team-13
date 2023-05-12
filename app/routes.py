@@ -12,8 +12,9 @@ from wtforms.validators import Email
 #from app.reply_emails import replyEmails
 from app.send_emails import sendEmails
 from app.register import registerUser 
-from app.models import User, Emails, Todo, Profile, Message
+from app.models import User, Emails, Todo, Profile, Message, Note
 from app.login import LoginForm
+from app.notes import NoteForm
 from app.todo import TodoForm
 from app.profile import BioForm, PasswordForm, DeleteForm
 from app.chat import ChatForm
@@ -202,19 +203,53 @@ def reply_email(email_id):
 '''
 
 #kenneth
-@myapp_obj.route("/todo", methods = ['GET', 'POST'])
+@myapp_obj.route("/notes", methods = ['GET', 'POST'])
 @login_required
-def add_todo():
+def note():
+    form = NoteForm()
+    if form.validate_on_submit():
+        note = Note(user = current_user, name = form.name.data, timestamp=datetime.now())
+        db.session.add(note)
+        db.session.commit()
+        flash('Successfully created a new note.')
+        return redirect(url_for('note'))
+    
+    all_notes = Note.query.filter(Note.user_id == current_user.id).all()
+    notes_list = []
+    for note in all_notes:
+        notes_list.append(note)
+
+    return render_template("notes.html", form=form, notes=notes_list, user=current_user)
+
+#kenneth
+@myapp_obj.route("/notes/<int:id>", methods = ['GET', 'POST'])
+@login_required
+def delete_note(id):
+    note = Note.query.filter(Note.id == id).first()
+    tasks = Todo.query.filter(Todo.name == note.name).all()
+    for task in tasks:
+        db.session.delete(task)
+        db.session.commit()
+    db.session.delete(note)
+    db.session.commit()
+
+    return redirect(url_for('note'))
+
+#kenneth
+@myapp_obj.route("/todo/<string:name>", methods = ['GET', 'POST'])
+@login_required
+def add_todo(name):
     form = TodoForm()
     if form.validate_on_submit():
-        todo = Todo(user = current_user, task = form.task.data, timestamp=datetime.now(), finished=False, favorite=False)
+        todo = Todo(user = current_user, name = name, task = form.task.data, timestamp=datetime.now(), finished=False, favorite=False)
         db.session.add(todo)
         db.session.commit()
         flash('Successfully added a new task.')
-        return redirect(url_for('add_todo'))
+        return redirect(url_for('add_todo', name = name))
+    
 
     user = current_user
-    all_tasks = Todo.query.filter(Todo.user_id == current_user.id).all()
+    all_tasks = Todo.query.filter(Todo.user_id == current_user.id, Todo.name == name).all()
     fav_list = []
     not_fav_list = []
     for t in all_tasks:
@@ -222,44 +257,44 @@ def add_todo():
             fav_list.append(t)
         else:
             not_fav_list.append(t)
-    return render_template("todo.html", form=form, fav_list=fav_list, not_fav_list=not_fav_list, user=user)
+    return render_template("todo.html", form=form, fav_list=fav_list, not_fav_list=not_fav_list, user=user, name=name)
 
 #kenneth
-@myapp_obj.route("/finish-task/<int:id>", methods = ['GET', 'POST'])
+@myapp_obj.route("/finish-task/<int:id>/<string:name>", methods = ['GET', 'POST'])
 @login_required
-def finish_task(id):
-    task = Todo.query.filter(Todo.id == id). first()
+def finish_task(id, name):
+    task = Todo.query.filter(Todo.id == id, Todo.name == name). first()
     if not task.finished:
         task.finished = True
     else:
         task.finished = False
     db.session.commit()
-    return redirect(url_for('add_todo'))
+    return redirect(url_for('add_todo', name=name))
 
 #kenneth
-@myapp_obj.route("/favorite-task/<int:id>", methods = ['GET', 'POST'])
+@myapp_obj.route("/favorite-task/<int:id>/<string:name>", methods = ['GET', 'POST'])
 @login_required
-def favorite_task(id):
-    task = Todo.query.filter(Todo.id == id). first()
+def favorite_task(id, name):
+    task = Todo.query.filter(Todo.id == id, Todo.name == name). first()
     if not task.favorite:
         task.favorite = True
     else:
         task.favorite = False
     db.session.commit()
-    return redirect(url_for('add_todo'))
+    return redirect(url_for('add_todo', name=name))
 
 #kenneth
-@myapp_obj.route('/delete-task/<int:id>', methods=['GET','POST'])
+@myapp_obj.route('/delete-task/<int:id>/<string:name>', methods=['GET','POST'])
 @login_required
-def delete_task(id):
-    task = Todo.query.filter(Todo.id == id).first()
+def delete_task(id, name):
+    task = Todo.query.filter(Todo.id == id, Todo.name == name).first()
     if task:
         db.session.delete(task) 
         db.session.commit()
         flash('Task deleted')
     else:
         flash('There is no task to be deleted.')
-    return redirect(url_for('add_todo'))
+    return redirect(url_for('add_todo', name=name))
 
 #kenneth
 @myapp_obj.route("/profile", methods=['GET', 'POST'])
@@ -297,9 +332,9 @@ def profile():
     if delete_form.validate_on_submit() and request.method == "POST":
         user = current_user
         if user.check_password(delete_form.password.data):
-            deleteTodo = Todo.query.filter_by(user=current_user).all()
-            for item in deleteTodo:
-                delete_task(item.id)
+            deleteNote = Note.query.filter_by(user=current_user).all()
+            for note in deleteNote:
+                delete_note(note.id)
 
             b = Profile.query.filter_by(user=current_user).first()
             if b:

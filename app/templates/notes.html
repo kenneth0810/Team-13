@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <title>Your Notes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/notes.css') }}">
+</head>
+
+<body>
+    <!-- start forms -->
+    <div>
+        <div class="card m-4">
+            <div class="card-body">
+                <h4 class="card-title text-center">Create a new note or edit your existing tasks.</h4>
+               <form action="" novalidate method="POST">
+                    {{form.hidden_tag()}}
+                    <label class="form-label text-muted" for="create_note">Create a new note:</label>
+                    <div>
+                        {{form.name(size=32, id=create_note, class="form-control")}}
+                        {{form.submit(class="btn btn-primary mt-2")}}
+                    </div>
+               </form>
+            </div>
+        </div>
+    </div> 
+
+    <div class="container">
+        <div class="row g-5">
+            {% for note in notes %}
+                <div class="col-md-4 col-sm-6">
+                    <a href="{{url_for('add_todo', name=note.name)}}">
+                        <div class="card note-card">
+                            <div class="card-body text-center">
+                                <h4 class="card-title">{{note.name}}</h4>
+                                <h6 class="text-muted">Date Created: {{note.timestamp.strftime("%m/%d/%Y")}}</h6>
+                                <a href="{{url_for('delete_note', id=note.id)}}"><i class="fas fa-trash"></i></a>
+                            </div>
+                        </div>
+                    </a>
+                </div> 
+            {% endfor %}
+        </div>
+    </div>
+</body>
+{% endblock %}
