@@ -1,32 +1,67 @@
 {% extends "base.html"%}
 
 {% block content %}
-<h1>Profile.</h1>
-<a href="{{url_for('homepage')}}">
-    <button type="submit6" name="submit_button6">Homepage</button>
-</a>
-<form action="" method="POST" novalidate>
-    {{bform.hidden_tag()}} {{pform.hidden_tag()}}
-    <h2>Hello {{user.fullname}}! </h2>
-    <h3 style="display: inline;">Username:</h3>
-    <p style="display: inline;">{{user.username}}</p>
-    <p> {{bform.bio.label}} <br> 
-        {{bform.bio(size=32)}}</p>
-    <a href="{{url_for('delete_bio', id=user.id)}}">Delete Bio</a>
+<head>
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
+<body>
+    <div class="sidenav">
+        <h1 class="pfp"><strong>{{ user.fullname[0] }}</strong></h1>
+        <h1>Hello {{user.fullname}}!</h1>
+     </div>
+     <div class="main">
+        <div>
+            <h4>Account Information</h4>
+            <hr>
+            <p><strong>Username: </strong>{{user.username}}</p>
+            <p><strong>Password: </strong>**********</p>
+            <hr>
+            <h5 class="text-center"><strong>About Me</strong></h5>
+            <form class="mb-4" action="{{url_for('profile')}}" method="POST" novalidate id="bform">
+                {{bform.hidden_tag()}}
+                <p>{{bform.bio(size=60, class="form-control text-center")}}</p>
+                <div class="bform_buttons text-center d-flex justify-content-around">
+                    <a>{{bform.submit(class="btn btn-primary")}}</a>
+                    <a class="btn btn-danger" href="{{url_for('delete_bio', id=user.id)}}">Delete Bio</a>
+                </div>
+            </form>
+            <hr>
+        <div>
+            <h5>Want to change your password?</h5>
+            <h6 class="text-muted">Create a new password below.</h6>
+            <form action="{{url_for('profile')}}" method="POST" novalidate id="pform">
+                {{pform.hidden_tag()}}
+                <p>{{pform.old_password.label}} {{pform.old_password(size=32, class="form-control")}}</p>
+                {% for error in pform.old_password.errors %}
+                    <span class="text-danger">[{{ error }}]</span>
+                {% endfor %}
+                <p>{{pform.new_password.label}} {{pform.new_password(size=32, class="form-control")}}</p>
+                {% for error in pform.new_password.errors %}
+                    <span class="text-danger">[{{ error }}]</span>
+                {% endfor %}
+                <p>{{pform.confirm.label}} {{pform.confirm(size=32, class="form-control")}}</p>
+                {% for error in pform.confirm.errors %}
+                    <span class="text-danger">[{{ error }}]</span>
+                {% endfor %}
+                <p>{{pform.submit(class="btn btn-success")}}</p>
+                <hr>
+            </form>
+        </div>
+        <div>
+            <h5 class="card-title">Want to delete your account?</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Note: This will PERMANENTLY delete your account.</h6>
+                <form action="{{url_for('profile')}}" method="POST" novalidate id="dform">
+                    {{dform.hidden_tag()}}
+                    <p>{{dform.password.label}} {{dform.password(size=32, class="form-control")}}</p>
+                    {% for error in dform.password.errors %}
+                        <span class="text-danger">[{{ error }}]</span>
+                    {% endfor %}
+                    <p>{{dform.submit(class="btn btn-danger")}}</p>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
 
-    <p>{{bform.submit()}}</p>
-    <br> 
-    <h3>Want to change your password?</h3>
-    <p>{{pform.old_password.label}} <br>
-        {{pform.old_password(size=32)}}</p>
-    <p>{{pform.new_password.label}} <br>
-        {{pform.new_password(size=32)}}</p>
-    <p>{{pform.submit()}}</p>
-
-    <br><br><br>
-    <h3>Want to delete your account?</h3>
-    <p>{{dform.password.label}} <br>
-        {{dform.password(size=32)}}</p>
-    <p>{{dform.submit()}}</p>
-</form>
 {% endblock %}

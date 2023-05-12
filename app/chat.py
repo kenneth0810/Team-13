@@ -1,15 +1,17 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, FieldList
-from wtforms.validators import DataRequired, Length, ValidationError
+from wtforms import StringField, TextAreaField, SubmitField, HiddenField
+from wtforms.validators import DataRequired, Length
 
-class AtLeastOneRecipient(object):
-    def __call__(self, form, field):
-        if not any(field.entries):
-            raise ValidationError('At least one recipient is required.')
+class CreateRoomForm(FlaskForm):
+    room_id = StringField('Create Room Code', validators=[DataRequired(), Length(min=5, max=5)])
+    submit = SubmitField('Create Chat Room')
 
-class ChatForm(FlaskForm):
-    recipient_name = FieldList(StringField('Recipient'), min_entries=5, validators=[AtLeastOneRecipient()])
-    username = StringField('Username')
-    subject = StringField('Subject', validators=[DataRequired(), Length(min=1, max=100)])
-    message = TextAreaField('Message', validators=[DataRequired(), Length(min=1, max=5000)])
+class JoinRoomForm(FlaskForm):
+    valid_room_id = StringField('Enter Room Code', validators=[DataRequired(), Length(min=5, max=5)])
+    submit = SubmitField('Join Chat Room')
+
+class SendMessageForm(FlaskForm):
+    message = TextAreaField('Message', validators=[DataRequired(), Length(max=5000)])
+    sender_id = HiddenField('Sender ID', validators=[DataRequired()])
+    chat_room_id = HiddenField('Chat Room ID', validators=[DataRequired()])
     submit = SubmitField('Send')
