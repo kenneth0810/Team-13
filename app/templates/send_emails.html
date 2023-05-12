@@ -3,29 +3,65 @@
 {% extends "base.html"%}
 
 {% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/send_emails.css') }}">
+  </head>
+  
 <h1>Email Page</h1>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-danger">
+  <ul class="list-unstyled">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% endwith %}
 <form action="" method="POST" novalidate>
-    {{send_emails_form.hidden_tag()}} {{send_emails_form.hidden_tag()}}
-    <p>
-        {{send_emails_form.recipients.label}} <br>
-        {{send_emails_form.recipients(size=50)}}
+    <body>
+    {{send_emails_form.hidden_tag()}} {{send_emails_form.hidden_tag()}} 
+    <div class="card">
+    <div class="container">
+    <p> 
+        <b>{{send_emails_form.recipients.label}} </b><br>
+        {{send_emails_form.recipients(size=70,rows=4)}}
+        {% for error in send_emails_form.subject.errors %}
+        <span class="text-danger">[{{ error }}]</span>
+        {% endfor %}
     </p>
     <p>
-        {{send_emails_form.subject.label}} <br>
-        {{send_emails_form.subject(size=50)}}
+        <b> {{send_emails_form.subject.label}}</b> <br>
+        {{send_emails_form.subject(size=70, rows =4)}}
+        {% for error in send_emails_form.subject.errors %}
+        <span class="text-danger">[{{ error }}]</span>
+        {% endfor %}
     </p>
 
     <p>
-        {{send_emails_form.email_body.label}} <br>
-        {{send_emails_form.email_body(rows=10, cols=80)}}
+        <b>{{send_emails_form.email_body.label}} </b><br>
+        {{send_emails_form.email_body(rows=10, cols=69)}}
+        {% for error in send_emails_form.subject.errors %}
+        <span class="text-danger">[{{ error }}]</span>
+        {% endfor %}
     </p>
 
-    <p>{{send_emails_form.submit()}}</p>
+    <p> {{send_emails_form.submit()}} </p> 
+    {% for error in send_emails_form.submit.errors %}
+    <span class="text-danger">[{{ error }}]</span>
+    {% endfor %}
 </form>
-
 <a href="/homepage">
-    <button type="submit2" name="submit_button2">Homepage</button>
-</a>
-
+    <button type="button" class="btn btn-danger">Discard</button>
+</a> 
+</br>
+</body> 
+</div>
+</div>
+<div style="text-align: center;">
+    <img src = "{{ url_for('static', filename='131_logo.jpg') }}" alt ="website logo"> 
+    </div>
 {% endblock %}
 </html>
+ 

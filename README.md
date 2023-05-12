@@ -25,16 +25,17 @@ sending emails, sending chats, and make a todo list once they created an account
 12. Delete account (Ruben)
 
 ## Instructions on running the project
+1. Temporary instructions: clone project, make and activate the environment, download the packages,run.py
 1. First, download the following technologies on the Linux Terminal if you do not have it in your computer
 ```
 sudo apt install python3 (download this first)
 pip3 install flask 
-pip3 install flask-login
-pip3 install flask-sqlachemy
-pip3 install flask-wtf
+pip3 install flask_login
+pip3 install flask_sqlachemy
+pip3 install flask_wtf
+pip3 install flask_socketio
 pip3 install git 
 ```
-
 2. Clone this project repository into folder of your choice using the following command
 ```
     git clone https://github.com/kenneth0810/Team-13.git

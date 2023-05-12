@@ -1,17 +1,28 @@
 <!doctype html>
 <html lang="en">
-   <body style="background-color:rgb(239, 248, 247);"> 
+  <body style="background-color:#b1e9fb;"> 
       <head>
+       <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}"> --> 
          <meta charset="utf-8">
          <meta name="viewport" content="width=device-width, initial-scale=1">
          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
        </head>
-{% extends "base.html"%}
-{% block content %}
-  <div class="container d-flex align-items-center justify-content-center">
-    <div class="register-form-wrapper">
+{% block content %} 
+<div class="container d-flex align-items-center justify-content-center">
+  <div class="register-form-wrapper">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-danger">
+      <ul class="list-unstyled">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
       <h1 class="text-center text-primary mb-4">Register</h1>
       <form action="" method="POST" novalidate class="register-form">
         {{ registerForm.hidden_tag() }}
@@ -48,9 +59,17 @@
         </div>
       </form>
       <div class="text-center mt-4">
-        <span>Already have an account?</span>
+        <span>Already have an account?     </span>
+        <br /> 
         <a href="/login" class="btn btn-info" role="button">Login</a>
       </div>
+      <br />
+      <div class="text-center mt-4"> 
+        <a href="/" class="btn btn-info" role="button">Back</a>
+        </div>
+    </div> 
+    <div style="text-align: center;">
+    <img src = "{{ url_for('static', filename='131_logo.jpg') }}" alt ="website logo"> 
     </div>
   </div>
 {% endblock %}

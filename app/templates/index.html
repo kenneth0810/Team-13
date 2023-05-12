@@ -1,18 +1,24 @@
-{% extends "base.html" %}
-
 {% block content %}
-<title>Index Page</title>
-<h1>Welcome to our email application!</h1>
-<p>       
-<a href = "/register">
-      <button type="submit" name="submit_button">Register</button>
-    </a> </p>
-<p>
-<a href = "/login">
-      <button type="submit2" name="submit_button2">Login</button>
-    </a>
-</p>
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
 
-  
+<style>
+  a {
+    text-decoration: none;
+  }
+ </style> 
+ </br>
+<h1 class="typewriter"> Welcome 👋🏻</h1> 
+<div style="text-align: center;">
+<img src = "{{ url_for('static', filename='131_logo.jpg') }}" alt ="website logo"> 
+</div>
+<div id="outer">
+  <a href="/register" class="button_slide slide_right">Register</a>
+  <br /> <br /><br />
+  <a href="/login" class="button_slide slide_right">Login</a>
+  <br /> <br /><br />
+  <br /> <br /><br />
+</div> 
         
 {% endblock %}
