@@ -419,14 +419,14 @@ def room(room_code):
 
 @socketio.on('message')
 def handle_message(message):
-    emit('message', {'name': current_user.username, 'message': message}, broadcast=True)
+    emit('message', {'name': current_user.fullname, 'message': message}, broadcast=True)
 
 @socketio.on('join')
 def handle_join(data):
     join_room(data['room'])
-    emit('join_message', {'name': current_user.username, 'message': ' has entered the room.'}, room=data['room'])
+    emit('join_message', {'name': current_user.fullname, 'message': ' has entered the room.'}, room=data['room'])
 
 @socketio.on('leave')
 def handle_leave(data):
     leave_room(['room'])
-    emit('leave_message', {'name': current_user.username, 'message': ' has left the room.'}, room=data['room'])
+    emit('leave_message', {'name': current_user.fullname, 'message': ' has left the room.'}, room=data['room'])
