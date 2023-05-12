@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     sent_emails = db.relationship('Emails', backref='sender', foreign_keys='Emails.sender_id', lazy = 'dynamic')
     received_emails = db.relationship('Emails', backref='recipient', foreign_keys='Emails.recipient_id', lazy = 'dynamic')
 
+    note = db.relationship('Note', backref = 'user', lazy = 'dynamic')
     todo = db.relationship('Todo', backref = 'user', lazy = 'dynamic')
     profile = db.relationship('Profile', backref = 'user', lazy = 'dynamic')
    
@@ -70,8 +71,16 @@ many to one: one email can have multiple replies where each reply is linked to a
 
 
 
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
+    timestamp = db.Column(db.DateTime, nullable=False)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
     task = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime, nullable=False)
     finished = db.Column(db.Boolean, nullable=False)
