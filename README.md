@@ -28,7 +28,7 @@ sending emails, sending chats, and make a todo list once they created an account
 1. Make a folder with the name of your choice and navigate to that folder. 
 
 2. Before activating virtual environment, download these technologies on the Linux Terminal if you do not have it in your computer. 
-- Note: If you do not want to use virtual environment, only perform step 1, skip to step 5 and perform steps from 5 to 9 only. 
+- Note: If you do not want to use virtual environment, only perform step 1, step2, skip to step 5 and perform steps from 5 to 9 only. 
 ```
 sudo apt install python3
 apt install python3-pip
