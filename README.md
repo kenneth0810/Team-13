@@ -25,28 +25,44 @@ sending emails, sending chats, and make a todo list once they created an account
 12. Delete account (Ruben)
 
 ## Instructions on running the project
-1. Temporary instructions: clone project, make and activate the environment, download the packages,run.py
-1. First, download the following technologies on the Linux Terminal if you do not have it in your computer
+1. Make a folder with the name of your choice and navigate to that folder. 
+
+2. Before activating virtual environment, download these technologies if you do not have it in your computer. 
 ```
-sudo apt install python3 (download this first)
-pip3 install flask 
+sudo apt install python3
+apt install python3-pip
+apt install python3.10-venv
+apt-get install git
+```
+
+3. Create a virtual environment by using the following command (myenv is the name of the virtual environment)
+```
+python3 -m venv myenv
+```
+
+4. Activate the virtual environment
+- On MacOs or Unix, run: ```source myenv/bin/activate```
+- On Windows, run: ```myenv\Scripts\activate.bat```
+
+5. Install the necessary packages: 
+```
+pip3 install flask
+pip3 install flask_sqlalchemy
 pip3 install flask_login
-pip3 install flask_sqlachemy
-pip3 install flask_wtf
 pip3 install flask_socketio
-pip3 install git 
+pip3 install flask_wtf
 ```
-2. Clone this project repository into folder of your choice using the following command
+6.  Clone this project repository into folder of your choice using the following command
 ```
     git clone https://github.com/kenneth0810/Team-13.git
 ```
 
-3. Move to the Team-13 directory with this command(assumption of you are currently in the home directory): 
+7. Move to the Team-13 directory with this command(assumption of you are currently in your choice of folder): 
 ```
    cd Team-13
 ```
     
-4. Set up a database
+8. Set up a database
 
  a. Run `flask shell`
 
@@ -54,18 +70,22 @@ pip3 install git
 
 ```
 from app import db
-from app.models import User, Emails, Note, Todo, Profile, Message
+from app.models import User, Emails, Note, Todo, Profile, ChatRoom
 db.create_all()
 exit()
 ```
 
-5. Run the project with the following command: 
+8. Run the project with the following command and explore our features!
+- Note: You will see a website link such as ```http://127.0.0.1:5000```
+When you are testing our chat features with two users, make sure you use two different browser (One of them being incognito window or Microsoft edge and the other in Google Chrome)
 ```
 python3 run.py
 ```
-
+9. Once you are done exploring our website, deactivate the virtual environmen: 
+```deactivate ```
 ## Credits: 
 - Yue Ying Lee (@YueYingLee)
 - Kenneth Nguyen (@kenneth0810)
 - Ruben Martinez-Martinez (@Ruben725)
 - Johnny Nguyen (@johnny-txt)
+
