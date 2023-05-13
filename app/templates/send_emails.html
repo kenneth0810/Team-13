@@ -1,31 +1,50 @@
-<!DOCTYPE html>
-<html>
 {% extends "base.html"%}
 
 {% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/send_emails.css') }}">
+</head>
+  
+<body>
 <h1>Email Page</h1>
-<form action="" method="POST" novalidate>
-    {{send_emails_form.hidden_tag()}} {{send_emails_form.hidden_tag()}}
-    <p>
-        {{send_emails_form.recipients.label}} <br>
-        {{send_emails_form.recipients(size=50)}}
-    </p>
-    <p>
-        {{send_emails_form.subject.label}} <br>
-        {{send_emails_form.subject(size=50)}}
-    </p>
-
-    <p>
-        {{send_emails_form.email_body.label}} <br>
-        {{send_emails_form.email_body(rows=10, cols=80)}}
-    </p>
-
-    <p>{{send_emails_form.submit()}}</p>
-</form>
-
-<a href="/homepage">
-    <button type="submit2" name="submit_button2">Homepage</button>
-</a>
-
+<div class="card" style="width: 50%;">
+    <div class="card-body">
+        <form action="" method="POST" novalidate>
+            {{send_emails_form.hidden_tag()}} {{send_emails_form.hidden_tag()}} 
+            <p> 
+                <b>{{send_emails_form.recipients.label}} </b><br>
+                {{send_emails_form.recipients(size=70,rows=4, class="form-control")}}
+                {% for error in send_emails_form.recipients.errors %}
+                <span class="text-danger">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p> 
+                <b>{{send_emails_form.subject.label}} </b><br>
+                {{send_emails_form.subject(size=70,rows=4, class="form-control")}}
+                {% for error in send_emails_form.subject.errors %}
+                <span class="text-danger">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                <b>{{send_emails_form.email_body.label}} </b><br>
+                {{send_emails_form.email_body(rows=10, cols=69, class="form-control")}}
+                {% for error in send_emails_form.email_body.errors %}
+                <span class="text-danger">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p> {{send_emails_form.submit()}} </p> 
+                {% for error in send_emails_form.submit.errors %}
+                <span class="text-danger">[{{ error }}]</span>
+                {% endfor %}
+            <a href="/homepage">
+                    <button type="button" class="btn btn-danger">Discard</button>
+            </a> 
+        </form>
+    </div>
+  </div>
+  <div style="text-align: center; margin-top: 1%;">
+    <img src = "{{ url_for('static', filename='131_logo.jpg') }}" alt ="website logo"> 
+    </div>
+</body> 
 {% endblock %}
-</html>
+ 
