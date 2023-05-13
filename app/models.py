@@ -47,6 +47,30 @@ class Emails(db.Model):
     def __repr__(self): #for debugging process
         return f'<emails {self.id}: {self.subject}, {self.message}>'
     
+
+'''
+one to many relationships 
+one sender has many emails 
+one sender has many recipients 
+
+
+replying: 
+one to many: original message = parent , new message = child 
+one to many: each reply can have one or more recipients 
+
+many to many: one user send to multiple recipients, each recipient can receive emails from multiple users
+many to one: one email can have multiple replies where each reply is linked to a single parent email 
+'''
+
+#thread is used to group emails together 
+# class Thread(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     subject = db.Column(db.String(1000), nullable = False)
+#     def __repr__(self):
+#         return f'<thread{self.id}: {self.subject}>'
+
+
+
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
@@ -79,9 +103,8 @@ class Message(db.Model):
 
 class ChatRoom(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    room_id = db.Column(db.String(10), nullable=False)
-
-    messages = db.relationship('Message', backref='chat_room', lazy='dynamic')
+    room_id = db.Column(db.String(50), unique=True, nullable=False)
+    users = db.Column(db.String)
 
 @login.user_loader
 def load_user(id):

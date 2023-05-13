@@ -8,6 +8,8 @@ from flask_login import logout_user
 from flask_login import login_required
 from flask_socketio import join_room, leave_room, emit
 from datetime import datetime
+#from wtforms.validators import Email
+#from app.reply_emails import replyEmails
 from app.send_emails import sendEmails
 from app.register import registerUser 
 from app.models import User, Emails, Todo, Profile, Message, ChatRoom, Note
@@ -81,47 +83,49 @@ def send_emails():
    send_emails_form = sendEmails()
    if send_emails_form.validate_on_submit():
     sender_id = current_user.id
-    recipients_field = send_emails_form.recipients.data.split(',')
+    recipients_list = send_emails_form.recipients.data.split(',')
     valid_recipients_list = [] 
-    invalid_recipients_list = []
     valid_recipients_string = ""
-    
-    #Add the recipients to different lists depending on whether it is valid or not
-    for recipient in recipients_field:
+    for recipient in recipients_list:
      valid_recipient =  User.query.filter_by(username = recipient.strip()).first()
      if (valid_recipient):
         valid_recipients_list.append(valid_recipient)
-        if valid_recipients_string == "":
-          valid_recipients_string = valid_recipient.username
-        else: 
-         valid_recipients_string =  valid_recipients_string + ", " + valid_recipient.username
-     else:
-       invalid_recipients_list.append(recipient.strip())
-    
-    # pops out error messages when any one of the recipients is invalid and does not send any emails 
-    if invalid_recipients_list:
-        flash(f' Invalid recipients: {", ".join(invalid_recipients_list)}. Retpye username, or discard the email.')
-        return render_template('send_emails.html', send_emails_form = send_emails_form)
-    
-    #Else, send the emails to the valid recipients
+        valid_recipients_string =  valid_recipients_string + ", " + valid_recipient.username
     for valid_recipient in valid_recipients_list:
         recipient_username= valid_recipient.username
         recipient_id = valid_recipient.id
         flash(f' Valid recipients: {valid_recipient.username}')
         recipient_usernames = [r.username for r in valid_recipients_list]
-        #Use information saved in valid_recipients_string to append to the email body
         if current_user.username not in recipient_usernames: 
-         email_body = send_emails_form.email_body.data +   "\n (Respond to:  "+  valid_recipients_string + "," + current_user.username +")"
+         valid_recipients_string = valid_recipients_string + "," +  current_user.username
+         email_body = send_emails_form.email_body.data +  "\n\n" + "Respond to:  "+  valid_recipients_string 
         else:
-         email_body = send_emails_form.email_body.data +  "\n (Respond to:  "+ valid_recipients_string +")"
-       
+         email_body = send_emails_form.email_body.data + "\n\n Respond to: "+ valid_recipients_string
+         
         email = Emails (recipient_username = recipient_username, sender_username =  current_user.username, sender_id = sender_id, recipient_id = recipient_id, subject=send_emails_form.subject.data, email_body= email_body)
         db.session.add(email)
     if valid_recipients_list:
         db.session.commit()
         flash(f'Email successfully sent to {", ".join([r.username for r in valid_recipients_list])}!')
         return redirect('/homepage')
+    else:
+     flash(f' Invalid recipients. Retype username or go back to homepage.')
+
    return render_template('send_emails.html', send_emails_form = send_emails_form)
+
+'''
+def get_emails():
+    all_emails_where_i_am_recipient_id = Emails.query(FIND_ALL_MY_EMAILS)
+    for email in all_emails_where_i_am_recipient_id:
+        subject = email.getSubject()
+        sender = email.getSenderUsername()
+        body = email.getBody()
+        recipient_list = [sender] + getRecipientsFromBody(email.getBody())
+
+def myFunction(email):
+    last_line = getLastLineOfString(email.email_body)
+    return [email.sender_username] +  last_line.split(',')
+'''
 
 #YueYingLee
 @myapp_obj.route("/view_emails", methods = ['GET', 'POST'])
@@ -129,6 +133,42 @@ def send_emails():
 def view_emails():
     emails = Emails.query.filter_by(recipient_id = current_user.id).all()
     return render_template('view_emails.html', user=current_user, emails = emails)
+
+
+# @myapp_obj.route("/reply_emails/<int:id>", methods=['GET', 'POST'])
+# @login_required
+# def reply_email(id):
+#     email_to_reply = Emails.query.filter_by(id=id).first()
+
+#     # create a new sendEmails form object
+#     reply_email_form = replyEmails()
+
+#     # populate the form fields with the necessary information
+#     reply_email_form.recipients.data = email_to_reply.sender_username
+#     reply_email_form.subject.data = "Re: " + email_to_reply.subject
+#     reply_email_form.email_body.data = f"\n\n\nOn {email_to_reply.timestamp}, {email_to_reply.sender_username} wrote:\n\n{email_to_reply.email_body}"
+
+#     if reply_email_form.validate_on_submit():
+#         # send the reply email
+#         sender_id = current_user.id
+#         recipient = User.query.filter_by(username=email_to_reply.sender_username).first()
+#         if recipient:
+#             recipient_id = recipient.id
+#             email = Emails(recipient_username=email_to_reply.sender_username,
+#                            sender_username=current_user.username,
+#                            sender_id=sender_id,
+#                            recipient_id=recipient_id,
+#                            subject=reply_email_form.subject.data,
+#                            email_body=reply_email_form.email_body.data)
+#             db.session.add(email)
+#             db.session.commit()
+#             flash(f"Your reply email has been sent to {email_to_reply.sender_username}!")
+#             return redirect('/homepage')
+#         else:
+#             flash("Invalid recipient. Please try again.")
+
+#     return render_template('reply_emails.html', reply_emails_form=reply_email_form)
+
 
 #kenneth
 @myapp_obj.route("/notes", methods = ['GET', 'POST'])
@@ -345,15 +385,38 @@ def room(room_code):
     return render_template('room.html', room_code=room_code)
 
 @socketio.on('message')
-def handle_message(message):
-    emit('message', {'name': current_user.fullname, 'message': message}, broadcast=True)
+def handle_message(data):
+    room = data['room']
+    message = data['message']
+    chat_room = ChatRoom.query.filter_by(room_id=room).first()
+    if chat_room and current_user.username in chat_room.users.split(','):
+        emit('message', {'name': current_user.fullname, 'message': message, 'room': room}, room=room, broadcast=True)
 
 @socketio.on('join')
 def handle_join(data):
-    join_room(data['room'])
-    emit('join_message', {'name': current_user.fullname, 'message': ' has entered the room.'}, room=data['room'])
+    room = data['room']
+    join_room(room)
+    chat_room = ChatRoom.query.filter_by(room_id=room).first()
+    if chat_room:
+        users = chat_room.users.split(',') if chat_room.users else []
+        users.append(current_user.username)
+        chat_room.users = ','.join(users)
+    else:
+        chat_room = ChatRoom(room_id=room, users=current_user.username)
+        db.session.add(chat_room)
+    db.session.commit()
+    emit('join_message', {'name': current_user.fullname, 'message': ' has entered the room.', 'room': room}, room=room)
 
 @socketio.on('leave')
 def handle_leave(data):
-    leave_room(['room'])
-    emit('leave_message', {'name': current_user.fullname, 'message': ' has left the room.'}, room=data['room'])
+    room = data['room']
+    leave_room(room)
+    chat_room = ChatRoom.query.filter_by(room_id=room).first()
+    if chat_room:
+        users = chat_room.users.split(',') if chat_room.users else []
+        users.remove(current_user.username)
+        chat_room.users = ','.join(users)
+        if not users:
+            db.session.delete(chat_room)
+    db.session.commit()
+    emit('leave_message', {'name': current_user.fullname, 'message': ' has left the room.', 'room': room}, room=room)
