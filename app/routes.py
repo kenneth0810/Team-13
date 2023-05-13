@@ -357,3 +357,18 @@ def handle_join(data):
 def handle_leave(data):
     leave_room(['room'])
     emit('leave_message', {'name': current_user.fullname, 'message': ' has left the room.'}, room=data['room'])
+
+
+
+@myapp_obj.route('/emails/search', methods=['POST'])
+def search_emails():
+    search_type = request.form.get('search_type')
+    search_term = request.form.get('search_term')
+    messages = Emails.query.filter_by(recipient_id=current_user.id).all()
+    if search_type == 'from_user':
+        messages = [msg for msg in messages if search_term.lower() in msg.sender_username.lower()]
+    elif search_type == 'subject':
+        messages = [msg for msg in messages if search_term.lower() in msg.subject.lower()]
+    elif search_type == 'message':
+        messages = [msg for msg in messages if search_term.lower() in msg.email_body.lower()]
+    return render_template('view_emails.html', emails=messages, user=current_user)

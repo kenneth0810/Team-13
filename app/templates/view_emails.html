@@ -1,10 +1,22 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
 <head>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/view_emails.css') }}">
 </head>
+
 <h1>Inbox for {{user.fullname}}</h1>
+
+<form action="{{ url_for('search_emails') }}" method="POST">
+  <p>Search emails by:</p>
+  <select name="search_type">
+      <option value="from_user">Sender</option>
+      <option value="subject">Subject</option>
+      <option value="message">Body</option>
+  </select>
+  <input type="text" name="search_term">
+  <button type="submit">Search</button>
+</form>
 <!--doing some passsing parameters so the user will be redirected to a page with the thread id  --> 
 {% if emails %}
     {% for email in emails %}
@@ -25,38 +37,23 @@
             </div>
           </div>
             </div>
-              </body>
       </p>
     {% endfor %}
-{% else %} 
-<body>
-  <p>No Emails received.</p> </body>
 {% endif %} 
->>>>>>> main
 
-    <script type="text/javascript">
-      var socketio = io();
 
-      const emails = document.getElementById("email.sender_username");
+<script>
+    // When the user scrolls down 20px from the top of the document, slide down the navbar
+    window.onscroll = function() {scrollFunction()};
 
-      const searchEmails = () => {
-        const searchBar = document.getElementById("search-bar");
-        const filter = searchBar.value.toUpperCase();
-        const emailTexts = emails.querySelectorAll(".text");
-        const searchType = document.getElementById("search-type").value;
-
-        for (let i = 0; i < emailTexts.length; i++) {
-          const text = emailTexts[i].getElementsByTagName("span")[0];
-          const txtValue = text.textContent || text.innerText;
-          const user = emailTexts[i].getElementsByTagName("strong")[0].textContent;
-    
-          if (searchType === "email.sender_username") {
-            }
-          }
-        }
-    };
+    function scrollFunction() {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("navbar").style.top = "0";
+      } else {
+        document.getElementById("navbar").style.top = "-50px";
+      }
+    }
     </script>
-  </body>
-</html>
-  
+
+
 {% endblock %}
