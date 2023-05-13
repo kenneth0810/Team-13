@@ -35,7 +35,7 @@ apt install python3.10-venv
 apt-get install git
 ```
 
-3. Create a virtual environment by using the the following command (myenv is the name of the virtual environment)
+3. Create a virtual environment by using the following command (myenv is the name of the virtual environment)
 ```
 python3 -m venv myenv
 ```
