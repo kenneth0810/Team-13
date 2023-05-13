@@ -48,10 +48,6 @@ def login():
 
     return render_template('login.html', form=form)
 
-@myapp_obj.route("/members/<string:name>/")
-def getMember(name):
-    return escape(name)
-
 #Yue Ying Lee
 @myapp_obj.route("/logout", methods = ['GET', 'POST'])
 @login_required
