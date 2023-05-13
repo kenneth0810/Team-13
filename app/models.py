@@ -69,13 +69,6 @@ class Profile(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    room_id = db.Column(db.Integer, db.ForeignKey('chat_room.id'))
-    message = db.Column(db.String(5000))
-    timestamp = db.Column(db.DateTime, nullable=False)
-
 class ChatRoom(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     room_id = db.Column(db.String(50), unique=True, nullable=False)
