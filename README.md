@@ -75,7 +75,9 @@ db.create_all()
 exit()
 ```
 
-8. Run the project with the following command: 
+8. Run the project with the following command and explore our features!
+- Note: You will see a website link such as ```http://127.0.0.1:5000```
+When you are testing our chat features with two users, make sure you use two different browser (One of them being incognito window or Microsoft edge and the other in Google Chrome)
 ```
 python3 run.py
 ```
