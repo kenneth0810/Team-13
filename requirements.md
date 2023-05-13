@@ -14,7 +14,7 @@
 12. Delete account (Ruben)
 
 ## Non-functional requirement
-1.  The website is only expected to work on Google Chrome. 
+1.  The website is expected to work on Google Chrome and Microsoft Edge. 
 2.  The website has UI interactive interface (for using elements from bootstrap). 
 
 ## Use Cases 

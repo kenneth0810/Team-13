@@ -2,21 +2,25 @@
 
 {% block content %}
   <h1>Chat Room</h1>
-  
+  <link rel="stylesheet" href="{{url_for('static', filename='css/chat.css')}}" />
   <h2>Create Chat Room</h2>
   <form action="{{ url_for('chatroom') }}" method="POST">
     {{ create_form.hidden_tag() }}
     <p>{{ create_form.room_id.label }}<br>
       {{ create_form.room_id(size=5) }}</p>
-    <p>{{ create_form.submit() }}</p>
+      <div class="button-container">
+        <input class="button" type="submit" value="Create A Chat Room">
+      </div>
   </form>
-  
+</br>
   <h2>Join Chat Room</h2>
   <form action="{{ url_for('chatroom') }}" method="POST">
     {{ join_form.hidden_tag() }}
     <p>{{ join_form.valid_room_id.label }}<br>
       {{ join_form.valid_room_id(size=5) }}</p>
-    <p>{{ join_form.submit() }}</p>
+      <div class="button-container">
+        <input class="button" type="submit" value="Join A Chat Room">
+      </div>
   </form>
 
   {% with messages = get_flashed_messages(with_categories=true) %}

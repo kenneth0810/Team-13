@@ -295,7 +295,7 @@ def delete_bio(id):
     else:
         flash('There is no bio to be deleted.')
     return redirect(url_for('profile'))
-    
+
 @myapp_obj.route('/chat', methods=['GET', 'POST'])
 @login_required
 def chatroom():
@@ -345,19 +345,41 @@ def room(room_code):
     return render_template('room.html', room_code=room_code)
 
 @socketio.on('message')
-def handle_message(message):
-    emit('message', {'name': current_user.fullname, 'message': message}, broadcast=True)
+def handle_message(data):
+    room = data['room']
+    message = data['message']
+    chat_room = ChatRoom.query.filter_by(room_id=room).first()
+    if chat_room and current_user.username in chat_room.users.split(','):
+        emit('message', {'name': current_user.fullname, 'message': message, 'room': room}, room=room, broadcast=True)
 
 @socketio.on('join')
 def handle_join(data):
-    join_room(data['room'])
-    emit('join_message', {'name': current_user.fullname, 'message': ' has entered the room.'}, room=data['room'])
+    room = data['room']
+    join_room(room)
+    chat_room = ChatRoom.query.filter_by(room_id=room).first()
+    if chat_room:
+        users = chat_room.users.split(',') if chat_room.users else []
+        users.append(current_user.username)
+        chat_room.users = ','.join(users)
+    else:
+        chat_room = ChatRoom(room_id=room, users=current_user.username)
+        db.session.add(chat_room)
+    db.session.commit()
+    emit('join_message', {'name': current_user.fullname, 'message': ' has entered the room.', 'room': room}, room=room)
 
 @socketio.on('leave')
 def handle_leave(data):
-    leave_room(['room'])
-    emit('leave_message', {'name': current_user.fullname, 'message': ' has left the room.'}, room=data['room'])
-
+    room = data['room']
+    leave_room(room)
+    chat_room = ChatRoom.query.filter_by(room_id=room).first()
+    if chat_room:
+        users = chat_room.users.split(',') if chat_room.users else []
+        users.remove(current_user.username)
+        chat_room.users = ','.join(users)
+        if not users:
+            db.session.delete(chat_room)
+    db.session.commit()
+    emit('leave_message', {'name': current_user.fullname, 'message': ' has left the room.', 'room': room}, room=room)
 
 
 @myapp_obj.route('/emails/search', methods=['POST'])
@@ -371,8 +393,8 @@ def search_emails():
         messages = [msg for msg in messages if search_term.lower() in msg.subject.lower()]
     elif search_type == 'message':
         messages = [msg for msg in messages if search_term.lower() in msg.email_body.lower()]
-     
-    
+
+
     sort_order = request.form.get('sort_order')
     if sort_order == 'oldest':
         messages = sorted(messages, key=lambda msg: msg.timestamp)
