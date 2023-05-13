@@ -41,8 +41,8 @@ python3 -m venv myenv
 ```
 
 4. Activate the virtual environment
-On MacOs or Unix, run: ```source myenv/bin/activate```
-On Windows, run: ```myenv\Scripts\activate.bat```
+- On MacOs or Unix, run: ```source myenv/bin/activate```
+- On Windows, run: ```myenv\Scripts\activate.bat```
 
 5. Install the necessary packages: 
 ```
