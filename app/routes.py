@@ -16,6 +16,7 @@ from app.notes import NoteForm
 from app.todo import TodoForm
 from app.profile import BioForm, PasswordForm, DeleteForm
 from app.chat import CreateRoomForm, JoinRoomForm, SendMessageForm
+from sqlalchemy import desc
 
 #Yue Ying Lee
 @myapp_obj.route("/")
@@ -393,12 +394,15 @@ def search_emails():
         messages = [msg for msg in messages if search_term.lower() in msg.subject.lower()]
     elif search_type == 'message':
         messages = [msg for msg in messages if search_term.lower() in msg.email_body.lower()]
+    return render_template('view_emails.html', emails=messages, user=current_user)
 
-
+@myapp_obj.route('/emails/sort', methods=['POST'])
+def sort_emails():
     sort_order = request.form.get('sort_order')
-    if sort_order == 'oldest':
-        messages = sorted(messages, key=lambda msg: msg.timestamp)
-    elif sort_order == 'newest':
-        meessages = sorted(messages, key=lambda msg: msg.timestamp, reverse=True)
+    
+    if sort_order == 'newest':
+        messages = Emails.query.filter_by(recipient_id=current_user.id).order_by(desc(Emails.timestamp)).all()
+    elif sort_order == 'oldest':
+        messages = Emails.query.filter_by(recipient_id=current_user.id).all()
 
     return render_template('view_emails.html', emails=messages, user=current_user, sort_order=sort_order)
