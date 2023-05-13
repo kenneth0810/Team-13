@@ -4,9 +4,10 @@ from flask_login import current_user
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import flash
+from wtforms.widgets import TextArea
 
 class BioForm(FlaskForm):
-    bio = StringField("Bio:", validators = [DataRequired(), Length(max=100)], render_kw ={"placeholder":"Add your bio"})
+    bio = StringField("Bio:", validators = [DataRequired(), Length(max=80)], render_kw ={"placeholder":"Add your bio (Max: 80 characters)"})
     submit = SubmitField("Save Bio")
 
 class PasswordForm(FlaskForm):

@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     sent_emails = db.relationship('Emails', backref='sender', foreign_keys='Emails.sender_id', lazy = 'dynamic')
     received_emails = db.relationship('Emails', backref='recipient', foreign_keys='Emails.recipient_id', lazy = 'dynamic')
 
+    note = db.relationship('Note', backref = 'user', lazy = 'dynamic')
     todo = db.relationship('Todo', backref = 'user', lazy = 'dynamic')
     profile = db.relationship('Profile', backref = 'user', lazy = 'dynamic')
    
@@ -46,32 +47,16 @@ class Emails(db.Model):
     def __repr__(self): #for debugging process
         return f'<emails {self.id}: {self.subject}, {self.message}>'
     
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
+    timestamp = db.Column(db.DateTime, nullable=False)
 
-'''
-one to many relationships 
-one sender has many emails 
-one sender has many recipients 
-
-
-replying: 
-one to many: original message = parent , new message = child 
-one to many: each reply can have one or more recipients 
-
-many to many: one user send to multiple recipients, each recipient can receive emails from multiple users
-many to one: one email can have multiple replies where each reply is linked to a single parent email 
-'''
-
-#thread is used to group emails together 
-# class Thread(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     subject = db.Column(db.String(1000), nullable = False)
-#     def __repr__(self):
-#         return f'<thread{self.id}: {self.subject}>'
-
-
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
     task = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime, nullable=False)
     finished = db.Column(db.Boolean, nullable=False)

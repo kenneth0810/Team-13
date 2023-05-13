@@ -6,22 +6,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/todo.css') }}">
 </head>
 <body>
-    <section class="vh-100" style="background-color: #fafafa;">
-
-        {% for messages in get_flashed_messages() %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{messages}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-
+    <section style="background-image: linear-gradient(45deg, #ffffff, #ddf9ff); min-height: 100vh;">
         <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col col-xl-9 col-xl-7">
             <div class="card rounded-3" style=" box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);">
                 <div class="card-body p-4">
-    
-                <h4 class="text-center my-3 pb-3">To Do List</h4>
+                <a href="/notes" class="text-secondary"><h6 class="back"> < Back</h6></a>
+                <h4 class="text-center my-3 pb-3">{{name}}</h4>
     
                 <form class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2" action=""  novalidate method="POST">
                     {{form.hidden_tag()}}
@@ -61,19 +53,19 @@
                                         <p>{{t.timestamp.strftime("%b %d, %Y %H:%M:%S")}}</p>
                                     </td>
                                     <td align="center">
-                                        <a style="margin-bottom: 5%;" href="{{url_for('delete_task', id=t.id)}}" class="btn btn-danger">Delete</a>
+                                        <a style="margin-bottom: 5%;" href="{{url_for('delete_task', id=t.id, name=t.name)}}" class="btn btn-danger">Delete</a>
                                         <br>
                                         {% if not t.finished %}
-                                            <a href="{{url_for('finish_task', id=t.id)}}" class="btn btn-success">Finish</a>
+                                            <a href="{{url_for('finish_task', id=t.id, name=t.name)}}" class="btn btn-success">Finish</a>
                                         {% else %}
-                                            <a href="{{url_for('finish_task', id=t.id)}}" class="btn btn-success">Cancel</a>
+                                            <a href="{{url_for('finish_task', id=t.id, name=t.name)}}" class="btn btn-success">Cancel</a>
                                         {% endif %}
                                     </td>
                                     <td class="text-center" id="star">
                                         {% if not t.favorite %}
-                                            <a href="{{url_for('favorite_task', id=t.id)}}" class="star"><i class="far fa-star"></i></a>
+                                            <a href="{{url_for('favorite_task', id=t.id, name=t.name)}}" class="star"><i class="far fa-star"></i></a>
                                         {% else %}
-                                            <a href="{{url_for('favorite_task', id=t.id)}}" class="star" style="color: #efef00"><i class="fas fa-star"></i></a>
+                                            <a href="{{url_for('favorite_task', id=t.id, name=t.name)}}" class="star" style="color: #efef00"><i class="fas fa-star"></i></a>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -93,19 +85,19 @@
                                         <p>{{t.timestamp.strftime("%b %d, %Y %H:%M:%S")}}</p>
                                     </td>
                                     <td align="center">
-                                        <a style="margin-bottom: 5%;" href="{{url_for('delete_task', id=t.id)}}" class="btn btn-danger">Delete</a>
+                                        <a style="margin-bottom: 5%;" href="{{url_for('delete_task', id=t.id, name=t.name)}}" class="btn btn-danger">Delete</a>
                                         <br>
                                         {% if not t.finished %}
-                                            <a href="{{url_for('finish_task', id=t.id)}}" class="btn btn-success">Finish</a>
+                                            <a href="{{url_for('finish_task', id=t.id, name=t.name)}}" class="btn btn-success">Finish</a>
                                         {% else %}
-                                            <a href="{{url_for('finish_task', id=t.id)}}" class="btn btn-success">Cancel</a>
+                                            <a href="{{url_for('finish_task', id=t.id, name=t.name)}}" class="btn btn-success">Cancel</a>
                                         {% endif %}
                                     </td>
                                     <td class="text-center" id="star">
                                         {% if not t.favorite %}
-                                            <a href="{{url_for('favorite_task', id=t.id)}}" class="star"><i class="far fa-star"></i></a>
+                                            <a href="{{url_for('favorite_task', id=t.id, name=t.name)}}" class="star"><i class="far fa-star"></i></a>
                                         {% else %}
-                                            <a href="{{url_for('favorite_task', id=t.id)}}" class="star"><i class="fas fa-star"></i></a>
+                                            <a href="{{url_for('favorite_task', id=t.id, name=t.name)}}" class="star"><i class="fas fa-star"></i></a>
                                         {% endif %}
                                     </td>
                                 </tr>
