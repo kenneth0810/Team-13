@@ -4,7 +4,29 @@
 <head>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/view_emails.css') }}">
 </head>
+
 <h1>Inbox for {{user.fullname}}</h1>
+
+<form action="{{ url_for('search_emails') }}" method="POST">
+  <p>Search emails by:</p>
+  <select name="search_type">
+      <option value="from_user">Sender</option>
+      <option value="subject">Subject</option>
+      <option value="message">Body</option>
+  </select>
+  <input type="text" name="search_term">
+  <button type="submit">Search</button>
+ </form>
+
+<form action="{{ url_for('sort_emails') }}" method="POST">
+	<p>Sort emails by: </p>
+	<select name = "sort_order">
+    		<option value="newest" {% if sort_order == 'newest' %}selected{% endif %}>Newest to Oldest</option>
+		<option value="oldest" {% if sort_order == 'oldest' %}selected{% endif %}>Oldest to Newest</option>
+	</select>
+	<button type="submit">Sort</button>
+</form>
+
 <!--doing some passsing parameters so the user will be redirected to a page with the thread id  --> 
 {% if emails %}
     {% for email in emails %}
@@ -25,18 +47,15 @@
             </div>
           </div>
             </div>
-              </body>
       </p>
     {% endfor %}
-{% else %} 
-<body>
-  <p>No Emails received.</p> </body>
 {% endif %} 
+
 
 <script>
     // When the user scrolls down 20px from the top of the document, slide down the navbar
     window.onscroll = function() {scrollFunction()};
-    
+
     function scrollFunction() {
       if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
         document.getElementById("navbar").style.top = "0";

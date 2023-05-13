@@ -16,6 +16,7 @@ from app.notes import NoteForm
 from app.todo import TodoForm
 from app.profile import BioForm, PasswordForm, DeleteForm
 from app.chat import CreateRoomForm, JoinRoomForm, SendMessageForm
+from sqlalchemy import desc
 
 #Yue Ying Lee
 @myapp_obj.route("/")
@@ -380,3 +381,28 @@ def handle_leave(data):
             db.session.delete(chat_room)
     db.session.commit()
     emit('leave_message', {'name': current_user.fullname, 'message': ' has left the room.', 'room': room}, room=room)
+
+
+@myapp_obj.route('/emails/search', methods=['POST'])
+def search_emails():
+    search_type = request.form.get('search_type')
+    search_term = request.form.get('search_term')
+    messages = Emails.query.filter_by(recipient_id=current_user.id).all()
+    if search_type == 'from_user':
+        messages = [msg for msg in messages if search_term.lower() in msg.sender_username.lower()]
+    elif search_type == 'subject':
+        messages = [msg for msg in messages if search_term.lower() in msg.subject.lower()]
+    elif search_type == 'message':
+        messages = [msg for msg in messages if search_term.lower() in msg.email_body.lower()]
+    return render_template('view_emails.html', emails=messages, user=current_user)
+
+@myapp_obj.route('/emails/sort', methods=['POST'])
+def sort_emails():
+    sort_order = request.form.get('sort_order')
+    
+    if sort_order == 'newest':
+        messages = Emails.query.filter_by(recipient_id=current_user.id).order_by(desc(Emails.timestamp)).all()
+    elif sort_order == 'oldest':
+        messages = Emails.query.filter_by(recipient_id=current_user.id).all()
+
+    return render_template('view_emails.html', emails=messages, user=current_user, sort_order=sort_order)
