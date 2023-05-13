@@ -371,4 +371,12 @@ def search_emails():
         messages = [msg for msg in messages if search_term.lower() in msg.subject.lower()]
     elif search_type == 'message':
         messages = [msg for msg in messages if search_term.lower() in msg.email_body.lower()]
-    return render_template('view_emails.html', emails=messages, user=current_user)
+     
+    
+    sort_order = request.form.get('sort_order')
+    if sort_order == 'oldest':
+        messages = sorted(messages, key=lambda msg: msg.timestamp)
+    elif sort_order == 'newest':
+        meessages = sorted(messages, key=lambda msg: msg.timestamp, reverse=True)
+
+    return render_template('view_emails.html', emails=messages, user=current_user, sort_order=sort_order)
