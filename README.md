@@ -27,7 +27,8 @@ sending emails, sending chats, and make a todo list once they created an account
 ## Instructions on running the project
 1. Make a folder with the name of your choice and navigate to that folder. 
 
-2. Before activating virtual environment, download these technologies if you do not have it in your computer. 
+2. Before activating virtual environment, download these technologies on the Linux Terminal if you do not have it in your computer. 
+- Note: If you do not want to use virtual environment, only perform step 1, skip to step 5 and perform steps from 5 to 8 only. 
 ```
 sudo apt install python3
 apt install python3-pip
@@ -35,7 +36,7 @@ apt install python3.10-venv
 apt-get install git
 ```
 
-3. Create a virtual environment by using the following command (myenv is the name of the virtual environment)
+3. Create a virtual environment by using the following command to ensure that the required packages are installed locally and independently of other projects on your computer. This helps avoid version conflicts and makes it easier to manage project dependencies. (myenv is the name of the virtual environment)
 ```
 python3 -m venv myenv
 ```
@@ -81,7 +82,7 @@ When you are testing our chat features with two users, make sure you use two dif
 ```
 python3 run.py
 ```
-9. Once you are done exploring our website, deactivate the virtual environmen: 
+9. Once you are done exploring our website, deactivate the virtual environment: 
 ```deactivate ```
 ## Credits: 
 - Yue Ying Lee (@YueYingLee)
