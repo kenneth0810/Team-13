@@ -261,7 +261,7 @@ def profile():
                 flash('Successfully updated password.')
                 return redirect(url_for('profile'))
     
-    #find all items associated with the current_user and delete them
+    #deletes every row from models.py tables that belongs to the current user
     delete_form = DeleteForm()
     if delete_form.validate_on_submit() and request.method == "POST":
         user = current_user
