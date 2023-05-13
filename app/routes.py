@@ -10,7 +10,7 @@ from flask_socketio import join_room, leave_room, emit
 from datetime import datetime
 from app.send_emails import sendEmails
 from app.register import registerUser 
-from app.models import User, Emails, Todo, Profile, Message, ChatRoom, Note
+from app.models import User, Emails, Todo, Profile, ChatRoom, Note
 from app.login import LoginForm
 from app.notes import NoteForm
 from app.todo import TodoForm
