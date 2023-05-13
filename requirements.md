@@ -180,7 +180,7 @@ The user enters confirmation passwords wrongly.
 - The user is on their TODO page.
 
 **Trigger:**
-- The user selects the “Add” option.
+- The user selects the “Todo” tab.
 
 **Primary Sequence:**
 1. The system prompts user to enter a task to do.
@@ -194,16 +194,14 @@ The user enters confirmation passwords wrongly.
 
 **Alternate Sequence #1:** The user entered nothing in the TODO list.
 - The system does not save the todo list.
-- The system prompts for something to be entered into the text box.
 
 **7. Use case name: Edit User Profile**
 
 **Pre-condition:** 
 - The user must be logged in.
-- The user is on their profile page.
 
 **Trigger:** 
-- The user selects the “Edit profile” option on the user profile page.
+- The user submits some changes in their profile page (add/edit/delete bio, change password, or delete account).
 
 **Primary Sequence:**
 1. The system displays a window showing all the information (such as full name, password, and biography).

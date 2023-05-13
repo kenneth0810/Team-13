@@ -48,10 +48,6 @@ def login():
 
     return render_template('login.html', form=form)
 
-@myapp_obj.route("/members/<string:name>/")
-def getMember(name):
-    return escape(name)
-
 #Yue Ying Lee
 @myapp_obj.route("/logout", methods = ['GET', 'POST'])
 @login_required
@@ -137,10 +133,13 @@ def view_emails():
 def note():
     form = NoteForm()
     if form.validate_on_submit():
-        note = Note(user = current_user, name = form.name.data, timestamp=datetime.now())
-        db.session.add(note)
-        db.session.commit()
-        flash('Successfully created a new note.')
+        if not Note.query.filter(Note.name == form.name.data).first():
+            note = Note(user = current_user, name = form.name.data, timestamp=datetime.now())
+            db.session.add(note)
+            db.session.commit()
+            flash('Successfully created a new note.')
+        else:
+            flash(f'Note with name: "{form.name.data}" already exists. Please choose a different name.')
         return redirect(url_for('note'))
     
     all_notes = Note.query.filter(Note.user_id == current_user.id).all()
@@ -151,6 +150,8 @@ def note():
     return render_template("notes.html", form=form, notes=notes_list, user=current_user)
 
 #kenneth
+#Deleting a note will delete every todo task in that note first, then delete the note
+#This is to avoid having tasks that belongs to a NULL note
 @myapp_obj.route("/notes/<int:id>", methods = ['GET', 'POST'])
 @login_required
 def delete_note(id):
@@ -179,6 +180,8 @@ def add_todo(name):
 
     user = current_user
     all_tasks = Todo.query.filter(Todo.user_id == current_user.id, Todo.name == name).all()
+
+    #two different lists so that every item in the fav_list can be outputted first before the other list (for 'Pin to top' feature)
     fav_list = []
     not_fav_list = []
     for t in all_tasks:
@@ -192,7 +195,7 @@ def add_todo(name):
 @myapp_obj.route("/finish-task/<int:id>/<string:name>", methods = ['GET', 'POST'])
 @login_required
 def finish_task(id, name):
-    task = Todo.query.filter(Todo.id == id, Todo.name == name). first()
+    task = Todo.query.filter(Todo.id == id, Todo.name == name).first()
     if not task.finished:
         task.finished = True
     else:
@@ -204,7 +207,7 @@ def finish_task(id, name):
 @myapp_obj.route("/favorite-task/<int:id>/<string:name>", methods = ['GET', 'POST'])
 @login_required
 def favorite_task(id, name):
-    task = Todo.query.filter(Todo.id == id, Todo.name == name). first()
+    task = Todo.query.filter(Todo.id == id, Todo.name == name).first()
     if not task.favorite:
         task.favorite = True
     else:
@@ -226,6 +229,7 @@ def delete_task(id, name):
     return redirect(url_for('add_todo', name=name))
 
 #kenneth
+#Profile has three different forms and each function depends on what form the user submits
 @myapp_obj.route("/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
@@ -241,7 +245,7 @@ def profile():
         flash('Successfully updated a new bio.')
         return redirect(url_for('profile'))
     else:
-        #if nothing is submitted, the bio form will be empty, so assign the form.bio to the current bio
+        #if nothing is submitted, the bio form will be empty, so assign the form.bio to the current bio so that the bio will be visible in the profile
         curr_bio = Profile.query.filter_by(user=current_user).first()
         if curr_bio:
             bio_form.bio.data = curr_bio.bio
@@ -256,7 +260,7 @@ def profile():
                 flash('Successfully updated password.')
                 return redirect(url_for('profile'))
     
-    #find all items associated with the current_user and delete them
+    #deletes every row from models.py tables that belongs to the current user
     delete_form = DeleteForm()
     if delete_form.validate_on_submit() and request.method == "POST":
         user = current_user

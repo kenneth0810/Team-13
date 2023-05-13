@@ -39,7 +39,7 @@
                             </tr>
                         </thead>
 
-
+                        <!-- Display favorited tasks on top first -->
                         {% for t in fav_list %}
                             {% if t.favorite %}
                                 <tr>
@@ -72,6 +72,7 @@
                             {% endif %}
                         {% endfor %}
 
+                        <!-- Display remaining tasks with the same format -->
                         {% for t in not_fav_list %}
                             {% if not t.favorite %}
                                 <tr>
