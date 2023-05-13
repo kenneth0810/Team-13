@@ -50,7 +50,7 @@
     <script type="text/javascript">
       var socketio = io();
 
-      const emails = document.getElementById("emails");
+      const emails = document.getElementById("email.sender_username");
 
       const searchEmails = () => {
         const searchBar = document.getElementById("search-bar");
@@ -63,11 +63,7 @@
           const txtValue = text.textContent || text.innerText;
           const user = emailTexts[i].getElementsByTagName("strong")[0].textContent;
     
-          if (searchType === "user") {
-            if (user.toUpperCase().indexOf(filter) > -1) {
-              emailTexts[i].style.display = "";
-            } else {
-              emailTexts[i].style.display = "none";
+          if (searchType === "email.sender_username") {
             }
           }
         }
