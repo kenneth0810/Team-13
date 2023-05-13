@@ -16,8 +16,7 @@ class User(db.Model, UserMixin):
 
     note = db.relationship('Note', backref = 'user', lazy = 'dynamic')
     todo = db.relationship('Todo', backref = 'user', lazy = 'dynamic')
-    profile = db.relationship('Profile', backref = 'user', lazy = 'dynamic')
-   
+    profile = db.relationship('Profile', backref = 'user', lazy = 'dynamic')   
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -79,9 +78,8 @@ class Message(db.Model):
 
 class ChatRoom(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    room_id = db.Column(db.String(10), nullable=False)
-
-    messages = db.relationship('Message', backref='chat_room', lazy='dynamic')
+    room_id = db.Column(db.String(50), unique=True, nullable=False)
+    users = db.Column(db.String)
 
 @login.user_loader
 def load_user(id):
