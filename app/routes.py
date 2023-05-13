@@ -75,52 +75,48 @@ def register():
         return render_template('register.html', registerForm=registerForm)
 
 #YueYingLee
-@myapp_obj.route("/send_emails", methods=['GET', 'POST'])
+@myapp_obj.route("/send_emails", methods = ['GET', 'POST'])
 @login_required
 def send_emails():
-    send_emails_form = sendEmails()
+   send_emails_form = sendEmails()
+   if send_emails_form.validate_on_submit():
+    sender_id = current_user.id
+    recipients_list = send_emails_form.recipients.data.split(',')
+    valid_recipients_list = [] 
+    invalid_recipients_list = []
+    valid_recipients_string = ""
+    for recipient in recipients_list:
+     valid_recipient =  User.query.filter_by(username = recipient.strip()).first()
+     if (valid_recipient):
+        valid_recipients_list.append(valid_recipient)
+        if valid_recipients_string == "":
+          valid_recipients_string = valid_recipient.username
+        else: 
+         valid_recipients_string =  valid_recipients_string + ", " + valid_recipient.username
+     else:
+       invalid_recipients_list.append(recipient.strip())
+     
+    if invalid_recipients_list:
+        flash(f' Invalid recipients: {", ".join(invalid_recipients_list)}. Retpye username, or discard the email.')
+        return render_template('send_emails.html', send_emails_form = send_emails_form)
+    
+    for valid_recipient in valid_recipients_list:
+        recipient_username= valid_recipient.username
+        recipient_id = valid_recipient.id
+        flash(f' Valid recipients: {valid_recipient.username}')
+        recipient_usernames = [r.username for r in valid_recipients_list]
+        if current_user.username not in recipient_usernames: 
+         email_body = send_emails_form.email_body.data +   "\nRespond to:  "+  valid_recipients_string + "," + current_user.username
 
-    if send_emails_form.validate_on_submit():
-        sender_id = current_user.id
-        recipient_usernames = send_emails_form.recipients.data.split(',')
-        valid_recipients = []
-
-        invalid_recipients = []
-        for recipient_username in recipient_usernames:
-            recipient = User.query.filter_by(username=recipient_username.strip()).first()
-            if recipient:
-                valid_recipients.append(recipient_username)
-            else:
-                invalid_recipients.append(recipient_username)
-
-        if invalid_recipients:
-            invalid_recipients_str = ", ".join(invalid_recipients)
-            flash(f'Invalid recipients: {invalid_recipients_str}. Please check and re-enter the usernames.')
-            return render_template('send_emails.html', send_emails_form=send_emails_form)
-
-        for recipient_username in valid_recipients:
-            email_body = send_emails_form.email_body.data + f"\n\nRespond to: {', '.join(valid_recipients)}"
-
-            recipient = User.query.filter_by(username=recipient_username.strip()).first()
-            email = Emails(
-                recipient_username=recipient_username,
-                sender_username=current_user.username,
-                sender_id=sender_id,
-                recipient_id=recipient.id,
-                subject=send_emails_form.subject.data,
-                email_body=email_body
-            )
-            db.session.add(email)
-
-        if valid_recipients:
-            db.session.commit()
-            valid_recipients_str = ", ".join(valid_recipients)
-            flash(f'Email successfully sent to: {valid_recipients_str}')
-            return redirect('/homepage')
-
-    return render_template('send_emails.html', send_emails_form=send_emails_form)
-
-
+        else:
+         email_body = send_emails_form.email_body.data +  "\nRespond to:  "+ valid_recipients_string
+        email = Emails (recipient_username = recipient_username, sender_username =  current_user.username, sender_id = sender_id, recipient_id = recipient_id, subject=send_emails_form.subject.data, email_body= email_body)
+        db.session.add(email)
+    if valid_recipients_list:
+        db.session.commit()
+        flash(f'Email successfully sent to {", ".join([r.username for r in valid_recipients_list])}!')
+        return redirect('/homepage')
+   return render_template('send_emails.html', send_emails_form = send_emails_form)
 
 #YueYingLee
 @myapp_obj.route("/view_emails", methods = ['GET', 'POST'])
