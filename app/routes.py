@@ -81,11 +81,13 @@ def send_emails():
    send_emails_form = sendEmails()
    if send_emails_form.validate_on_submit():
     sender_id = current_user.id
-    recipients_list = send_emails_form.recipients.data.split(',')
+    recipients_field = send_emails_form.recipients.data.split(',')
     valid_recipients_list = [] 
     invalid_recipients_list = []
     valid_recipients_string = ""
-    for recipient in recipients_list:
+    
+    #Add the recipients to different lists depending on whether it is valid or not
+    for recipient in recipients_field:
      valid_recipient =  User.query.filter_by(username = recipient.strip()).first()
      if (valid_recipient):
         valid_recipients_list.append(valid_recipient)
@@ -95,21 +97,24 @@ def send_emails():
          valid_recipients_string =  valid_recipients_string + ", " + valid_recipient.username
      else:
        invalid_recipients_list.append(recipient.strip())
-     
+    
+    # pops out error messages when any one of the recipients is invalid and does not send any emails 
     if invalid_recipients_list:
         flash(f' Invalid recipients: {", ".join(invalid_recipients_list)}. Retpye username, or discard the email.')
         return render_template('send_emails.html', send_emails_form = send_emails_form)
     
+    #Else, send the emails to the valid recipients
     for valid_recipient in valid_recipients_list:
         recipient_username= valid_recipient.username
         recipient_id = valid_recipient.id
         flash(f' Valid recipients: {valid_recipient.username}')
         recipient_usernames = [r.username for r in valid_recipients_list]
+        #Use information saved in valid_recipients_string to append to the email body
         if current_user.username not in recipient_usernames: 
-         email_body = send_emails_form.email_body.data +   "\nRespond to:  "+  valid_recipients_string + "," + current_user.username
-
+         email_body = send_emails_form.email_body.data +   "\n (Respond to:  "+  valid_recipients_string + "," + current_user.username +")"
         else:
-         email_body = send_emails_form.email_body.data +  "\nRespond to:  "+ valid_recipients_string
+         email_body = send_emails_form.email_body.data +  "\n (Respond to:  "+ valid_recipients_string +")"
+       
         email = Emails (recipient_username = recipient_username, sender_username =  current_user.username, sender_id = sender_id, recipient_id = recipient_id, subject=send_emails_form.subject.data, email_body= email_body)
         db.session.add(email)
     if valid_recipients_list:
