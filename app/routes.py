@@ -8,9 +8,6 @@ from flask_login import logout_user
 from flask_login import login_required
 from flask_socketio import join_room, leave_room, emit
 from datetime import datetime
-
-from wtforms.validators import Email
-#from app.reply_emails import replyEmails
 from app.send_emails import sendEmails
 from app.register import registerUser 
 from app.models import User, Emails, Todo, Profile, Message, ChatRoom, Note
@@ -21,7 +18,6 @@ from app.profile import BioForm, PasswordForm, DeleteForm
 from app.chat import CreateRoomForm, JoinRoomForm, SendMessageForm
 
 #Yue Ying Lee
-# index page is the page user see before registering or logging in
 @myapp_obj.route("/")
 def index():
     return render_template('index.html' )
@@ -37,19 +33,17 @@ def homepage():
 #Yue Ying Lee
 @myapp_obj.route("/login", methods=['GET', 'POST'])
 def login():
-    # create form
     form = LoginForm()
     if form.validate_on_submit():
         valid_user = User.query.filter_by(username = form.username.data).first()
         if valid_user != None:
           if valid_user.check_password(form.password.data)== True:
              login_user(valid_user)
-             flash(f'Here are the input {form.username.data} and {form.password.data}')
              return redirect(url_for('homepage'))
           else :
-             flash(f'Invalid password. Try again')
+             flash(f'Invalid password. Try again.')
         else: 
-             flash(f'Invalid username. Try again or register an account')  
+             flash(f'Invalid username. Try again or register an account.')  
 
     return render_template('login.html', form=form)
 
@@ -67,7 +61,6 @@ def logout():
 #Yue Ying Lee
 @myapp_obj.route("/register", methods =['GET', 'POST'])
 def register():
-        #create registration form
         registerForm  = registerUser()
         if registerForm.validate_on_submit():
           same_Username = User.query.filter_by(username = registerForm.username.data).first()
@@ -76,132 +69,66 @@ def register():
             user.set_password(registerForm.password.data)
             db.session.add(user)
             db.session.commit()
-            #redirect user to login page to log in with their new account
-            flash(f'Here are the input {registerForm.username.data}, {registerForm.fullname.data} and {registerForm.password.data}')
             return redirect('/login')
           else :
-             flash('The username is not available. Please choose another username')
+             flash('The username is not available. Please choose another username.')
         return render_template('register.html', registerForm=registerForm)
 
-
-#Yue Ying Lee
+#YueYingLee
 @myapp_obj.route("/send_emails", methods = ['GET', 'POST'])
 @login_required
 def send_emails():
    send_emails_form = sendEmails()
    if send_emails_form.validate_on_submit():
     sender_id = current_user.id
-    recipients_list = send_emails_form.recipients.data.split(',')
-    print("recipients_list is: ")
-    print(recipients_list)
-    valid_recipients = [] 
-    for recipient in recipients_list:
+    recipients_field = send_emails_form.recipients.data.split(',')
+    valid_recipients_list = [] 
+    invalid_recipients_list = []
+    valid_recipients_string = ""
+    
+    #Add the recipients to different lists depending on whether it is valid or not
+    for recipient in recipients_field:
      valid_recipient =  User.query.filter_by(username = recipient.strip()).first()
      if (valid_recipient):
+        valid_recipients_list.append(valid_recipient)
+        if valid_recipients_string == "":
+          valid_recipients_string = valid_recipient.username
+        else: 
+         valid_recipients_string =  valid_recipients_string + ", " + valid_recipient.username
+     else:
+       invalid_recipients_list.append(recipient.strip())
+    
+    # pops out error messages when any one of the recipients is invalid and does not send any emails 
+    if invalid_recipients_list:
+        flash(f' Invalid recipients: {", ".join(invalid_recipients_list)}. Retpye username, or discard the email.')
+        return render_template('send_emails.html', send_emails_form = send_emails_form)
+    
+    #Else, send the emails to the valid recipients
+    for valid_recipient in valid_recipients_list:
         recipient_username= valid_recipient.username
-        flash(f' Valid recipients: {valid_recipient.username}')
         recipient_id = valid_recipient.id
-        
-        email = Emails (recipient_username = recipient_username, sender_username =  current_user.username, sender_id = sender_id, recipient_id = recipient_id, subject=send_emails_form.subject.data, email_body= send_emails_form.email_body.data)
+        flash(f' Valid recipients: {valid_recipient.username}')
+        recipient_usernames = [r.username for r in valid_recipients_list]
+        #Use information saved in valid_recipients_string to append to the email body
+        if current_user.username not in recipient_usernames: 
+         email_body = send_emails_form.email_body.data +   "\n (Respond to:  "+  valid_recipients_string + "," + current_user.username +")"
+        else:
+         email_body = send_emails_form.email_body.data +  "\n (Respond to:  "+ valid_recipients_string +")"
+       
+        email = Emails (recipient_username = recipient_username, sender_username =  current_user.username, sender_id = sender_id, recipient_id = recipient_id, subject=send_emails_form.subject.data, email_body= email_body)
         db.session.add(email)
-        valid_recipients.append(valid_recipient)
-    if valid_recipients:
+    if valid_recipients_list:
         db.session.commit()
-        flash(f'Email successfully sent to {", ".join([r.username for r in valid_recipients])}!')
+        flash(f'Email successfully sent to {", ".join([r.username for r in valid_recipients_list])}!')
         return redirect('/homepage')
-    else:
-     flash(f' Invalid recipients. Retype username or go back to homepage.')
-
    return render_template('send_emails.html', send_emails_form = send_emails_form)
 
-'''
-view emails need to modify so next time i can reply in the emails '''
 #YueYingLee
 @myapp_obj.route("/view_emails", methods = ['GET', 'POST'])
 @login_required
 def view_emails():
     emails = Emails.query.filter_by(recipient_id = current_user.id).all()
     return render_template('view_emails.html', user=current_user, emails = emails)
-
-
-'''reply email 
-from original email page, click reply 
-pops to reply email template: 
-to: origial sender email 
-subject: RE: original subject 
-message: show original email body 
-
-textbox: to enter reply 
-'''
-
-
-
-
-# #Yue Ying Lee
-# @myapp_obj.route('/reply_email/<int:email_id>', methods=['GET','POST'])
-# @login_required
-# def reply_emails():
-#     reply_emails_form = replyEmails() 
-# def reply(message_id):
-#     message = Emails.query.get_or_404(message_id)
-#     task = Todo.query.filter(Todo.id == id).first()
-#     form = ReplyForm()
-#     if form.validate_on_submit():
-#         recipient = User.query.filter_by(email=form.recipient.data).first()
-#         if not recipient:
-#             flash('Invalid recipient email address.')
-#             return redirect(url_for('reply', message_id=message_id))
-#         elif not form.body.data.strip():
-#             flash('Message body cannot be empty.')
-#             return redirect(url_for('reply', message_id=message_id))
-#         reply = Emails(
-#             sender_id=current_user.id,
-#             recipient_id=recipient.id,
-#             subject=form.subject.data,
-#             email_body=form.body.data,
-#             parent_id=message_id
-#         )
-#         db.session.add(reply)
-#         db.session.commit()
-#         flash('Your reply has been sent.')
-#         return redirect(url_for('thread', message_id=message_id))
-
-#     return render_template('reply_emails.html', reply_emails_form = reply_emails_form)
-
-'''@myapp_obj.route("/reply_email/<int:email_id>", methods=["GET", "POST"])
-@login_required
-def reply_email(email_id):
-    email = Emails.query.get(email_id)
-    if not email:
-        flash("Invalid email ID.")
-        return redirect("/inbox")
-    if email.recipient_id != current_user.id:
-        flash("You are not authorized to reply to this email.")
-        return redirect("/inbox")
-
-    reply_form = sendEmails()
-    if reply_form.validate_on_submit():
-        sender_id = current_user.id
-        recipient_id = email.sender_id
-        subject = "RE: " + email.subject
-        email_body = reply_form.email_body.data
-
-        reply_email = Emails(
-            recipient_id=recipient_id,
-            sender_id=sender_id,
-            subject=subject,
-            email_body=email_body,
-            parent_email_id=email.id,
-        )
-        db.session.add(reply_email)
-        db.session.commit()
-
-        flash("Reply sent successfully!")
-        return redirect("/inbox")
-
-    reply_form.email_body.data = f"\n\n\n---- Original Message ----\n{email.email_body}"
-    return render_template("send_emails.html", send_emails_form=reply_form)
-'''
 
 #kenneth
 @myapp_obj.route("/notes", methods = ['GET', 'POST'])
