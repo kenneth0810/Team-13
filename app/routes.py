@@ -15,7 +15,7 @@ from app.login import LoginForm
 from app.notes import NoteForm
 from app.todo import TodoForm
 from app.profile import BioForm, PasswordForm, DeleteForm
-from app.chat import CreateRoomForm, JoinRoomForm, SendMessageForm
+from app.chat import CreateRoomForm, JoinRoomForm
 from sqlalchemy import desc
 
 #Yue Ying Lee
