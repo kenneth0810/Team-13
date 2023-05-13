@@ -133,10 +133,13 @@ def view_emails():
 def note():
     form = NoteForm()
     if form.validate_on_submit():
-        note = Note(user = current_user, name = form.name.data, timestamp=datetime.now())
-        db.session.add(note)
-        db.session.commit()
-        flash('Successfully created a new note.')
+        if not Note.query.filter(Note.name == form.name.data).first():
+            note = Note(user = current_user, name = form.name.data, timestamp=datetime.now())
+            db.session.add(note)
+            db.session.commit()
+            flash('Successfully created a new note.')
+        else:
+            flash(f'Note with name: "{form.name.data}" already exists. Please choose a different name.')
         return redirect(url_for('note'))
     
     all_notes = Note.query.filter(Note.user_id == current_user.id).all()
