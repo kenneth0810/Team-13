@@ -28,7 +28,7 @@ sending emails, sending chats, and make a todo list once they created an account
 1. Make a folder with the name of your choice and navigate to that folder. 
 
 2. Before activating virtual environment, download these technologies on the Linux Terminal if you do not have it in your computer. 
-- Note: If you do not want to use virtual environment, only perform step 1, skip to step 5 and perform steps from 5 to 8 only. 
+- Note: If you do not want to use virtual environment, only perform step 1, skip to step 5 and perform steps from 5 to 9 only. 
 ```
 sudo apt install python3
 apt install python3-pip
@@ -76,13 +76,13 @@ db.create_all()
 exit()
 ```
 
-8. Run the project with the following command and explore our features!
+9. Run the project with the following command and explore our features!
 - Note: You will see a website link such as ```http://127.0.0.1:5000```
 When you are testing our chat features with two users, make sure you use two different browser (One of them being incognito window or Microsoft edge and the other in Google Chrome)
 ```
 python3 run.py
 ```
-9. Once you are done exploring our website, deactivate the virtual environment: 
+10. Once you are done exploring our website, deactivate the virtual environment: 
 ```deactivate ```
 ## Credits: 
 - Yue Ying Lee (@YueYingLee)
