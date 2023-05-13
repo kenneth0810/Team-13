@@ -130,14 +130,6 @@ def view_emails():
     emails = Emails.query.filter_by(recipient_id = current_user.id).all()
     return render_template('view_emails.html', user=current_user, emails = emails)
 
-
-#YueYingLee
-@myapp_obj.route("/view_emails", methods = ['GET', 'POST'])
-@login_required
-def view_emails():
-    emails = Emails.query.filter_by(recipient_id = current_user.id).all()
-    return render_template('view_emails.html', user=current_user, emails = emails)
-
 #kenneth
 @myapp_obj.route("/notes", methods = ['GET', 'POST'])
 @login_required
@@ -353,38 +345,21 @@ def room(room_code):
     return render_template('room.html', room_code=room_code)
 
 @socketio.on('message')
-def handle_message(data):
-    room = data['room']
-    message = data['message']
-    chat_room = ChatRoom.query.filter_by(room_id=room).first()
-    if chat_room and current_user.username in chat_room.users.split(','):
-        emit('message', {'name': current_user.fullname, 'message': message, 'room': room}, room=room, broadcast=True)
+def handle_message(message):
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    emit('message', {'name': user.fullname, 'message': message}, broadcast=True)
 
 @socketio.on('join')
 def handle_join(data):
-    room = data['room']
-    join_room(room)
-    chat_room = ChatRoom.query.filter_by(room_id=room).first()
-    if chat_room:
-        users = chat_room.users.split(',') if chat_room.users else []
-        users.append(current_user.username)
-        chat_room.users = ','.join(users)
-    else:
-        chat_room = ChatRoom(room_id=room, users=current_user.username)
-        db.session.add(chat_room)
-    db.session.commit()
-    emit('join_message', {'name': current_user.fullname, 'message': ' has entered the room.', 'room': room}, room=room)
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    join_room(data['room'])
+    emit('join_message', {'name': user.fullname, 'message': ' has entered the room.'}, room=data['room'])
 
 @socketio.on('leave')
 def handle_leave(data):
-    room = data['room']
-    leave_room(room)
-    chat_room = ChatRoom.query.filter_by(room_id=room).first()
-    if chat_room:
-        users = chat_room.users.split(',') if chat_room.users else []
-        users.remove(current_user.username)
-        chat_room.users = ','.join(users)
-        if not users:
-            db.session.delete(chat_room)
-    db.session.commit()
-    emit('leave_message', {'name': current_user.fullname, 'message': ' has left the room.', 'room': room}, room=room)
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    leave_room(['room'])
+    emit('leave_message', {'name': user.fullname, 'message': ' has left the room.'}, room=data['room'])
