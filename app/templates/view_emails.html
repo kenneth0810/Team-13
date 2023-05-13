@@ -1,47 +1,79 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-<h1>Emails page for {{user.fullname}}</h1>
-<p>      
-    <a href="/homepage">
-        <button type="submit6" name="submit_button6">Homepage</button>
-    </a>
-</p>
-<!--doing some passsing parameters so the user will be redirected to a page with the thread id  --> 
-{% if emails %}
-    {% for email in emails %}
-      <p>
-        <div class="emails"> 
-            <p>Time: {{ email.timestamp }} </p>
-            <p>From: {{ email.sender_username}} </p>
-            <p> Subject: {{ email.subject}} </p>
-            <p> Body: {{ email.email_body }} </p>
-            <p>      
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chat App</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/chat.css')}}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+  </head>
+  <h2> Emails: </h2>
+  <body>
+    <div class="content">
+        <div class="search-box">
+          <input type="text" id="search-bar" placeholder="Search Emails...">
+          <select id="search-type">
+            <option value="user">Search by User</option>
+          </select>
+          <button id="search-btn" onclick="searchEmails()">Search</button>
+	  
+	  
+	  {% if emails %}
+    		{% for email in emails %}
+		<div class="message-boxE">
+      		<p>
+        	<div class="emails">
+            	<p>Time: {{ email.timestamp }} </p>
+            	<p>From: {{ email.sender_username}} </p>
+            	<p> Subject: {{ email.subject}} </p>
+           	<p> Body: {{ email.email_body }} </p>
+            	<p>
                 <a href="/send_emails">
                     <button type="submit6" name="submit_button6">Reply</button>
                 </a>
             </p>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!-- create big whitespace in between emails--> 
+        	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!-- create big whitespace in between emails-->
+		</div>
+ 	
+      	</p>
+    	{% endfor %}
+	{% else %}
+ 		 <p>No Emails received.</p>
+
+	{% endif %}
+     	</div>
     </div>
-      </p>
-    {% endfor %}
-{% else %}
-  <p>No Emails received.</p>
 
-{% endif %}
 
-<script>
-    // When the user scrolls down 20px from the top of the document, slide down the navbar
-    window.onscroll = function() {scrollFunction()};
+    <script type="text/javascript">
+      var socketio = io();
+
+      const emails = document.getElementById("emails");
+
+      const searchEmails = () => {
+        const searchBar = document.getElementById("search-bar");
+        const filter = searchBar.value.toUpperCase();
+        const emailTexts = emails.querySelectorAll(".text");
+        const searchType = document.getElementById("search-type").value;
+
+        for (let i = 0; i < emailTexts.length; i++) {
+          const text = emailTexts[i].getElementsByTagName("span")[0];
+          const txtValue = text.textContent || text.innerText;
+          const user = emailTexts[i].getElementsByTagName("strong")[0].textContent;
     
-    function scrollFunction() {
-      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        document.getElementById("navbar").style.top = "0";
-      } else {
-        document.getElementById("navbar").style.top = "-50px";
-      }
-    }
+          if (searchType === "user") {
+            if (user.toUpperCase().indexOf(filter) > -1) {
+              emailTexts[i].style.display = "";
+            } else {
+              emailTexts[i].style.display = "none";
+            }
+          }
+        }
+    };
     </script>
-
-
+  </body>
+</html>
+  
 {% endblock %}
