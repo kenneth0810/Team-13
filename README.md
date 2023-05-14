@@ -9,7 +9,7 @@
 ## Introduction 
 In this project, we created a website **EMTOCHA**, which acts as an email client (**EM**) while having special features of making a todo list (**TO**) and sending chat messages (**CHA**) by joining chat rooms that they are interested in. Every user will have access to these features once they created an account on our website. 
 
-![Alt text](app/static/131_logo.jpg?raw=true)
+![Alt text](app/static/131_logo2.jpg?raw=true)
 
 ## List of features/functions and who implemented them 
 1. Register an email account (Yue Ying)
