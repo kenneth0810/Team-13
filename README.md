@@ -18,18 +18,18 @@ In this project, we created a website **EMTOCHA**, which acts as an email client
 4. Sort emails (Ruben)
 5. Search emails (Ruben)
 6. Send chat messages (Johnny)
-7. Delete chat messages (Johnny)
-8. Add TO DO component (Kenneth)
-9. Delete TO DO component (Kenneth)
-10. Edit user profile (Kenneth)
-11. Search chat messages (Johnny)
+7. Search chat messages (Johnny)
+8. Delete chat room (Johnny)
+9. Add TO DO component (Kenneth)
+10. Delete TO DO component (Kenneth)
+11. Edit user profile (Kenneth)
 12. Delete account (Ruben)
 
 ## Instructions on running the project
 1. Make a folder with the name of your choice and navigate to that folder. 
 
 2. Before activating virtual environment, download these technologies on the Linux Terminal if you do not have it in your computer. 
-- Note: If you do not want to use virtual environment, only perform step 1, step2, skip to step 5 and perform steps from 5 to 9 only. 
+- Note: If you do not want to use virtual environment, only perform step 1, step2, skip to step 5 and perform steps from 5 to 8 only. 
 ```
 sudo apt install python3
 apt install python3-pip
@@ -63,28 +63,16 @@ pip3 install flask_wtf
 ```
    cd Team-13
 ```
-    
-8. Set up a database
-
- a. Run `flask shell`
-
- b. Copy and paste the code block below
-
-```
-from app import db
-from app.models import User, Emails, Note, Todo, Profile, ChatRoom
-db.create_all()
-exit()
-```
-
-9. Run the project with the following command and explore our features!
+8. Run the project with the following command and explore our features!
 - Note: You will see a website link such as ```http://127.0.0.1:5000```
 When you are testing our chat features with two users, make sure you use two different browser/tab (One of them being incognito window or Microsoft edge and the other in Google Chrome)
 ```
 python3 run.py
 ```
-10. Once you are done exploring our website, deactivate the virtual environment: 
+
+9. Once you are done exploring our website, deactivate the virtual environment: 
 ```deactivate ```
+
 ## Credits: 
 - Yue Ying Lee (@YueYingLee)
 - Kenneth Nguyen (@kenneth0810)
