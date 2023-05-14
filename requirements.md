@@ -6,11 +6,11 @@
 4. Sort emails (Ruben)
 5. Search emails (Ruben)
 6. Send chat messages (Johnny)
-7. Delete chat room (Johnny)
-8. Add TO DO component (Kenneth)
-9. Delete TO DO component (Kenneth)
-10. Edit user profile (Kenneth)
-11. Search chat messages (Johnny)
+7. Search chat messages (Johnny)
+8. Delete chat room (Johnny)
+9. Add TO DO component (Kenneth)
+10. Delete TO DO component (Kenneth)
+11. Edit user profile (Kenneth)
 12. Delete account (Ruben)
 
 ## Non-functional requirement
