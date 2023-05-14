@@ -27,7 +27,6 @@
 	<button type="submit">Sort</button>
 </form>
 
-<!--doing some passsing parameters so the user will be redirected to a page with the thread id  --> 
 {% if emails %}
     {% for email in emails %}
       <p>  <body>
@@ -38,15 +37,10 @@
             <p> <b> From:</b> {{ email.sender_username}} </p>
             <p> <b> Subject: </b>{{ email.subject}} </p>
             <p> <b> Body:</b> <br>{{ email.email_body }} </p>
-             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!-- create big whitespace in between emails--> 
-             <!--- <a href="/reply_emails">
-             <button type="button" class="btn btn-primary">Reply</button>
-             </a>             
-            
-                     reply emails link need to fix--> 
-            </div>
-          </div>
-            </div>
+             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </div>
+             </div>
+           </div>
       </p>
     {% endfor %}
 {% endif %} 
