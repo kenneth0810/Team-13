@@ -18,7 +18,7 @@ In this project, we created a website **EMTOCHA**, which acts as an email client
 4. Sort emails (Ruben)
 5. Search emails (Ruben)
 6. Send chat messages (Johnny)
-7. Delete chat messages (Johnny)
+7. Delete Chat Room (Johnny)
 8. Add TO DO component (Kenneth)
 9. Delete TO DO component (Kenneth)
 10. Edit user profile (Kenneth)
