@@ -219,6 +219,7 @@ The user enters confirmation passwords wrongly.
 
 **Pre condition:**
 - The user has a registered account. 
+- The user is logged in.
 - The user is on the user profile page.
 
 **Trigger:** The user select the “Delete account” option under the user profile page.
@@ -227,17 +228,12 @@ The user enters confirmation passwords wrongly.
 1. The system prompts the user to enter password of their account before deleting.
 2. The user will input their password to verify their account ownership.
 3. The system verifies the user account ownership.
-4. The user will see a confirmation popup to confirm if they want to permanently delete the account.
-5. The user clicks confirm to delete the account. 
-6. The system displays a message indicating the account is permanently deleted.
+4. System deletes every row from the database tables that belongs to the user (notes, todos, emails, bio, user profile)
+5. The system displays a message indicating the account is permanently deleted.
 
 **Primary Postconditions:**
 - The user will be taken back to the Login page. 
 - The system removes the user’s account from database.  
 
 **Alternate Sequence #1:** The user enters a wrong password during the verification message.
-- The system displays a error message to indicate unsuccessful request to delete account and prompts the user to reenter or cancel the process. 
-- The user either reenter the password or choose to cancel the process. 
-
-**Alternate Sequence #2:** The user clicks “No” to cancel the confirmation to delete the account.
-- The user is redirected to their profile page.
+- The system displays a error message to indicate unsuccessful request to delete account and prompts the user to reenter the password.
