@@ -26,7 +26,7 @@
 - The user has prepared their full name, username, and password they want to use. 
 - The user has not registered for an account on the website before with the username.
 
-**Trigger:** The user selects the “Register new email account”option. 
+**Trigger:** The user selects the “Register” option. 
 
 **Primary Sequence:**
 1. The system prompts the user to enter their full name, username, and password. 
