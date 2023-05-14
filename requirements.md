@@ -6,7 +6,7 @@
 4. Sort emails (Ruben)
 5. Search emails (Ruben)
 6. Send chat messages (Johnny)
-7. Delete chat messages (Johnny)
+7. Delete chat room (Johnny)
 8. Add TO DO component (Kenneth)
 9. Delete TO DO component (Kenneth)
 10. Edit user profile (Kenneth)
@@ -118,55 +118,42 @@ The user enters confirmation passwords wrongly.
 
 **Pre condition:**
 - The user is logged into their account.
-- The user is on the chat message page.
+- The user is on the chat room  page.
 
 **Trigger:**
 - The user clicks the "Chat" button.
 
 **Primary Sequence:**
-1. The user clicks on the chat button on the chat message page to see all their chats.
-2. The user clicks on the "start a group chat" button.
-3. The system prompts the user to enter multiple existing usernames(email addresses) and clicks "start chat."
+1. The user clicks on the chat button in the navigation bar to redirect to the chat page.
+2. The user can either choose to create a room code for their chat room or to enter an already existing chat code to join a live chat room.
+3. The user clicks the "Create a Chat Room" or "Join a Chat Room" and the user will be redirected to the chat room page.
 4. The user see a chat box appear with a text entry at the bottom of the page.
 5. The user input any text they want in the text entry box.
-6. The user clicks the "send" arrow to successfully send their message to the group chat.
+6. The user clicks the "send" arrow to successfully send their message to the chat room.
 
 **Primary Postconditions:**
 - The user(sender) will see that their text shown in the chat history log of the chat page.
 - The user and the recipients in the group chat will see the new messages sent by the user in the chat history log of the chat page. 
 
-**Alternate Sequence #1:** The user enters nothing in the text box.
-- The system shows errors and not allow the user to send a message.
-- The system prompts the user to enter message or quit the chat.
+**Alternate Sequence #1:** The user enters nothing in the text box and clicks the send button.
+- The system will not send a message to the chat room.
 
-**Alternate Sequence #2:** The user enters an invalid username(email address). 
-- The system displays an error message that indicates the entered username does not exist and prompts the user to reenter a valid recipient username.
-- The user either reenters a valid recipient email to add to the group chat or create a group chat without adding anybody else.
-
-**5. Use case name: Delete Chat Messages**
+**5. Use case name: Delete Chat Room**
 
 **Pre condition:** 
 - The user is logged into their account.
-- The user is on the chat window and the message exists.
+- The user is on the chat room window.
 
 **Trigger:** 
-- The user right clicks on the chat message and click on “Delete” button.
+- The user clicks on “Delete Chat Room” button.
 
 **Primary Sequence:**
-1. The system prompts the user with a confirmation dialog box, asking their confirmation on deleting the message or cancel.
-2. The user clicks "Yes" to confirm the deletion. 
-3. The system removes the message from the chat conversation.
+1. On the chat room page, the user clicks on the "Delete Chat Room" button.
+2. The user gets redirected back to the chat page and receives a flash message that the chat room has been deleted. 
+3. The system removes the unique chat room and all of the messages will no longer be followed by the database or will all be deleted once everyone leaves the chat room.
 
-**Primary Postconditions:**
-- The user (sender & receipient) see that the specified message has disappeared from the chat window. 
-- The website’s database has remove the user’s chat history of the specific message. 
-
-**Alternate Sequence #1:** The user attempts to delete a message from the recipient.
-- The system does not pop out the delete button to delete the message.
-
-**Alternate Sequence #2:** The user clicks the “No” option from the confirmation dialog box.
-- The system exit out of the delete confirmation dialog box.
-- The user see the message remains in the chat window.
+**Primary Postconditions:** 
+- The website’s database has removed the chat room and all of its messages 
 
 **6. Use case name: Add a TODO component**
 
@@ -214,6 +201,7 @@ The user enters confirmation passwords wrongly.
 
 **Pre condition:**
 - The user has a registered account. 
+- The user is logged in.
 - The user is on the user profile page.
 
 **Trigger:** The user select the “Delete account” option under the user profile page.
@@ -222,17 +210,12 @@ The user enters confirmation passwords wrongly.
 1. The system prompts the user to enter password of their account before deleting.
 2. The user will input their password to verify their account ownership.
 3. The system verifies the user account ownership.
-4. The user will see a confirmation popup to confirm if they want to permanently delete the account.
-5. The user clicks confirm to delete the account. 
-6. The system displays a message indicating the account is permanently deleted.
+4. System deletes every row from the database tables that belongs to the user (notes, todos, emails, bio, user profile)
+5. The system displays a message indicating the account is permanently deleted.
 
 **Primary Postconditions:**
 - The user will be taken back to the Login page. 
 - The system removes the user’s account from database.  
 
 **Alternate Sequence #1:** The user enters a wrong password during the verification message.
-- The system displays a error message to indicate unsuccessful request to delete account and prompts the user to reenter or cancel the process. 
-- The user either reenter the password or choose to cancel the process. 
-
-**Alternate Sequence #2:** The user clicks “No” to cancel the confirmation to delete the account.
-- The user is redirected to their profile page.
+- The system displays a error message to indicate unsuccessful request to delete account and prompts the user to reenter the password.
