@@ -30,13 +30,12 @@
 
 **Primary Sequence:**
 1. The system prompts the user to enter their full name, username, and password. 
-2. The user enters their full name, username, and password following the guidelines. 
-3. The system shows the availability of the username to the user.
-4. The system reenters their password for confirmation.
-5. The system checks for any missing field of information of the user. The user will be prompted to continue to enter if there is any missing field.  
-6. The user clicks the “Register” option to register an email account. 
-7. The system displays a message to indicate the user has successfully registered for an account. 
-8. The user will be automatically redirected to log in page on the website. 
+2. The user enters their full name, username, and password. 
+3. The user reenters their password for confirmation.
+4. The user clicks the “Register” option to register an email account. 
+5. The system checks the availability of the username chosen by the user, and check if any information field not following the requirements or missing.
+6. The user will be prompted to continue to enter if there is any missing field before registering again.
+6. The user will be automatically redirected to log in page on the website when registration is successful. 
 
 **Primary Postconditions:**
 - The user has successfully registered an account on the website and has access to the features of the website. 
@@ -44,15 +43,15 @@
 
 **Alternate Sequence #1:** 
 The user enters a username that has already been registered on the website.
-- The system displays an error message indicating the username has been registered to a user already. 
+- The system displays an error message indicating the username has been registered to an user already. 
 - The system prompts the user to enter a different username or to quit the registration page to log in instead. 
-- The user either enter a different username or quit to log in instead. 
+- The user either enter a different username or choose to log in instead. 
 
 **Alternate Sequence #2:**
 The user enters confirmation passwords wrongly.
 - The system displays an error message indicating the confirmation password does not match. 
-- The system prompts the user to reenter the confirmation password. 
-- The user renters the confirmation password. 
+- The system prompts the user to reenter the both password and confirmation password. 
+- The user renters both password and confirmation password. 
 
 **2. Use case name: Login/Logout**
 
@@ -65,12 +64,12 @@ The user enters confirmation passwords wrongly.
 
 **Primary Sequence:**
 1. The system prompts the user to enter their username and password. 
-2. The user enters their username and password. 
-3. The system checks if there is any missing field. 
+2. The user enters their username and password and clicks on "Login" button. 
+3. The system checks if there is any missing field.
 4. The user will be prompted to continue to enter if there is any missing field.  
-5. The user clicks on “Login” button. 
+5. The user clicks on “Login” button again after filling the missing required field. 
 6. The system checks if the username and password entered are correct.
-7. The user will be automatically redirected to their profile page when the information are correct.
+7. The user will be automatically redirected to the homepage when the information are correct.
 8. The user clicks on "Log out" button. 
 9. The system logs out the user from their email account.
 
@@ -91,19 +90,15 @@ The user enters confirmation passwords wrongly.
 - The user has prepared the contents of the email and know who they want to send to. 
 - The user is on the homepage of the website. 
 
-**Trigger:** The user selects the “Send an email” option on the menu bar. 
+**Trigger:** The user selects the “Send an email” option on the homepage. 
 
 **Primary Sequence:**
 1. The user is redirected to the drafting email window. 
-2. The system prompts the user to enter the recipients’ username(email address), subject line, and the content of the email. 
-3. The user enters the emails body and the username (email address) they want to send to with an option of sending to one or multiple recipients. 
-4. The system checks if the recipients’ usernames are entered correctly. 
-5. The user clicks on “Send” button to send email.
-6. The system prompts the user to confirm sending the email.
-7. The user confirms sending the email.
-8. The system sends the email to the recipients. 
-9. The system displays a confirmation message indicating the success of sending emails. 
-10. The user is redirected to the homepage.
+2. The system prompts the user to enter the recipients’ username(email address), subject and email body. 
+3. The user enters the subject, email body and the username (email address) they want to send to with an option of sending to one or multiple recipients. 
+4. The user clicks on “Send” button to send email.
+5. The system sends the email to the recipients. 
+6. The system displays a confirmation message indicating the success of sending emails and the user is redirected to the homepage.
 
 **Primary Postconditions:**
 - The user successfully sends the emails to the recipients they chose. 
@@ -112,12 +107,12 @@ The user enters confirmation passwords wrongly.
 
 **Alternate Sequence #1:** The user entered invalid recipients’ usernames (email address). 
 - The system displays an error message indicating the recipient entered does not exist. 
-- The system prompts the user to re-enter the recipients’ usernames.
-- The user either reenters the recipients’ usernames or quits the sending email function. 
+- The system prompts the user to re-enter the recipients’ usernames or discard the email.
+- The user either reenters the recipients’ usernames or discard the email. 
 
 **Alternate Sequence #2:** The user did not enter the subject line, usernames, or email content.
-- The system displays an error message and prompts users to enter information on the missing field or quit the sending email function. 
-- The user will enter the information of the missing field or quits the drafting email window. 
+- The system displays an error message and prompts users to enter information on the missing field or discard the email. 
+- The user will enter the information of the missing field or discard the email. 
 
 **4. Use case name: Send chat messages**
 
