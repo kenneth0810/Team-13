@@ -59,3 +59,13 @@
 - Attendees: Yue Ying Lee, Kenneth Nguyen, Johnny Nguyen 
 - Team updates: Yue Ying modified the index, register, login page with bootstraps. Kenneth updated the to do function, and did bootstraps on responsibles pages. Johnny added chat room function. 
 - Group progress: Discussed about our website theme. Johnny will fix some bugs on his funtions, Kenneth will continue working on doing bootstraps. Yue Ying will look into virtual environment, add new feature for sending emails function and continue working on the bootstraps. We decided to merge all of our stuffs tomorrow in class.
+
+### 2023-05-12 at 20:00 - 01:20
+- Attendees: Yue Ying Lee, Kenneth Nguyen, Johnny Nguyen, Ruben Martinez-Martinez
+- Team updates: Yue Ying fixed some errors, added new feature in send email function, and modified css for matching website theme. Kenneth modified bootstrap and fixed some bugs. Johnny is still in progress of fixing some bugs and added css for pages.
+- Group progress: Yue Ying added virtual environment instructions into README.md. Solved bugs in chat room functions. Ruben will continue working on his functions. 
+
+### 2023-05-13 at 20:20 - 21:20
+- Attendees: Yue Ying Lee, Kenneth Nguyen 
+- Team updates: Yue Ying modified README.md with more instructions. All functions are working. Kenneth modified the requirements.md.
+- Group progress: Successful final testing of the website. Submitted the milestone 3 final project. 
